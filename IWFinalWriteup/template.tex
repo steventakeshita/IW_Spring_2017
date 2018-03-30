@@ -1,0 +1,523 @@
+\documentclass[pageno]{jpaper}
+
+\newcommand{\IWreport}{2017}
+\newcommand{\quotes}[1]{``#1''}
+
+
+\widowpenalty=9999
+
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{Solving the Generalized Form of the Game of Set Efficiently}
+
+\author{Steven Takeshita\\Adviser: Zachary Kincaid}
+
+\date{}
+\maketitle
+
+\thispagestyle{empty}
+\doublespacing
+\begin{abstract}
+This document is intended to serve as a sample you can use for independent work reports.  We provide some guidelines on content and formatting.  They are not required, but they might be helpful.
+\end{abstract}
+
+\section{Motivation and Goal}
+
+The Game of Set was created in 1974 and published in 1991. The game consists of $3^4 = 81$ unique cards. Each card has 4 properties and one of three values. A valid set of three cards is one in which for each property, they all either have the same or different value. At the beginning of the game, 12 cards are shown, and players must locate valid sets. Once a set is found or no set exists, three new cards are added. The most number of sets collected at the ends win. Therefore, a natural extension of this problem is to determine how fast can we find sets. The goal of my project is to create a solver that locates a set efficiently in practice for a game with $p$ properties and $v$ values. The Game of Set is an interesting problem for dynamic algorithms in that when three new cards are added, the algorithm should be able to build off of previous knowledge. A way to utilize this past information could be helpful in applying similar principles to other problems that could lend itself to dynamic programming. 
+
+
+\section{Problem Background and Related Work}
+
+
+The Game of Set has been researched thoroughly for education and as a motivating example for cap sets, but little research exists about solving a generalized version. Chaudhuri et al (2003) proved that the generalized version of Set is in fact NP-Complete through a reduction from perfect-Dimensional Matching, a known NP-Hard problem ~\cite{chaudhuri}.  
+
+This paper proves computational complexity bounds, but does not solve the problem in practice. Solvers do exist on the internet and can be readily found ~\cite{nolte}. Some solvers even employ image processing to identify sets ~\cite{jorquera}. However, the solvers are constrained to have four properties and three values. Therefore, the solver I will build will be able to solve the generic case of Set in which it has $p$ properties and $v$ values.  
+
+\subsection{Problem Definition}
+
+A deck will contain $v^p$ possible cards where the cards have $p$ properties and $v$ values. Initially, $v*p$ cards will be outputted as the starting layout. Identify an arbitrary set of $v$ cards, in which for all properties the values are either the same or all different. Remove this set of size $v$ and count it as another set found, or if no set exists, add $v$ more cards from the remaining $v^p - v$ cards. Find a total of $n$ sets, where $n \leq v^{p-1}$ and each time a set is found $v$ more cards will be immediately added. Therefore, there are 2 update functions that the algorithms must handle. One to add $v$ new cards to the board and the other to remove $v$ cards that formed a set. 
+
+By removing the first set of cards seen, this will simulate real gameplay, in which the goal is to find sets as fast as possible. By finding a generalized $n$ number of sets, as cards are added and removed, the dynamic algorithm will hopefully see some speed up. This further simulates gameplay in which the goal is to find a collection of sets and it is likely that there might not exists sets or sets will be found causing new cards to be added. 
+
+\section{Approach}
+
+Generalizing the Game of Set has been done academically, but no practical solution to locate sets exists. A reduction to SMT creates a solver to theoretically always verify whether a set exists, but this does not verify a set within reasonable time if we consider the the poly-time transformation and the fact that it needs to recalculate a set every time new cards are added, not using information from previous rounds to verify it faster. Therefore, my approach will use previous knowledge of the absence of sets to quickly discover sets in a new showing of cards. Set's changing probabilities of discovering a Set also lends itself to the dynamic algorithm approach. Norvig (2017) showed that on a fresh layout of the game with 12 cards, the ratio of games in which there exists a Set to those that do not contain a set, is 29:1. But as the game plays on, the ratio drops to 15:1, a 50\% less chance of finding a set. For 15 cards, the ratio drops to 4\% of its original ratio ~\cite{norvig}. Therefore, as the game is iteratively played in which Sets are taken out, the game becomes immensely harder. With a dynamic algorithm approach, the solver I build should be able to beat the SMT solver especially with this added difficulty as Sets are removed from the board. 
+
+
+\section{Reduction to SMT}
+
+\subsection{Set Up}
+
+There exists $v*p$ cards forming a starting board $B$, but in general there will be $n$ cards on a board at any moment. These cards can be represented as vectors where all entries $b_{i,j} \in \{0,1, ... , v-1\}$:
+
+\begin{align}
+    B &= \begin{bmatrix}
+           b_{1,1} \\
+           b_{1,2} \\
+           \vdots \\
+           b_{1,p}
+         \end{bmatrix}
+         \begin{bmatrix}
+           b_{2,1} \\
+           b_{2,2} \\
+           \vdots \\
+           b_{2,p}
+         \end{bmatrix} ... 
+          \begin{bmatrix}
+           b_{n,1} \\
+           b_{n,2} \\
+           \vdots \\
+           b_{n,p}
+         \end{bmatrix}
+  \end{align}
+  
+The SMT Solver will then attempt to find a set of $v$ cards. The satisfying set can be denoted as vectors where $k_{i,j} \in \{0,1, ... , v-1\}$:
+
+\begin{align}
+    K &= \begin{bmatrix}
+           k_{1,1} \\
+           k_{1,2} \\
+           \vdots \\
+           k_{1,p}
+         \end{bmatrix}
+         \begin{bmatrix}
+           k_{2,1} \\
+           k_{2,2} \\
+           \vdots \\
+           k_{2,p}
+         \end{bmatrix} ... 
+          \begin{bmatrix}
+           k_{v,1} \\
+           k_{v,2} \\
+           \vdots \\
+           k_{v,p}
+         \end{bmatrix}
+  \end{align}
+
+\subsection{All Different or All Same Constraint}
+To correctly identify satisfying, distinct sets that exist from the given cards, we need to create three sets of constraints. The first set of constraints will only be satisfied when the cards found $K$ represent a set, where for all properties, they have either the same or all different value. This constraint can be written as two cases for each property of the cards:
+
+\textbf{The values are all the same for a given property i:} 
+\begin{align}
+	(k_{1,i} = k_{2,i}) \wedge (k_{2,i} = k_{3,i}) \wedge ... \wedge (k_{v-1,i} = k_{v,i})
+\end{align}
+\begin{align}
+	\bigwedge \limits_{m=1}^{v-1} k_{m,i} = k_{m+1,i}
+\end{align}
+
+\textbf{The values are all different for a given property i:}
+\begin{multline}
+	((k_{1,i} \neq k_{2,i}) \wedge (k_{1,i} \neq k_{3,i}) \wedge ... \wedge (k_{1,i} \neq k_{v,i})) \\
+	 \wedge ((k_{2,i} \neq k_{3,i}) \wedge (k_{2,i} \neq k_{4,i}) \wedge ... \wedge (k_{2,i} \neq k_{v,i})) \wedge 
+	 ... \wedge (k_{v-1,i} \neq k_{v,i})
+\end{multline}
+
+\begin{align}
+	\bigwedge \limits_{m=1}^{v-1}  \bigwedge \limits_{j = m+1}^{v} k_{m,i} \neq k_{j,i}
+\end{align}
+
+
+Therefore, we can write more concisely that for all properties of the cards, the values must all be the same or all different:
+
+\begin{align}
+	\bigwedge \limits_{i=1}^{p}  \left(  \left( \bigwedge \limits_{m=1}^{v-1}  \bigwedge \limits_{j = m+1}^{v} k_{m,i} \neq k_{j,i} \right)  \bigvee  	 \left(  \bigwedge \limits_{m=1}^{v-1} k_{m,i} = k_{m+1,i} \right) \right)
+\end{align}
+
+
+\subsection{The Cards Must Be From The Board}
+
+The second set of constraints is that the cards selected in the set $K$ must all be from the board $B$, which is of size $n$. This constraint can be encoded into the SMT solver as:
+
+A given card $i$ from $K$ must be from the board $B$:
+\begin{multline}
+	((k_{i,1} = b_{1,1}) \wedge (k_{i,2} = b_{1,2}) \wedge ... \wedge (k_{i,p} = b_{1,p})) \vee \\
+	 ((k_{i,1} = b_{2,1}) \wedge (k_{i,2} = b_{2,2}) \wedge ... \wedge (k_{i,p} = b_{2,p}))  \vee ... \vee \\ ((k_{i,1} = b_{n,1}) \wedge (k_{i,2} = b_{n,2}) \wedge ... \wedge (k_{i,p} = b_{n,p})) 
+\end{multline}
+
+Therefore, all cards $i \in K$ must be from the board $B$:
+ 
+\begin{align}
+	\bigwedge \limits_{i=1}^{v}  \left( \bigvee \limits_{j = 1}^{n}  \left( \bigwedge \limits_{m=1}^{p}  k_{i,m} = b_{j,m}\right) \right)
+\end{align}
+
+\subsection{All Distinct Cards}
+
+We constrain the possible cards in the set to be from $B$, but this includes duplicates. A possible set could be three of the exact same cards and would satisfy the above constraints but does not represent a real set in the game. Therefore, the last constraint is that the cards selected to be in $K$, must all be distinct cards. The cards of a set are considered all distinct if for any two cards, they have at least one property that has a differing value. The constraint can be written as:
+
+
+%%%% possibly rewrite this better such that for a given card i make sure that the cards above it (ie. j = i+1) are all totally distinct
+%%% and then more concisely can write that for all it would be better... pick one
+
+A given card, $i$, differs with respect to at least one property compared to all cards coming after $i:$
+
+\begin{multline}
+	((k_{i,1} \neq k_{i+1,1}) \vee (k_{i,2} \neq k_{i+1,2}) \vee ... \vee (k_{i,p} \neq k_{i+1,p}))  \wedge \\
+	((k_{i,1} \neq k_{i+2,1}) \vee (k_{i,2} \neq k_{i+2,2}) \vee ... \vee (k_{i,p} \neq k_{i+2,p}))  \wedge ... \wedge \\ 
+	((k_{i,1} \neq k_{v,1}) \vee (k_{i,2} \neq k_{v,2}) \vee ... \vee (k_{i,p} \neq k_{v,p})) 
+\end{multline}
+
+Written more succinctly:
+
+
+%\begin{multline}
+%	((k_{1,1} \neq k_{2,1}) \vee (k_{1,2} \neq k_{2,2}) \vee ... \vee (k_{1,p} \neq k_{2,p}))  \wedge \\
+%	((k_{1,1} \neq k_{3,1}) \vee (k_{1,2} \neq k_{3,2}) \vee ... \vee (k_{1,p} \neq k_{3,p}))  \wedge ... \wedge \\ 
+%	((k_{1,1} \neq k_{v,1}) \vee (k_{1,2} \neq k_{v,2}) \vee ... \vee (k_{1,p} \neq k_{v,p})) \wedge \\
+%	((k_{2,1} \neq k_{3,1}) \vee (k_{2,2} \neq k_{3,2}) \vee ... \vee (k_{2,p} \neq k_{3,p})) \wedge  ... \wedge \\ 
+%	((k_{2,1} \neq k_{v,1}) \vee (k_{2,2} \neq k_{v,2}) \vee ... \vee (k_{2,p} \neq k_{v,p})) \wedge ... \wedge \\
+%	((k_{v-1,1} \neq k_{v,1}) \vee (k_{v-1,2} \neq k_{v,2}) \vee ... \vee (k_{v-1,p} \neq k_{v,p})) 
+%\end{multline}
+
+
+
+\begin{align}
+	\bigwedge \limits_{i=1}^{v-1}   \left( \bigwedge \limits_{j=i+1}^{v}   \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq k_{j,m} \right)  \right)
+\end{align}
+
+By building these three constraints (7, 9, 11) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
+
+
+\subsection{Update Functions} 
+The solver to find sets must also support two update functions. The first update function of removing cards can be easily encoded into the SMT constraints. Let set $V$ be an arbitrary set that was located by the SMT solver. To remove the set from the board, we can add new constraints such that the new set to be found cannot be equal to any of the cards found in $V$, where $V$ contains $v$ cards. Again, to be a distinct card, at least one property must be differing. This can be written as:
+
+\begin{align}
+	\forall k \in K, \forall v \in V \left (k_1 \neq v_1 \vee k_2 \neq v_2 \vee ... \vee k_p \neq v_p \right)
+\end{align}
+
+A given card $i$ from $K$ must not be equivalent to a card in $V$:
+
+\begin{multline}
+	((k_{i,1} \neq v_{1,1}) \vee (k_{i,2} \neq v_{1,2}) \vee ... \vee (k_{i,p} \neq v_{1,p})) \wedge \\
+	 ((k_{i,1} \neq v_{2,1}) \vee (k_{i,2} \neq v_{2,2}) \vee ... \vee (k_{i,p} \neq v_{2,p}))  \wedge ... \wedge \\ ((k_{i,1} \neq v_{v,1}) \vee (k_{i,2} \neq v_{v,2}) \vee ... \vee (k_{i,p} \neq v_{v,p})) 
+\end{multline}
+
+All cards $i \in K$ must not be equivalent to a card in $V$:
+
+\begin{align}
+	\bigwedge \limits_{i=1}^{v}   \left( \bigwedge \limits_{j=1}^{v}  \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq v_{j,m} \right)   \right)
+\end{align}
+
+For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11) from above. Therefore, this is represents a full reduction to SMT from the Game of Set. 
+
+
+\section{Implementation}
+
+The simulations for the randomizer and solvers were all written in python. Considering python's lightweight feel and ease of iterating over all variables in a list, makes it the natural extension for representing a deck and board of cards. Therefore, python made the code easier to write up and allowed for helpful language defined shortcuts. 
+
+
+\subsection{Randomizer}
+
+The randomization algorithm for creating a randomized deck is very important in terms of creating a real life scenario gameplay. Therefore, the algorithm must uniformly distribute all of the cards ($n*p$) initially so that no solver can have an unfair advantage knowing what cards are more likely to come out. To do so, I used a couple of important libraries to ensure randomness and to plot the distribution in order to guarantee its uniform distribution. I used the Random library in python to be able to generate random indices to pull for the beginning board ($n*p$) and for the next $v$ cards when sets are found. I assumed the Random library to be perfectly random. To ensure that the next $v$ cards are always random from the set, I employed the use of a modified version of Fisher Yates Shuffle. Fisher Yates Shuffle works by iteratively randomly picking indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert it to work with a deck, I randomly selected a beginning set of indices of size $n*p$ from the deck and set this as the beginning board, removing them from the deck. Next, to add $v$ new cards, I randomly select $v$ cards from the remaining deck and append them to the board. This employs the use of Fisher Yates Shuffle. 
+
+% EMPLOYED A NEW WAY TO DO RANDOMIZAATION CHANGE THIS IT COULD STILL BE THE FISHER YATES THOUGH
+
+
+% It doesn't have a name that I know.  One way of thinking about it is that it's an version of Fisher-Yates that uses rejection sampling instead of re-arranging the deck to make the distribution easy to sample from.  It's a Las Vegas randomized algorithm. 
+% Las Vegas algorithm is one that is randomized that will output the correct answer always. 
+
+To confirm that this in fact created random beginning boards and new cards, I graphed the distribution of the beginning board for $1000$ trials with $v = 10$ and $p = 10$. I then used numpy to and matplotlib to count all the occurrences of each card and then graph them as a histogram. See the figure below.
+
+As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases, the distribution of cards that were selected form a uniform distribution. Therefore, this confirms that the implementation of the Fisher Yates shuffle in creating a perfectly random board and draws was successful. 
+
+\begin{figure}[htbb]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{3p4v10000Init.png}
+\caption{3 properties, 4 values, 10,000 trials Initial Board Distribution}
+\label{fig:init1}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{4p5v10000Init.png}
+\caption{4 properties, 5 values, 10,000 trials Initial Board Distribution}
+\label{fig:init2}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[htbb]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{3p4v10000Draw.png}
+\caption{3 properties, 4 values, 10,000 trials Board Distribution after One Draw}
+\label{fig:draw1}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{4p5v10000Draw.png}
+\caption{4 properties, 5 values, 10,000 trials Initial Board Distribution after One draw}
+\label{fig:draw2}
+\end{minipage}
+\end{figure}
+
+\subsection{SMT Solver Implementation}
+
+
+For the SMT Solver implementation, I used Z3, a high performance theorem prover created by Microsoft Research. The software creates an easy way to create variables and constraints in Python. Each card that needs to be found represented $p$ variables. I coded the above constraints (7, 9, 11) in Z3 to be only all satisfied if there exists a set within the board. 
+
+% Once a set has been found,  I then queue the set to be removed, with all preceding sets to be removed if there exists any. This would take advantage of the fact that if there exists many sets on the board, then the SMT solver would only add constraint 14 to negate any cards of the satisfying set to be one of the cards already found to be a part of set. This would provide a marginal speedup, but is important for creating a fast as possible benchmark for the dynamic algorithm to compete against. 
+
+To optimize the SMT Solver implementation, I queue up the set to be removed and add the constraints defined in constraint 14 to run through the SMT Solver again to find another set to be removed in case there existed many sets already on the starting board. Once the SMT Solver no longer says that with the constraints and variables it is satisfied, I then know to add $v$ new cards (or more if the board had a lot of sets and therefore the SMT solver was able to find my sets without having to update the constraints) to hopefully create a new set. I will only do this once no sets exist on the board after removing so many cards to hopefully provide marginal speedup to the program. Also, the cards need to be deleted from the board and therefore, I will call upon the Randomizer method to delete all the cards found by the SMT before no sets existed on the board. Therefore, this will make sure that the dynamic algorithm doesn't have too much of a lead when removing cards. Now, I will add $v$ new cards and rebuild the constraints (7, 9, 11) and run the SMT solver to hopefully find another set of cards. 
+
+This iterative sequence will take place $n$ times to find $n$ sets within a game and the SMT solver will return these sets for validation of a legal set. 
+
+\subsection{Dynamic Algorithm Implementation}
+
+
+if the value number is 1 then all cards are considered a set
+if the value number is 2 then all pairs of cards are considered a set because for all combos they must differ or be the same by definition of having only two values. Therefore, only two cards comprise a set. 
+
+
+
+
+\subsection{Testing}
+
+For both of these implementation, I will need to implement testing to ensure that the sets found by the solvers are indeed sets and that the algorithm correctly removed the sets from the board. 
+
+\subsubsection{Testing Satisfying Set}
+
+To confirm that for all properties the cards from the set have either the same value or all different value, I iterated over all properties and all cards values of that property to check whether when put into a set data structure that the length of the set was either 1, meaning that all the values were the same, or the same length as before, meaning all values were distinct elements. 
+
+To check that all the boards must be from the board, I had to store all iterations of the board, as new cards could be added and sets would be removed. Therefore, I used a set data structure to store all the cards, and updated this set as new cards were added to the board. Finally, I iterated over each set found and checked that it was included in the board at some point and therefore meant it was taken from the board. 
+
+To confirm that the last constraint of all distinct cards was satisfied for each possible set, I asserted that the length of the set was equivalent to the length of the set when converted into a set data structure. Therefore, if they are equal, all elements in the set are therefore distinct and make up all different cards.
+
+Finally, the solver has to handle finding many sets, and to ensure that the solver does not find the same set $n$ times, I assert that when converted to a long list of cards that make up all $n$ sets found, that the length of this list converted to a set data structure should be the same as the length of the long list. Therefore, it would show that all $n*v$ cards are all distinct. 
+
+\subsubsection{Testing Correct Deletion}
+
+The constraints created for the SMT solver also relies on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board set, I iterated over all cards and asserted that they were not in board at the termination of the program. This is also important for the Dynamic solver because it must output the correct board as well at the end from finding $n$ sets. 
+
+\section{Results}
+
+
+\section{Conclusion}
+
+
+
+
+
+
+
+
+
+\subsection{Paper Formatting}
+\label{section:formatting}
+
+There are no minimum or maximum length limits on IW reports.  
+We are including this template because we think it will be helpful
+for citing things properly and for including figures into formatted
+text.  If you are using \LaTeX~\cite{lamport94} 
+to typeset your paper, then we strongly suggest
+that you start from the template available at
+http://iw.cs.princeton.edu -- this
+document was prepared with that template.  
+If you are using a different software package to typeset your paper, 
+then you can still use this document as a reasonable sample of 
+how your report might look.  Table~\ref{table:formatting} is a suggestion
+of some formatting guidelines, as well as being an example of how to
+include a table in a Latex document.
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Field} & \textbf{Value}\\
+    \hline
+    \hline
+    Paper size & US Letter 8.5in $\times$ 11in\\
+    \hline
+    Top margin & 1in\\
+    \hline
+    Bottom margin & 1in\\
+    \hline
+    Left margin & 1in\\
+    \hline
+    Right margin & 1in\\
+    \hline
+    Body font & 12pt\\
+    \hline
+    Abstract font & 12pt, italicized\\
+    \hline
+    Section heading font & 14pt, bold\\
+    \hline
+    Subsection heading font & 12pt, bold\\
+    \hline
+  \end{tabular}
+  \caption{Formatting guidelines. }
+  \label{table:formatting}
+\end{table}
+
+\textbf{Please ensure that you include page numbers with your
+submission}. This makes it easier for readers to refer to
+different parts of your paper when they provide comments.
+
+We highly recommend you use bibtex for managing your references and citations.  You can add bib entries to a references.bib file throughout the semester (e.g., as you read papers) and then they will be ready for you to cite when you start writing the report.  If you use bibtex, please note that the references.bib file provided in the template example includes some format-specific incantations at the top of the file.  If you substitute your own bib file, you will probably want to include these 
+incantations at the top of it.
+
+\subsection{Citations and Footnotes}
+
+There are various reasons to cite prior work and include it as references in your bibliography.  For example, If you are improving upon 
+prior work, you should include
+a full citation for the work in the bibliography \cite{nicepaper,nicepaper2}. 
+You can also cite information that is used as background or
+explanation\cite{Salzberg:2005}.  In addition to citing scholarly papers or books, you can
+also create bibtex entries for webpages or other sources.  Many online
+databases allow you to download a premade bibtex entry for each paper
+you access.  You can simply copy-paste these into your references.bib
+file.
+
+Sometimes you want to footnote something, such as a web
+site.\footnote{http://www.cs.princeton.edu}  Note that the footnote
+number comes after the punctuation.
+
+\subsection{Figures and Tables.}
+
+Figure \ref{fig:gray} shows an example of how to include a figure in
+your report.  
+Ensure that the figures and
+tables are legible.  Please also ensure that you refer to your
+figures in the main text. Make sure that your figures will be legible
+in the expected forms that the report will be read.  If you expect someone
+to print it out in gray-scale, then make sure the figures are legible 
+when printed that way.  
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.75\linewidth]{gray.jpg}
+\caption{This is a gray image.}
+\label{fig:gray}
+\end{figure}
+
+In Section~\ref{section:formatting}, an example of a table was given.
+(Note that the ``S'' in Section is capitalized.  Here's one more
+example - see Table~\ref{table:data}.
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l|l|} \hline
+    \textbf{Some field} & \textbf{Another field}\\\hline
+    200          &  10000 \\ \hline 
+    400          &  20000 \\ \hline 
+    800          &  40000 \\ \hline 
+    1600        &  80000 \\ \hline 
+    3200        &  160000 \\ \hline 
+    6400        &  320000 \\ \hline 
+  \end{tabular}
+  \caption{Some data in a table. }
+  \label{table:data}
+\end{table}
+
+
+Here's an example that shows how you can have side-by-side figures -
+see Figure~\ref{fig:side-a} and Figure~\ref{fig:side-b}.  (Note that
+the the ``F'' in Figure is capitalized. 
+
+\begin{figure}[htbb]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{checkerboard-squares-black-white.jpg}
+\caption{Plain checkerboard.}
+\label{fig:side-a}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{swirl-squares-black-white.jpg}
+\caption{Cool checkerboard.}
+\label{fig:side-b}
+\end{minipage}
+\end{figure}
+
+\subsection{Double Quotes.}
+
+Latex double quotes are not the same as the double quote key on your
+keyboard. The standard way of writing quotes and double quotes in
+LaTeX is with `` and '' not with " and ".   
+
+Now that may be confusing, so you may want to use the \textbackslash\{quotes\} command.  For
+example \quotes{The quick brown fox.}
+
+
+
+\subsection{Main Body.}
+
+Avoid bad page or column breaks in
+your main text, i.e., last line of a paragraph at the top of a
+column or first line of a paragraph at the end of a column. If you
+begin a new section or sub-section near the end of a column,
+ensure that you have at least two (2)  lines of body text on the same
+column. 
+
+\section{Outline}  
+The following is a possible outline for your paper.
+\subsection{Introduction}
+\begin{itemize}
+\item Motivation and Goal (The goal of this project is...)
+\item Overview of challenge and previous work 
+\item Approach 
+\item Summary of implementation
+\item Summary of results
+\item (optional) Roadmap: The remainder of this paper is organized as follows....
+\end{itemize}
+
+\subsection{Problem Background and Related Work}
+\begin{itemize}
+\item Survey of prior work with similar goals 
+\item For each previous approach, explain what has been done and why it does not meet your goal
+\end{itemize}
+
+\subsection{Approach}
+\begin{itemize}
+\item Key novel idea
+\item Why it is a good idea
+\end{itemize}
+
+\subsection{Implementation}
+\begin{itemize}
+\item System overview (flow chart of key steps?)
+\item Subsection for each step or issue you addressed
+\begin{itemize}
+\item Problem statement
+\item Possible approaches
+\item Chosen approach and why
+\item Implementaton details
+\end{itemize}
+\end{itemize}
+
+\subsection{Evaluation}
+\begin{itemize}
+\item Experiment design...
+\item Data...
+\item Metrics...
+\item Comparisons...
+\item Qualitative results...
+\item Quantitative results...
+\end{itemize}
+
+\subsection{Summary}
+\begin{itemize}
+\item Conclusions...
+\item Limitations...
+\item Future work...
+\end{itemize}
+
+
+\section{Ethics}
+
+Your independent work report should abide by the basic standards of scholarly ethics and by the Princeton Honor Code. If you have any doubts about how to cite
+other work, how to quote or include text or images from other works, or other issues, please discuss them with your project adviser or with the IW coordinators. 
+
+
+
+\bstctlcite{bstctl:etal, bstctl:nodash, bstctl:simpurl}
+\bibliographystyle{IEEEtranS}
+\bibliography{references}
+
+\end{document}
+

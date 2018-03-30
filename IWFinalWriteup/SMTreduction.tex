@@ -1,0 +1,150 @@
+\documentclass[pageno]{jpaper}
+
+\newcommand{\IWreport}{2017}
+\newcommand{\quotes}[1]{``#1''}
+
+
+\widowpenalty=9999
+
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Reduction to SMT}
+
+\subsection{Set Up}
+ There exists $v*p$ cards forming a starting board $B$. These cards can be represented as vectors where all entries $b_{i,j} \in \{0,1, ... , v-1\}$:
+
+\begin{align}
+    B &= \begin{bmatrix}
+           b_{1,1} \\
+           b_{1,2} \\
+           \vdots \\
+           b_{1,p}
+         \end{bmatrix}
+         \begin{bmatrix}
+           b_{2,1} \\
+           b_{2,2} \\
+           \vdots \\
+           b_{2,p}
+         \end{bmatrix} ... 
+          \begin{bmatrix}
+           b_{n*p,1} \\
+           b_{n*p,2} \\
+           \vdots \\
+           b_{n*p,p}
+         \end{bmatrix}
+  \end{align}
+  
+The SMT Solver will then attempt to find a set of $p$ cards. The satisfying set can be denoted as vectors where $k_{i,j} \in \{0,1, ... , v-1\}$:
+
+\begin{align}
+    K &= \begin{bmatrix}
+           k_{1,1} \\
+           k_{1,2} \\
+           \vdots \\
+           k_{1,p}
+         \end{bmatrix}
+         \begin{bmatrix}
+           k_{2,1} \\
+           k_{2,2} \\
+           \vdots \\
+           k_{2,p}
+         \end{bmatrix} ... 
+          \begin{bmatrix}
+           k_{p,1} \\
+           k_{p,2} \\
+           \vdots \\
+           k_{p,p}
+         \end{bmatrix}
+  \end{align}
+
+\subsection{All Different or All Same Constraint}
+To correctly identify satisfying, distinct sets that exist from the given cards, we need to create three sets of constraints. The first set of constraints will only be satisfied when the cards found $K$ represent a set, where for all properties, they have either the same or all different value. This constraint can be written as two cases for each property of the cards:
+
+\textbf{The values are all the same for a given property i:} 
+\begin{align}
+	(k_{1,i} = k_{2,i}) \wedge (k_{2,i} = k_{3,i}) \wedge ... \wedge (k_{p-1,i} = k_{p,i})
+\end{align}
+\begin{align}
+	\bigcap \limits_{m=1}^{p-1} k_{m,i} = k_{m+1,i}
+\end{align}
+
+\textbf{The values are all different for a given property i:}
+\begin{multline}
+	((k_{1,i} \neq k_{2,i}) \wedge (k_{1,i} \neq k_{3,i}) \wedge ... \wedge (k_{1,i} \neq k_{p,i})) \\
+	 \wedge ((k_{2,i} \neq k_{3,i}) \wedge (k_{2,i} \neq k_{4,i}) \wedge ... \wedge (k_{2,i} \neq k_{p,i})) \wedge 
+	 ... \wedge (k_{p-1,i} \neq k_{p,i})
+\end{multline}
+
+\begin{align}
+	\bigcap \limits_{m=1}^{p-1}  \bigcap \limits_{j = m+1}^{p} k_{m,i} \neq k_{j,i}
+\end{align}
+
+
+Therefore, we can write more concisely that for all properties of the cards, the values must all be the same or all different:
+
+\begin{align}
+	\bigcap \limits_{i=1}^{p}  \left(  \left( \bigcap \limits_{m=1}^{p-1}  \bigcap \limits_{j = m+1}^{p} k_{m,i} \neq k_{j,i} \right)  \bigcup  	 \left(  \bigcap \limits_{m=1}^{p-1} k_{m,i} = k_{m+1,i} \right) \right)
+\end{align}
+
+
+\subsection{The Cards Must Be From The Board}
+
+The second set of constraints is that the cards selected in the set $K$ must all be from the board $B$. This constraint can be encoded into the SMT solver as:
+
+A given card $i$ from $K$ must be from the board $B$:
+\begin{multline}
+	((k_{i,1} = b_{1,1}) \wedge (k_{i,2} = b_{1,2}) \wedge ... \wedge (k_{i,p} = b_{1,p})) \vee \\
+	 ((k_{i,1} = b_{2,1}) \wedge (k_{i,2} = b_{2,2}) \wedge ... \wedge (k_{i,p} = b_{2,p}))  \vee ... \vee \\ ((k_{i,1} = b_{n*p,1}) \wedge (k_{i,2} = b_{n*p,2}) \wedge ... \wedge (k_{i,p} = b_{n*p,p})) 
+\end{multline}
+
+Therefore, all cards $i \in K$ must be from the board $B$:
+ 
+\begin{align}
+	\bigcap \limits_{i=1}^{p}  \left( \bigcup \limits_{j = 1}^{p}  \left( \bigcap \limits_{m=1}^{p}  k_{i,m} = b_{j,m}\right) \right)
+\end{align}
+
+\subsection{All Distinct Cards}
+
+We constrain the possible cards in the set to be from $B$, but this includes duplicates. A possible set could be three of the exact same cards and would satisfy the above constraints but does not represent a real set in the game. Therefore, the last constraint is that the cards selected to be in $K$, must all be distinct cards. The cards of a set are considered all distinct if for any two cards, they have at least one property that has a differing value. The constraint can be written as:
+
+\begin{multline}
+	((k_{1,1} \neq k_{2,1}) \vee (k_{1,2} \neq k_{2,2}) \vee ... \vee (k_{1,p} \neq k_{2,p}))  
+	 \wedge ((k_{2,1} \neq k_{3,1}) \vee (k_{2,2} \neq k_{3,2}) \vee ... \vee (k_{2,p} \neq k_{3,p})) \\ \wedge  ... \wedge ((k_{p-1,1} \neq k_{p,1}) \vee (k_{p-1,2} \neq k_{p,2}) \vee ... \vee (k_{p-1,p} \neq k_{p,p})) 
+\end{multline}
+
+
+
+\begin{align}
+	\bigcap \limits_{i=1}^{p-1}   \left( \bigcap \limits_{j=i+1}^{p}   \left( \bigcup \limits_{m = 1}^{p} k_{i,m} \neq k_{j,m} \right)  \right)
+\end{align}
+
+By building these three constraints (7, 9, 11) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
+
+
+\subsection{Update Functions} 
+The solver to find sets must also support two update functions. The first update function of removing cards can be easily encoded into the SMT constraints. Let set $V$ be an arbitrary set that was located by the SMT solver. To remove the set from the board, we can add new constraints such that the new set to be found cannot be equal to any of the cards found in $V$. This can be written as:
+
+\begin{align}
+	\forall k \in K, \forall v \in V \left (k_1 \neq v_1 \vee k_2 \neq v_2 \vee ... \vee k_p \neq v_p \right)
+\end{align}
+
+A given card $i$ from $K$ must not be equivalent to a card in $V$:
+
+\begin{multline}
+	((k_{i,1} \neq v_{1,1}) \wedge (k_{i,2} \neq v_{1,2}) \wedge ... \wedge (k_{i,p} \neq v_{1,p})) \vee \\
+	 ((k_{i,1} \neq v_{2,1}) \wedge (k_{i,2} \neq v_{2,2}) \wedge ... \wedge (k_{i,p} \neq v_{2,p}))  \vee ... \vee \\ ((k_{i,1} \neq v_{p,1}) \wedge (k_{i,2} \neq v_{p,2}) \wedge ... \wedge (k_{i,p} \neq v_{p,p})) 
+\end{multline}
+
+All cards $i \in K$ must not be equivalent to a card in $V$:
+
+\begin{align}
+	\bigcap \limits_{i=1}^{p}   \left( \bigcup \limits_{j=1}^{p}  \bigcap \limits_{m = 1}^{p} k_{i,m} \neq v_{j,m} \right)   
+\end{align}
+
+For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11) from above. Therefore, this is represents a full reduction to SMT from the Game of Set. 
+
+\end{document}
+
