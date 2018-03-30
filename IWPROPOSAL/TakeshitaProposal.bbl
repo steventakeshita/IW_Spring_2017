@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+
+\bibitem{chaudhuri}
+Kamalika Chaudhuri, Brighten Godfrey, David Ratajczak, and Hoeteck Wee.
+\newblock On the complexity of the game of set, 2003.
+
+\bibitem{jorquera}
+Fernando San~Martin Jorquera and Amanda Legge.
+\newblock Set® card game solver using image processing techniques on
+  smart-phone photos, 2013.
+
+\bibitem{nolte}
+Steve Nolte.
+\newblock Javascript set game solver.
+
+\bibitem{norvig}
+Peter Norvig.
+\newblock The odds of finding a set in the card game set®, 2017.
+
+\end{thebibliography}
