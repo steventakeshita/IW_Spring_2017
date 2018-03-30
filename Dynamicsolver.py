@@ -36,6 +36,11 @@ class Dynamicsolver:
         self.found_sets = []
 
 
+        # cards searching for
+        # mapped from card that you have to the set that it completes
+        self.cards_searching_for = {}
+
+
         def create_initial_combos(cards):
             # if self.v is 1 then all cards are considered a set
             if (self.v == 1):
@@ -61,10 +66,6 @@ class Dynamicsolver:
         self.partial_sets = []
 
         create_initial_combos(self.rand.board)
-
-        # cards searching for
-        # mapped from card that you have to the set that it completes
-        self.cards_searching_for = {}
 
 
 
@@ -181,7 +182,7 @@ class Dynamicsolver:
                         value_missing = tot_val - sum(values_have)
                         card_missing+= str(value_missing)
 
-                    self.cards_searching_for[card_missing] = self.partial_sets[len(self.partial_sets)-ps-1]
+                self.cards_searching_for[card_missing] = self.partial_sets[len(self.partial_sets)-ps-1]
 
         for i in sets_to_delete:
             # delete partial sets 
@@ -226,8 +227,13 @@ class Dynamicsolver:
 
                         # if the card was missing just one card remove it from the cards searching for 
                         # since it is now missing 2 cards
-                        if len(i) == v-1:
-                          del self.cards_searching_for[i]
+                        if len(i) == self.v-1:
+                            print self.cards_searching_for
+                            for missing_card, partial in self.cards_searching_for.items():
+                                print i
+                                if partial == i:
+                                    del self.cards_searching_for[missing_card]
+                            print self.cards_searching_for
 
                         # delete the card from the partial set
                         del i[len(i)-1-j]
@@ -261,7 +267,11 @@ class Dynamicsolver:
             # if a card in the ones drawn is one of the ones found
             if i in self.cards_searching_for:
                 # finish the set
-                new_set = self.cards_searching_for[i]
+                original_set = self.cards_searching_for[i]
+
+                # delete it from partial sets
+                self.partial_sets.remove(i)
+
                 new_set.append(i)
                 self.found_sets.append(new_set)
 
@@ -357,7 +367,9 @@ def run_test():
 
     # actual game of set
     basic3 = Randomizer(3,2)
-    # basic3.board = ['11', '10', '12']
+    # basic3.board = ['20', '11', '00', '01', '12', '02']
+    basic3.board = ['20', '11']
+    # print basic3.board
     test = Dynamicsolver(basic3.v, basic3.p, basic3)
     original_board = test.all_cards_on_board
     model = test.find_set()
