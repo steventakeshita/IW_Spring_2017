@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  26 MAR 2018 22:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  1 APR 2018 13:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1101,149 +1101,134 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 39.
  [2] [3] [4]
-[5] [6] [7] <3p4v10000Init.png, id=196, 578.16pt x 433.62pt>
+[5] [6] [7] <3p4v10000Init.png, id=201, 578.16pt x 433.62pt>
 File: 3p4v10000Init.png Graphic file (type png)
 
 <use 3p4v10000Init.png>
-Package pdftex.def Info: 3p4v10000Init.png used on input line 224.
+Package pdftex.def Info: 3p4v10000Init.png used on input line 243.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 225.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 244.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 9.99591pt on input line 225.
+(Font)              scaled to size 9.99591pt on input line 244.
 Package microtype Info: Loading generic settings for font family
 (microtype)             `phv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 225.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 244.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 9.99591pt on input line 225.
+(Font)              scaled to size 9.99591pt on input line 244.
 
-<4p5v10000Init.png, id=198, 578.16pt x 433.62pt>
+<4p5v10000Init.png, id=203, 578.16pt x 433.62pt>
 File: 4p5v10000Init.png Graphic file (type png)
  <use 4p5v10000Init.png>
-Package pdftex.def Info: 4p5v10000Init.png used on input line 231.
+Package pdftex.def Info: 4p5v10000Init.png used on input line 250.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 222--235
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 241--254
 [][]   [] 
  []
 
-<3p4v10000Draw.png, id=199, 578.16pt x 433.62pt>
+<3p4v10000Draw.png, id=204, 578.16pt x 433.62pt>
 File: 3p4v10000Draw.png Graphic file (type png)
  <use 3p4v10000Draw.png>
-Package pdftex.def Info: 3p4v10000Draw.png used on input line 241.
+Package pdftex.def Info: 3p4v10000Draw.png used on input line 260.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<4p5v10000Draw.png, id=200, 578.16pt x 433.62pt>
+<4p5v10000Draw.png, id=205, 578.16pt x 433.62pt>
 File: 4p5v10000Draw.png Graphic file (type png)
  <use 4p5v10000Draw.png>
-Package pdftex.def Info: 4p5v10000Draw.png used on input line 248.
+Package pdftex.def Info: 4p5v10000Draw.png used on input line 267.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 239--252
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 258--271
 [][]   [] 
  []
 
-[8 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5v100
-00Draw.png>] [9] [10]
+[8] [9 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5
+v10000Draw.png>] [10] [11]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 365.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 393.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 365.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 393.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 365.
- [11] <gray.jpg, id=237, 329.23pt x 154.5775pt>
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 393.
+ <gray.jpg, id=239, 329.23pt x 154.5775pt>
 File: gray.jpg Graphic file (type jpg)
 
 <use gray.jpg>
-Package pdftex.def Info: gray.jpg used on input line 381.
+Package pdftex.def Info: gray.jpg used on input line 409.
 (pdftex.def)             Requested size: 352.31625pt x 165.41985pt.
 
-<checkerboard-squares-black-white.jpg, id=242, 216.81pt x 216.81pt>
+<checkerboard-squares-black-white.jpg, id=244, 216.81pt x 216.81pt>
 File: checkerboard-squares-black-white.jpg Graphic file (type jpg)
 
 <use checkerboard-squares-black-white.jpg>
 Package pdftex.def Info: checkerboard-squares-black-white.jpg used on input lin
-e 413.
+e 441.
 (pdftex.def)             Requested size: 176.15813pt x 176.1676pt.
 
-<swirl-squares-black-white.jpg, id=243, 216.81pt x 216.81pt>
+<swirl-squares-black-white.jpg, id=245, 216.81pt x 216.81pt>
 File: swirl-squares-black-white.jpg Graphic file (type jpg)
 
 <use swirl-squares-black-white.jpg>
-Package pdftex.def Info: swirl-squares-black-white.jpg used on input line 420.
+Package pdftex.def Info: swirl-squares-black-white.jpg used on input line 448.
 (pdftex.def)             Requested size: 176.15813pt x 176.1676pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 411--424
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 439--452
 [][]   [] 
  []
 
-[12 <./gray.jpg>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 450.
+[12] [13 <./gray.jpg> <./checkerboard-squares-black-white.jpg> <./swirl-squares
+-black-white.jpg>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 478.
 
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 450.
- [13 <./checkerboard-squares-black-white.jpg> <./swirl-squares-black-white.jpg>
-] [14]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 478.
+ [14] [15]
 (./template.bbl
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 511.
- [15]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 511.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 539.
+ [16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 539.
  (./template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 511.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 511.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 539.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 539.
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: F0827DCC4061ABC81C729A1CFBB716A2;4550.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
+(rerunfilecheck)             Checksum: 1C40EB26602379E4450C3FDBCAE9DD50;4686.
  ) 
 Here is how much of TeX's memory you used:
- 15629 strings out of 493014
- 226816 string characters out of 6133351
- 350254 words of memory out of 5000000
- 18657 multiletter control sequences out of 15000+600000
- 81821 words of font info for 233 fonts, out of 8000000 for 9000
+ 15632 strings out of 493014
+ 226828 string characters out of 6133351
+ 350466 words of memory out of 5000000
+ 18658 multiletter control sequences out of 15000+600000
+ 81951 words of font info for 235 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  48i,16n,40p,1311b,507s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{figure.caption.5} has been referenced but does no
-t exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{table.caption.4} has been referenced but does not e
-xist, replaced by a fixed one
-
-pdfTeX warning (dest): name{figure.caption.3} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{table.caption.2} has been referenced but does not e
-xist, replaced by a fixed one
-
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texl
-ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
-ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
-/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/
-2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/te
-xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/f
-onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on template.pdf (15 pages, 245970 bytes).
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
+live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texli
+ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texliv
+e/2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/
+texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2016/texmf-dist/
+fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type
+1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/time
+s/utmri8a.pfb>
+Output written on template.pdf (16 pages, 249416 bytes).
 PDF statistics:
- 317 PDF objects out of 1000 (max. 8388607)
- 278 compressed objects within 3 object streams
- 82 named destinations out of 1000 (max. 500000)
- 46884 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 326 PDF objects out of 1000 (max. 8388607)
+ 285 compressed objects within 3 object streams
+ 81 named destinations out of 1000 (max. 500000)
+ 46892 words of extra memory for PDF output out of 51595 (max. 10000000)
 

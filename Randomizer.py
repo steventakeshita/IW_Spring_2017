@@ -52,14 +52,8 @@ class Randomizer:
 	def remove_cards(self, cards_to_remove):
 		self.found_sets += cards_to_remove
 
-		indices = []
-		for i in range(len(self.board)):
-			if self.board[i] in cards_to_remove: 
-				indices.append(i)
-
-		for i in range(len(indices)):
-			del self.board[indices[len(indices)-1-i]]
-
+		for i in cards_to_remove:
+			self.board.remove(i)
 
 
 	# draws v new cards from the deck and adds it the board while removing them from the deck

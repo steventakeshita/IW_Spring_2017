@@ -46,10 +46,6 @@ class BruteForce:
 
         return self.find_set()
 
-
-
-
-
     # Remove an arbitrary set and update constraints
     def remove_set_from_board(self, remove_set):
         self.rand.remove_cards(remove_set)
@@ -130,7 +126,7 @@ def run_test():
     check_if_real_set(original_board, model, basic2.p, basic2.v)
 
     # actual game of set
-    basic3 = Randomizer(3,2)
+    basic3 = Randomizer(3,4)
     # basic3.board = ['20', '11', '00', '01', '12', '02']
     # basic3.board = ['20', '11']
     # print basic3.board
@@ -206,4 +202,4 @@ def run_test():
       check_if_removed(remove2.board, i)
 
 
-run_test()
+# run_test()

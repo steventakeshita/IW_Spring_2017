@@ -177,7 +177,16 @@ Written more succinctly:
 	\bigwedge \limits_{i=1}^{v-1}   \left( \bigwedge \limits_{j=i+1}^{v}   \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq k_{j,m} \right)  \right)
 \end{align}
 
-By building these three constraints (7, 9, 11) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
+\subsection {Condensing Sets}
+
+The satisfying assignment can be achieved through any permutation of cards of a set. Therefore, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards. This will break the symmetry in the encoding and speed up the process of the SMT solver. Therefore, we need to encode this relation of forcing a single set for all permutations of cards. Therefore, we can arbitrarily set that the sum of the values of the cards for all properties must be in ascending order. A set like $\{[000],[001],[002]\}$ will not be allowed to take any other configuration as $0 \leq 1 \leq 2$. This can be encoding as follows: 
+
+\begin{align}
+	\bigwedge \limits_{i=1}^{v-1} \left( \sum \limits_{m=1}^{p} k_{i,m} \leq  \sum \limits_{m=1}^{p} k_{i+1,m} \right)
+\end{align}
+
+
+By building these four constraints (7, 9, 11, 12) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
 
 
 \subsection{Update Functions} 
@@ -199,6 +208,12 @@ All cards $i \in K$ must not be equivalent to a card in $V$:
 \begin{align}
 	\bigwedge \limits_{i=1}^{v}   \left( \bigwedge \limits_{j=1}^{v}  \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq v_{j,m} \right)   \right)
 \end{align}
+
+
+
+
+
+
 
 For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11) from above. Therefore, this is represents a full reduction to SMT from the Game of Set. 
 
@@ -271,6 +286,8 @@ This iterative sequence will take place $n$ times to find $n$ sets within a game
 
 if the value number is 1 then all cards are considered a set
 if the value number is 2 then all pairs of cards are considered a set because for all combos they must differ or be the same by definition of having only two values. Therefore, only two cards comprise a set. 
+
+
 
 
 

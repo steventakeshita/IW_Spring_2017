@@ -8,6 +8,8 @@
 import time
 
 from SMTsolver import *
+# from Dynamicsolver import *
+from BruteForce import *
 
 # list the number of sets to find, values and properties of each deck
 sets_to_find = [1]
@@ -81,6 +83,29 @@ def runDynamicsolver(randomizer, n):
 	# return total time it took to find the sets
 	return finish - start
 
+
+
+# run the dynamic solver on a board to find n sets and return the time it took
+def runBruteForce(randomizer, n):
+	# checks CPU time... NOT real time
+	start = time.clock()
+	
+	test = BruteForce(randomizer.v, randomizer.p, randomizer)
+	model = test.find_n_sets(n)
+
+	finish = time.clock()
+
+	# confirm that this is in fact a set
+	# need to check whether it has been part of ANY board since we mightve had to add cards
+	# can comment this test out if want to be faster
+	for i in model:
+		check_if_real_set(test.all_cards_on_board, i, randomizer.p, randomizer.v)
+
+	# return total time it took to find the sets
+	return finish - start
+
+
+
 # run all the trials
 def run_trials():
 	for v in values:
@@ -89,17 +114,20 @@ def run_trials():
 
 				SMT_time = []
 				Dynamic_time = []
+				BruteForce_time = []
 
 				for _ in range(num_trials):
 					cur_rand = Randomizer(v,p) 
 
 					SMT_time.append(runSMTsolver(cur_rand, n))
 					# Dynamic_time.append(runDynamicsolver(cur_rand, n)) 
+					BruteForce_time.append(runSMTsolver(cur_rand, n))
 
 				avg_SMT = sum(SMT_time)/float(num_trials)
 				# avg_Dynamic = sum(Dynamic_time)/float(num_trials)
+				avg_Brute = sum(BruteForce_time)/float(num_trials)
 
-				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) 
-				# print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic)
+				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Brute Force time: " + str(avg_Brute)
+				# print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avgBrute)  
 
 run_trials()
