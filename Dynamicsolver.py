@@ -27,7 +27,6 @@ class Dynamicsolver:
 
         # collects all the cards that we ever on the board
         self.all_cards_on_board = set(self.rand.board)
-
         
         # DYNAMIC SPECIFIC FIELDS
         # perhaps make this into an interface to clean up the code though probably not necessary
@@ -80,84 +79,93 @@ class Dynamicsolver:
     # find all cards that complete stes from partial sets
     def find_completing_cards_from_board_for_partial_set(self, ps, cur_partial_set, sets_to_delete, cards_cannot_use):
         # determine whether for each property are we searching for the same or different value
-            is_same_for_prop = []
-            diff_value_needed = [[] for _ in range(self.p)]
-            # can determine what the set is aiming for based on only two cards
-            for p in range(self.p):
-                # same value for this property
-                p_1 = cur_partial_set[1][p]
-                p_0 = cur_partial_set[0][p] 
-                if (p_0 == p_1):
-                    is_same_for_prop.append(True)
-                # or different
-                else:
-                    # go over all cards in the partial sets and see what value we need for each property
-                    for i in cur_partial_set:
-                        diff_value_needed[p] += [int(i[p])]
+        
 
-                    is_same_for_prop.append(False)
+        is_same_for_prop = []
+        diff_value_needed = [[] for _ in range(self.p)]
 
-            # check if a card can be appended to this combo
-            for card in self.rand.board:
+        # can determine what the set is aiming for based on only two cards
+        for p in range(self.p):
 
-                # if this card is one we cannot use skip to the next card 
-                if card in cards_cannot_use:
-                    continue
+            # same value for this property
+            p_1 = cur_partial_set[1][p]
+            p_0 = cur_partial_set[0][p] 
+            if (p_0 == p_1):
+                is_same_for_prop.append(True)
+            # or different
+            else:
+                # go over all cards in the partial sets and see what value we need for each property
+                for i in cur_partial_set:
+                    diff_value_needed[p] += [int(i[p])]
 
-                # only potentially include it if its not one of the cards already included in the possible set
-                if card not in cur_partial_set:
-
-                    failed = False
-                    for p in range(self.p):
-
-                        if is_same_for_prop[p]:
-                            # not the same characteristic
-                            if card[p] != cur_partial_set[0][p]:
-                                failed = True
-                                break
-                        else:
-                            # remember what properties we need per property
-                            if int(card[p]) not in diff_value_needed[p]:
-                                diff_value_needed[p]+=[int(card[p])]
-                            else:
-                                # there are overlapping "different" properties therefore not a card we want
-                                failed = True
-                                break
-
-                    # print failed
-                    # satisfies all characteristics add it to the set
-                    if not failed:
-                        # partial sets
-                        cur_partial_set.append(card)
+                is_same_for_prop.append(False)
 
 
-            # added all the satisfying cards to the card
-            # if the length of the possible set is v then it is a set!
-            if len(cur_partial_set) == self.v:
+        # check if a card can be appended to this combo
+        for card in self.rand.board:
 
-                self.found_sets.append(cur_partial_set)
-                sets_to_delete.append(len(self.partial_sets)-ps-1)
+            # if this card is one we cannot use skip to the next card 
+            if card in cards_cannot_use:
+                continue
 
-                # alernatively just immediately delete the card from the list!
-                cards_cannot_use += cur_partial_set
+            # only potentially include it if its not one of the cards already included in the possible set
+            if card not in cur_partial_set:
 
-            # missing one card, queue this up to the next one! 
-            elif len(cur_partial_set) == self.v-1:
-                # determine WHAT the last card should be 
-                card_missing = ""
-                tot_val = sum(range(self.v))
+                failed = False
+                potential_add_diff_values = [[] for _ in range(self.p)]
+
+                # check the card to see what card we can add
                 for p in range(self.p):
                     if is_same_for_prop[p]:
-                        # match the arbitrarily first cards pth property
-                        card_missing+= cur_partial_set[0][p]
+                        # not the same characteristic
+                        if card[p] != cur_partial_set[0][p]:
+                            failed = True
+                            break
                     else:
-                        values_have = diff_value_needed[p]
-                        value_missing = tot_val - sum(values_have)
-                        card_missing+= str(value_missing)
+                        # remember what properties we need per property
+                        if int(card[p]) not in (diff_value_needed[p] + potential_add_diff_values[p]):
+                            potential_add_diff_values[p]+= [int(card[p])]
+                        else:
+                            # there are overlapping "different" properties therefore not a card we want
+                            failed = True
+                            break
 
-                self.cards_searching_for[card_missing] = cur_partial_set
+
+                # satisfies all characteristics add it to the set
+                if not failed:
+                    # partial sets
+                    cur_partial_set.append(card)
+
+                    # combine to see what values we are missing
+                    for add in range(self.p):
+                        diff_value_needed[add]+= potential_add_diff_values[add]
+
+        # added all the satisfying cards to the card
+        # if the length of the possible set is v then it is a set!
+        if len(cur_partial_set) == self.v:
+
+            self.found_sets.append(cur_partial_set)
+            sets_to_delete.append(len(self.partial_sets)-ps-1)
+
+            # alernatively just immediately delete the card from the list!
+            cards_cannot_use += cur_partial_set
 
 
+        # missing one card, queue this up to the next one! 
+        elif len(cur_partial_set) == self.v-1:
+            # determine WHAT the last card should be 
+            card_missing = ""
+            tot_val = sum(range(self.v))
+            for p in range(self.p):
+                if is_same_for_prop[p]:
+                    # match arbitrarily first cards pth property
+                    card_missing += cur_partial_set[0][p]
+                else:
+                    values_have = diff_value_needed[p]
+                    value_missing = tot_val - sum(values_have)
+                    card_missing += str(value_missing)
+
+            self.cards_searching_for[card_missing] = cur_partial_set
 
 
     def find_all_sets(self):
@@ -185,7 +193,6 @@ class Dynamicsolver:
 
             self.find_completing_cards_from_board_for_partial_set(ps, cur_partial_set, sets_to_delete, cards_cannot_use)
             
-
         for i in sets_to_delete:
             # delete partial sets 
             # delete this possible set from possible sets... 
@@ -225,10 +232,9 @@ class Dynamicsolver:
 
                     # delete the card from the partial set
                     del i[len(i)-1-j]
-                    continue
 
-            # add to queue of deleting stes
-            if len(i) == 1:
+            # add to queue of deleting sets
+            if len(i) == 1 or len(i) == 0:
                 sets_to_delete.append(i)
 
         # delete the sets that are now just one card
@@ -236,22 +242,19 @@ class Dynamicsolver:
             self.partial_sets.remove(i)
 
 
+    
+
     def find_set(self):
         # if there are sets already queued as being found, immediately return
         if len(self.found_sets) != 0:
             return self.found_sets.pop()
         else:
-            print "board attributes"
-            print self.rand.board
-            print self.rand.found_sets
 
-            print "solver attributes"
-            print self.partial_sets
-            print self.cards_searching_for
 
 
             # must have to draw new cards and rebuild what can be used or not... 
             self.rand.draw_new_cards()
+
 
             # last v new cards in the board are new cards
             new_cards = self.rand.board[len(self.rand.board)-self.v:]
@@ -267,12 +270,29 @@ class Dynamicsolver:
         # make sure that any new sets that are satisfied that we don't use any of the cards again
         cards_cannot_use = []
         final_new_cards = []
+
+
+        for missing_card, partial in self.cards_searching_for.items():
+
+
+
         # look through all of the new cards pulled and see if it finishes any of the sets
         for i in new_cards:
             # if a card in the ones drawn is one of the cards we are searching for
             if i in self.cards_searching_for:
                 # finish the set
                 original_set = self.cards_searching_for[i]
+
+                # need to check that any potential set does not contain any card from a previously completed set
+                is_used_in_another_set = False
+                for j in original_set:
+                    if j in cards_cannot_use:
+                        is_used_in_another_set = True
+                        break
+
+                # if we used one of the cards in the set for a different completed set try the next partial set
+                if is_used_in_another_set:
+                    continue            
 
                 new_set = original_set + [i]
 
@@ -291,6 +311,7 @@ class Dynamicsolver:
 
         # delete partial sets that include the cards we removed
         self.delete_from_partial_sets(cards_cannot_use)
+
         self.remove_set_from_board(cards_cannot_use)
 
         # create new partial sets based on what cards are left
@@ -370,67 +391,88 @@ def run_test():
 
 
 
-    # # basic starting board where the board will contain ALL the cards and therefore must contain a set 
-    # basic1 = Randomizer(2,2)
-    # test = Dynamicsolver(basic1.v, basic1.p, basic1)
-    # original_board = test.all_cards_on_board
-    # model = test.find_set()
-    # extract_cards(basic1.v, basic1.p, model, False)
-    # check_if_real_set(original_board, model, basic1.p, basic1.v)
+#     # basic starting board where the board will contain ALL the cards and therefore must contain a set 
+#     basic1 = Randomizer(2,2)
+#     test = Dynamicsolver(basic1.v, basic1.p, basic1)
+#     original_board = test.all_cards_on_board
+#     model = test.find_set()
+#     extract_cards(basic1.v, basic1.p, model, False)
+#     check_if_real_set(original_board, model, basic1.p, basic1.v)
 
 
-    # # 2 values 3 properties
-    # basic2 = Randomizer(2,3)
-    # test = Dynamicsolver(basic2.v, basic2.p, basic2)
-    # original_board = test.all_cards_on_board
-    # model = test.find_set()
-    # extract_cards(basic2.v, basic2.p, model, False)
-    # check_if_real_set(original_board, model, basic2.p, basic2.v)
+#     # 2 values 3 properties
+#     basic2 = Randomizer(2,3)
+#     test = Dynamicsolver(basic2.v, basic2.p, basic2)
+#     original_board = test.all_cards_on_board
+#     model = test.find_set()
+#     extract_cards(basic2.v, basic2.p, model, False)
+#     check_if_real_set(original_board, model, basic2.p, basic2.v)
 
-    # # actual game of set
-    # basic3 = Randomizer(3,4)
-    # test = Dynamicsolver(basic3.v, basic3.p, basic3)
-    # original_board = test.all_cards_on_board
-    # model = test.find_set()
-    # extract_cards(basic3.v, basic3.p, model, False)
-    # check_if_real_set(original_board, model, basic3.p, basic3.v)
+#     # actual game of set
+#     basic3 = Randomizer(3,4)
+#     test = Dynamicsolver(basic3.v, basic3.p, basic3)
+#     original_board = test.all_cards_on_board
+#     model = test.find_set()
+#     extract_cards(basic3.v, basic3.p, model, False)
+#     check_if_real_set(original_board, model, basic3.p, basic3.v)
 
 
 
 # # Checking remove card functionality
 
-    # # 2 values 3 properties test if remove_card_works
-    # remove1 = Randomizer(2,3)
-    # test = Dynamicsolver(remove1.v, remove1.p, remove1)
-    # original_board = test.all_cards_on_board
-    # model = test.find_set()
-    # extract_cards(remove1.v, remove1.p, model, False)
-    # # check if the set found was part of the old board and is a set
-    # check_if_real_set(original_board, model, remove1.p, remove1.v)
+#     # 2 values 3 properties test if remove_card_works
+#     remove1 = Randomizer(2,3)
+#     test = Dynamicsolver(remove1.v, remove1.p, remove1)
+#     original_board = test.all_cards_on_board
+#     model = test.find_set()
+#     extract_cards(remove1.v, remove1.p, model, False)
+#     # check if the set found was part of the old board and is a set
+#     check_if_real_set(original_board, model, remove1.p, remove1.v)
 
-    # # check that the set is not longer in the new board
-    # check_if_removed(remove1.board, model)
+#     # check that the set is not longer in the new board
+#     check_if_removed(remove1.board, model)
 
-    # # 3 values 4 properties test if remove_card_works
-    # remove2 = Randomizer(3,4)
+#     # 3 values 4 properties test if remove_card_works
+#     remove2 = Randomizer(3,4)
+#     test = Dynamicsolver(remove2.v, remove2.p, remove2)
+#     original_board = test.all_cards_on_board
+#     model = test.find_set()
+#     extract_cards(remove2.v, remove2.p, model, False)
+#     # check if the set found was part of the old board and is a set
+#     check_if_real_set(original_board, model, remove2.p, remove2.v)
+
+#     # check that the set is not longer in the new board
+#     check_if_removed(remove2.board, model)
+
+
+# Checking that it can remove multiple sets
+
+    # # 3 values 4 properties test and remove 2 sets
+    # remove2 = Randomizer(3,4) 
     # test = Dynamicsolver(remove2.v, remove2.p, remove2)
+    # model = test.find_n_sets(2)
+    
+    # # print test.all_cards_on_board
+
+    # for i in model:
+    #   extract_cards(remove2.v, remove2.p, i, False)
+
     # original_board = test.all_cards_on_board
-    # model = test.find_set()
-    # extract_cards(remove2.v, remove2.p, model, False)
-    # # check if the set found was part of the old board and is a set
-    # check_if_real_set(original_board, model, remove2.p, remove2.v)
+    # # need to check whether it has been part of ANY board since we mightve had to add cards
+    # for i in model:
+    #   check_if_real_set(original_board, i, remove2.p, remove2.v)
 
     # # check that the set is not longer in the new board
-    # check_if_removed(remove2.board, model)
+    # for i in model:
+    #   check_if_removed(remove2.board, i)
 
 
-# # Checking that it can remove multiple sets
 
-    # 3 values 4 properties test and remove 2 sets
+
+    # 3 values 4 properties test and remove 10 sets
     remove2 = Randomizer(3,4) 
-    remove2.board = ['1002', '1200', '0001', '2010', '2002', '2110', '2102', '2201', '0010', '1121', '0220', '0022']
     test = Dynamicsolver(remove2.v, remove2.p, remove2)
-    model = test.find_n_sets(2)
+    model = test.find_n_sets(10)
     for i in model:
       extract_cards(remove2.v, remove2.p, i, True)
 
@@ -442,22 +484,6 @@ def run_test():
     # check that the set is not longer in the new board
     for i in model:
       check_if_removed(remove2.board, i)
-
-#   # 3 values 4 properties test and remove 10 sets
-#   remove2 = Randomizer(3,4) 
-#   test = Dynamicsolver(remove2.v, remove2.p, remove2)
-#   model = test.find_n_sets(10)
-#   for i in model:
-#       extract_cards(remove2.v, remove2.p, i, False)
-
-#   original_board = test.all_cards_on_board
-# # need to check whether it has been part of ANY board since we mightve had to add cards
-#   for i in model:
-#       check_if_real_set(original_board, i, remove2.p, remove2.v)
-
-#   # check that the set is not longer in the new board
-#   for i in model:
-#       check_if_removed(remove2.board, i)
 
 
 run_test()

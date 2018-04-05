@@ -116,12 +116,15 @@ def run_trials():
 				Dynamic_time = []
 				BruteForce_time = []
 
+				# have to create new randomizer or else the next solver uses the same "used" board
 				for _ in range(num_trials):
-					cur_rand = Randomizer(v,p) 
+					SMT_rand = Randomizer(v,p) 
+					SMT_time.append(runSMTsolver(SMT_rand, n))
 
-					SMT_time.append(runSMTsolver(cur_rand, n))
-					# Dynamic_time.append(runDynamicsolver(cur_rand, n)) 
-					BruteForce_time.append(runSMTsolver(cur_rand, n))
+					# Dynamic_time.append(runDynamicsolver(cur_rand, n))
+
+					Brute_rand = Randomizer(v,p) 
+					BruteForce_time.append(runSMTsolver(Brute_rand, n))
 
 				avg_SMT = sum(SMT_time)/float(num_trials)
 				# avg_Dynamic = sum(Dynamic_time)/float(num_trials)

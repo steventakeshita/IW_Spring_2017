@@ -179,12 +179,19 @@ Written more succinctly:
 
 \subsection {Condensing Sets}
 
-The satisfying assignment can be achieved through any permutation of cards of a set. Therefore, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards. This will break the symmetry in the encoding and speed up the process of the SMT solver. Therefore, we need to encode this relation of forcing a single set for all permutations of cards. Therefore, we can arbitrarily set that the sum of the values of the cards for all properties must be in ascending order. A set like $\{[000],[001],[002]\}$ will not be allowed to take any other configuration as $0 \leq 1 \leq 2$. This can be encoding as follows: 
+The satisfying assignment can be achieved through any permutation of cards of a set. Therefore, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards. This will break the symmetry in the encoding and speed up the process of the SMT solver, as the SMT solver will not need to search branches of its search tree that are duplicates of another branch. Therefore, we need to encode this relation of forcing a single set for all permutations of cards. Therefore, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
+
+\begin{multline}
+	(k_{1,1} \leq k_{2,1} \leq ... \leq k_{v,1}) \wedge (   (k_{1,2} \leq k_{2,2} \leq ... \leq k_{v,2})  \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge (   (k_{1,3} \leq k_{2,3} \leq ... \leq k_{v,3})  \vee \neg (k_{1,2} = k_{2,2} = ... = k_{v,2}) \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge ... \wedge (   (k_{1,p} \leq k_{2,p} \leq ... \leq k_{v,p})  \vee \neg (k_{1,p-1} = k_{2,p-1} = ... = k_{v,p-1}) \vee ... \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1}))
+\end{multline}
+
+Written more compactly:
 
 \begin{align}
-	\bigwedge \limits_{i=1}^{v-1} \left( \sum \limits_{m=1}^{p} k_{i,m} \leq  \sum \limits_{m=1}^{p} k_{i+1,m} \right)
+	\bigwedge \limits_{i=1}^{p}   \left(  (k_{1,i} \leq k_{2,i} \leq ... \leq k_{v,i}) \bigvee \limits_{j=1}^{i-1}  \left( \neg (k_{1,j} = k_{2,j} = ... = k_{v,j})  \right)   \right)
 \end{align}
-
 
 By building these four constraints (7, 9, 11, 12) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
 
@@ -212,9 +219,6 @@ All cards $i \in K$ must not be equivalent to a card in $V$:
 
 
 
-
-
-
 For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11) from above. Therefore, this is represents a full reduction to SMT from the Game of Set. 
 
 
@@ -225,13 +229,7 @@ The simulations for the randomizer and solvers were all written in python. Consi
 
 \subsection{Randomizer}
 
-The randomization algorithm for creating a randomized deck is very important in terms of creating a real life scenario gameplay. Therefore, the algorithm must uniformly distribute all of the cards ($n*p$) initially so that no solver can have an unfair advantage knowing what cards are more likely to come out. To do so, I used a couple of important libraries to ensure randomness and to plot the distribution in order to guarantee its uniform distribution. I used the Random library in python to be able to generate random indices to pull for the beginning board ($n*p$) and for the next $v$ cards when sets are found. I assumed the Random library to be perfectly random. To ensure that the next $v$ cards are always random from the set, I employed the use of a modified version of Fisher Yates Shuffle. Fisher Yates Shuffle works by iteratively randomly picking indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert it to work with a deck, I randomly selected a beginning set of indices of size $n*p$ from the deck and set this as the beginning board, removing them from the deck. Next, to add $v$ new cards, I randomly select $v$ cards from the remaining deck and append them to the board. This employs the use of Fisher Yates Shuffle. 
-
-% EMPLOYED A NEW WAY TO DO RANDOMIZAATION CHANGE THIS IT COULD STILL BE THE FISHER YATES THOUGH
-
-
-% It doesn't have a name that I know.  One way of thinking about it is that it's an version of Fisher-Yates that uses rejection sampling instead of re-arranging the deck to make the distribution easy to sample from.  It's a Las Vegas randomized algorithm. 
-% Las Vegas algorithm is one that is randomized that will output the correct answer always. 
+The randomization algorithm for creating a randomized deck is very important in terms of creating a real life scenario gameplay. Therefore, the algorithm must uniformly distribute all of the cards ($v*p$) initially so that no solver can have an unfair advantage knowing what cards are more likely to come out. To do so, I used a couple of important libraries to ensure randomness and to plot the distribution in order to guarantee its uniform distribution. I used the Random library in python to be able to generate random indices to pull for the beginning board ($v*p$) and for the next $v$ cards when sets are found. I assumed the Random library to be perfectly random. To ensure that the next $v$ cards are always random from the set, I employed the use of a modified version of Fisher Yates Shuffle, creating a Las Vegas algorithm. Fisher Yates Shuffle works by iteratively randomly picking indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert the algorithm for use on a deck, I use rejection sampling to determine new cards to add to the board. I create a randomized card and if it is not in the board already and not in the removed cards set, I add it. If it is, I generate another card until I have created $v*p$ cards that are all distinct. Since the algorithm uses a randomized strategy but will always a board, whose cards are all distinct and from the deck with equal probabilities, this is known as a Las Vegas algorithm. To support the update function of removing cards, I append those cards to a set of removed cards. Therefore, when $v$ new cards are to be added, I generate $v$ new random cards through the above algorithm to be added to the board. This yields a randomized $v*p$ starting boards and unbiased drawing of $v$ cards from the deck.
 
 To confirm that this in fact created random beginning boards and new cards, I graphed the distribution of the beginning board for $1000$ trials with $v = 10$ and $p = 10$. I then used numpy to and matplotlib to count all the occurrences of each card and then graph them as a histogram. See the figure below.
 
