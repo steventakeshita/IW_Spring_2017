@@ -268,6 +268,10 @@ As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases
 \end{minipage}
 \end{figure}
 
+\subsection{Brute Force Implementation}
+
+As a very naive implementation, I implemented a Brute Force solution that tests all possible combinations of cards till a set is found and returns this set. This can be carried out $n$ times to find $n$ sets and therefore does not build on any previous knowledge, completely checking all possible sets each iteration though it may have checked the possible set in a previous search. 
+
 \subsection{SMT Solver Implementation}
 
 
@@ -280,6 +284,19 @@ To optimize the SMT Solver implementation, I queue up the set to be removed and 
 This iterative sequence will take place $n$ times to find $n$ sets within a game and the SMT solver will return these sets for validation of a legal set. 
 
 \subsection{Dynamic Algorithm Implementation}
+
+
+The Dynamic Algorithm approach hinges on the tradeoff between memory and speed. The Brute Force solution does not need to keep track of partial sets and can spend time iterating over all combos as fast possible. The SMT solver computes a set even faster by pruning the search as it continues through the algorithm to create marginal speed up while recording down possible search paths and deleting branches that have no chance of yielding a correct solution. And in the extreme case, the Dynamic Algorithm will utilize more space, recording down possible sets that can be quickly completed when new card are drawn. Therefore, the Dynamic Algorithm can complete sets in almost instantaneous time when large numbers of sets are to be found and when there is a low chance of there being a set in the board at a given time. 
+
+The Dynamic Algorithm's main speedup is in the way that it creates a list of partial sets, attempting to complete these when new cards are drawn. 
+
+\subsubsection{Set Up}
+
+To create all partial sets, the Dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${n*p}\choose{2}$ using Python's built in itertools library since a possible set can be wholly determined by two cards. Next, for each partial set, the algorithm will determine add any cards that satisfy the constraints that for each property, the values are either the same or all different. At the end of iterating over all cards on the board, if the partial set would be satisfied completely by one card, it will map the missing card to the partial set it will complete in a cards searching for data structure. This will continue for all partial sets. 
+
+
+\subsubsection{Quick Complete Upon Drawing Cards}
+
 
 
 if the value number is 1 then all cards are considered a set

@@ -36,6 +36,7 @@ class BruteForce:
                     cur_prop_value.append(card[p])
                 if len(set(cur_prop_value)) != self.v and len(set(cur_prop_value)) != 1:
                     is_set = False
+                    break
             if is_set:
                 self.remove_set_from_board(list(cards))
                 return list(cards)

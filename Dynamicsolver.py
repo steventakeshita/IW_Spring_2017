@@ -147,7 +147,6 @@ class Dynamicsolver:
             self.found_sets.append(cur_partial_set)
             sets_to_delete.append(len(self.partial_sets)-ps-1)
 
-            # alernatively just immediately delete the card from the list!
             cards_cannot_use += cur_partial_set
 
 
@@ -172,7 +171,6 @@ class Dynamicsolver:
         # for all possible sets in the partial sets
         sets_to_delete = []
         cards_cannot_use = []
-        # might be worthwhile to go over the indices rather than i in j so that when removing you can do it directly...
 
         # start from the back for easier deletion 
         for ps in range(len(self.partial_sets)):
@@ -217,21 +215,56 @@ class Dynamicsolver:
         # BUT also make sure that any other previous set did NOT use any card from the set(s) found      
         # must check to see if any of the cards you cannot use is in partial_sets and then remove card
 
+
         sets_to_delete = []
+
+
+
+
+# COPY PASTED
+        # potentially make it faster lol
+        # delete the partial set mapping from searching for cards if one of the partial sets uses card we can't use
+        for missing_card, partial in self.cards_searching_for.items():
+            for card in partial:
+                if card in cards_cannot_use:
+                    del self.cards_searching_for[missing_card]
+                    break
+
+
+        # for every partial set
         for i in self.partial_sets:
-            for j in range(len(i)):
-                # if this partial set used a card we are not supposed to use...
-                if i[len(i)-1-j] in cards_cannot_use:
 
-                    # if the card was missing just one card remove it from the cards searching for 
-                    # since it is now missing 2 cards
-                    if len(i) == self.v-1:
-                        for missing_card, partial in self.cards_searching_for.items():
-                            if partial == i:
-                                del self.cards_searching_for[missing_card]
+            to_delete_from_partial = []
 
-                    # delete the card from the partial set
-                    del i[len(i)-1-j]
+            for card in i:
+                if card in cards_cannot_use:
+                    to_delete_from_partial.append(card)
+
+            for j in to_delete_from_partial:
+                i.remove(j)
+
+            # # for every card in each partial set
+            # for j in range(len(i)):
+
+
+
+
+            #     # if this partial set used a card we are not supposed to use...
+            #     if i[len(i)-1-j] in cards_cannot_use:
+
+            #         # if the card was missing just one card remove it from the cards searching for 
+            #         # since it is now missing 2 cards
+
+
+
+            #         # if len(i) == self.v-1:
+            #         #     for missing_card, partial in self.cards_searching_for.items():
+            #         #         if partial == i:
+            #         #             del self.cards_searching_for[missing_card]
+            #         #             break
+
+            #         # delete the card from the partial set
+            #         del i[len(i)-1-j]
 
             # add to queue of deleting sets
             if len(i) == 1 or len(i) == 0:
@@ -242,15 +275,41 @@ class Dynamicsolver:
             self.partial_sets.remove(i)
 
 
+
+
+        # # for every partial set
+        # for i in self.partial_sets:
+
+        #     to_delete_from_partial = []
+
+        #     # for every card in each partial set
+        #     for j in i:
+
+        #         # if this partial set used a card we are not supposed to use...
+        #         if j in cards_cannot_use:
+
+        #             to_delete_from_partial.append(j)
+
+        #     # delete it from the set
+        #     for j in i:
+        #         i.remove(j)
+
+        #     # add to queue of deleting sets
+        #     if len(i) == 1 or len(i) == 0:
+        #         sets_to_delete.append(i)
+
+        # # delete the sets that are now just one card
+        # for i in sets_to_delete:
+        #     self.partial_sets.remove(i)
+
+
     
 
     def find_set(self):
         # if there are sets already queued as being found, immediately return
         if len(self.found_sets) != 0:
-            return self.found_sets.pop()
+            return self.found_sets.pop() 
         else:
-
-
 
             # must have to draw new cards and rebuild what can be used or not... 
             self.rand.draw_new_cards()
@@ -268,25 +327,21 @@ class Dynamicsolver:
     # quickly see if the cards just drawn satisfy any of the partial sets
     def find_sets_complete_partial(self, new_cards):
         # make sure that any new sets that are satisfied that we don't use any of the cards again
-        cards_cannot_use = []
+        cards_cannot_use_from_partial = []
         final_new_cards = []
-
-
-        for missing_card, partial in self.cards_searching_for.items():
-
 
 
         # look through all of the new cards pulled and see if it finishes any of the sets
         for i in new_cards:
             # if a card in the ones drawn is one of the cards we are searching for
             if i in self.cards_searching_for:
-                # finish the set
-                original_set = self.cards_searching_for[i]
+                # finish the set and remove it from the dictionary
+                original_set = self.cards_searching_for.pop(i)
 
                 # need to check that any potential set does not contain any card from a previously completed set
                 is_used_in_another_set = False
                 for j in original_set:
-                    if j in cards_cannot_use:
+                    if j in cards_cannot_use_from_partial:
                         is_used_in_another_set = True
                         break
 
@@ -296,23 +351,24 @@ class Dynamicsolver:
 
                 new_set = original_set + [i]
 
-                # delete it from partial sets
-                self.partial_sets.remove(original_set)
+                
+                # add it to found sets
                 self.found_sets.append(new_set)
 
-                # no longer can use any of the cards in the new set in any other sets
-                cards_cannot_use += new_set
+                # delete it from partial sets
+                self.partial_sets.remove(original_set)
 
-                # delete it from one of the cards searching for 
-                del self.cards_searching_for[i]
+                # no longer can use any of the cards in the new set in any other sets
+                cards_cannot_use_from_partial += new_set
+
             else:
                 # if the new card is not one of them we are searching for.. create new partial sets
                 final_new_cards.append(i)
 
         # delete partial sets that include the cards we removed
-        self.delete_from_partial_sets(cards_cannot_use)
+        self.delete_from_partial_sets(cards_cannot_use_from_partial)
 
-        self.remove_set_from_board(cards_cannot_use)
+        self.remove_set_from_board(cards_cannot_use_from_partial)
 
         # create new partial sets based on what cards are left
         self.create_new_partial_sets(final_new_cards)
@@ -391,80 +447,80 @@ def run_test():
 
 
 
-#     # basic starting board where the board will contain ALL the cards and therefore must contain a set 
-#     basic1 = Randomizer(2,2)
-#     test = Dynamicsolver(basic1.v, basic1.p, basic1)
-#     original_board = test.all_cards_on_board
-#     model = test.find_set()
-#     extract_cards(basic1.v, basic1.p, model, False)
-#     check_if_real_set(original_board, model, basic1.p, basic1.v)
+    # basic starting board where the board will contain ALL the cards and therefore must contain a set 
+    basic1 = Randomizer(2,2)
+    test = Dynamicsolver(basic1.v, basic1.p, basic1)
+    original_board = test.all_cards_on_board
+    model = test.find_set()
+    extract_cards(basic1.v, basic1.p, model, False)
+    check_if_real_set(original_board, model, basic1.p, basic1.v)
 
 
-#     # 2 values 3 properties
-#     basic2 = Randomizer(2,3)
-#     test = Dynamicsolver(basic2.v, basic2.p, basic2)
-#     original_board = test.all_cards_on_board
-#     model = test.find_set()
-#     extract_cards(basic2.v, basic2.p, model, False)
-#     check_if_real_set(original_board, model, basic2.p, basic2.v)
+    # 2 values 3 properties
+    basic2 = Randomizer(2,3)
+    test = Dynamicsolver(basic2.v, basic2.p, basic2)
+    original_board = test.all_cards_on_board
+    model = test.find_set()
+    extract_cards(basic2.v, basic2.p, model, False)
+    check_if_real_set(original_board, model, basic2.p, basic2.v)
 
-#     # actual game of set
-#     basic3 = Randomizer(3,4)
-#     test = Dynamicsolver(basic3.v, basic3.p, basic3)
-#     original_board = test.all_cards_on_board
-#     model = test.find_set()
-#     extract_cards(basic3.v, basic3.p, model, False)
-#     check_if_real_set(original_board, model, basic3.p, basic3.v)
+    # actual game of set
+    basic3 = Randomizer(3,4)
+    test = Dynamicsolver(basic3.v, basic3.p, basic3)
+    original_board = test.all_cards_on_board
+    model = test.find_set()
+    extract_cards(basic3.v, basic3.p, model, False)
+    check_if_real_set(original_board, model, basic3.p, basic3.v)
 
 
 
-# # Checking remove card functionality
+# Checking remove card functionality
 
-#     # 2 values 3 properties test if remove_card_works
-#     remove1 = Randomizer(2,3)
-#     test = Dynamicsolver(remove1.v, remove1.p, remove1)
-#     original_board = test.all_cards_on_board
-#     model = test.find_set()
-#     extract_cards(remove1.v, remove1.p, model, False)
-#     # check if the set found was part of the old board and is a set
-#     check_if_real_set(original_board, model, remove1.p, remove1.v)
+    # 2 values 3 properties test if remove_card_works
+    remove1 = Randomizer(2,3)
+    test = Dynamicsolver(remove1.v, remove1.p, remove1)
+    original_board = test.all_cards_on_board
+    model = test.find_set()
+    extract_cards(remove1.v, remove1.p, model, False)
+    # check if the set found was part of the old board and is a set
+    check_if_real_set(original_board, model, remove1.p, remove1.v)
 
-#     # check that the set is not longer in the new board
-#     check_if_removed(remove1.board, model)
+    # check that the set is not longer in the new board
+    check_if_removed(remove1.board, model)
 
-#     # 3 values 4 properties test if remove_card_works
-#     remove2 = Randomizer(3,4)
-#     test = Dynamicsolver(remove2.v, remove2.p, remove2)
-#     original_board = test.all_cards_on_board
-#     model = test.find_set()
-#     extract_cards(remove2.v, remove2.p, model, False)
-#     # check if the set found was part of the old board and is a set
-#     check_if_real_set(original_board, model, remove2.p, remove2.v)
+    # 3 values 4 properties test if remove_card_works
+    remove2 = Randomizer(3,4)
+    test = Dynamicsolver(remove2.v, remove2.p, remove2)
+    original_board = test.all_cards_on_board
+    model = test.find_set()
+    extract_cards(remove2.v, remove2.p, model, False)
+    # check if the set found was part of the old board and is a set
+    check_if_real_set(original_board, model, remove2.p, remove2.v)
 
-#     # check that the set is not longer in the new board
-#     check_if_removed(remove2.board, model)
+    # check that the set is not longer in the new board
+    check_if_removed(remove2.board, model)
 
 
 # Checking that it can remove multiple sets
 
-    # # 3 values 4 properties test and remove 2 sets
-    # remove2 = Randomizer(3,4) 
-    # test = Dynamicsolver(remove2.v, remove2.p, remove2)
-    # model = test.find_n_sets(2)
+    # 3 values 4 properties test and remove 2 sets
+    remove2 = Randomizer(3,4) 
+    test = Dynamicsolver(remove2.v, remove2.p, remove2)
+    model = test.find_n_sets(2)
     
-    # # print test.all_cards_on_board
+    # print test.all_cards_on_board
 
-    # for i in model:
-    #   extract_cards(remove2.v, remove2.p, i, False)
+    for i in model:
+      extract_cards(remove2.v, remove2.p, i, False)
 
-    # original_board = test.all_cards_on_board
-    # # need to check whether it has been part of ANY board since we mightve had to add cards
-    # for i in model:
-    #   check_if_real_set(original_board, i, remove2.p, remove2.v)
+    original_board = test.all_cards_on_board
+    # need to check whether it has been part of ANY board since we mightve had to add cards
+    for i in model:
+      check_if_real_set(original_board, i, remove2.p, remove2.v)
 
-    # # check that the set is not longer in the new board
-    # for i in model:
-    #   check_if_removed(remove2.board, i)
+    # check that the set is not longer in the new board
+    for i in model:
+      check_if_removed(remove2.board, i)
 
 
 
@@ -473,6 +529,23 @@ def run_test():
     remove2 = Randomizer(3,4) 
     test = Dynamicsolver(remove2.v, remove2.p, remove2)
     model = test.find_n_sets(10)
+    for i in model:
+      extract_cards(remove2.v, remove2.p, i, False)
+
+    original_board = test.all_cards_on_board
+    # need to check whether it has been part of ANY board since we mightve had to add cards
+    for i in model:
+      check_if_real_set(original_board, i, remove2.p, remove2.v)
+
+    # check that the set is not longer in the new board
+    for i in model:
+      check_if_removed(remove2.board, i)
+
+
+    # 3 values 4 properties test and remove 10 sets
+    remove2 = Randomizer(5,5) 
+    test = Dynamicsolver(remove2.v, remove2.p, remove2)
+    model = test.find_n_sets(1)
     for i in model:
       extract_cards(remove2.v, remove2.p, i, True)
 
@@ -485,5 +558,4 @@ def run_test():
     for i in model:
       check_if_removed(remove2.board, i)
 
-
-run_test()
+# run_test()

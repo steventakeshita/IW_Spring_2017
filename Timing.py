@@ -8,16 +8,16 @@
 import time
 
 from SMTsolver import *
-# from Dynamicsolver import *
+from Dynamicsolver import *
 from BruteForce import *
 
 # list the number of sets to find, values and properties of each deck
-sets_to_find = [1]
-values = [5]
-properties = [5]
+sets_to_find = [1,2,4,8]
+values = [3]
+properties = [4]
 
 # how many trials to run for each iteration to average
-num_trials = 1
+num_trials = 10
 
 
 # run correctness tests
@@ -71,7 +71,6 @@ def runDynamicsolver(randomizer, n):
 	
 	test = Dynamicsolver(randomizer.v, randomizer.p, randomizer)
 	model = test.find_n_sets(n)
-
 	finish = time.clock()
 
 	# confirm that this is in fact a set
@@ -121,16 +120,17 @@ def run_trials():
 					SMT_rand = Randomizer(v,p) 
 					SMT_time.append(runSMTsolver(SMT_rand, n))
 
-					# Dynamic_time.append(runDynamicsolver(cur_rand, n))
+					Dynamic_rand = Randomizer(v,p) 
+					Dynamic_time.append(runDynamicsolver(Dynamic_rand, n))
 
 					Brute_rand = Randomizer(v,p) 
 					BruteForce_time.append(runSMTsolver(Brute_rand, n))
 
 				avg_SMT = sum(SMT_time)/float(num_trials)
-				# avg_Dynamic = sum(Dynamic_time)/float(num_trials)
+				avg_Dynamic = sum(Dynamic_time)/float(num_trials)
 				avg_Brute = sum(BruteForce_time)/float(num_trials)
 
-				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Brute Force time: " + str(avg_Brute)
-				# print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avgBrute)  
+				# print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Brute Force time: " + str(avg_Brute)
+				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avg_Brute)  
 
 run_trials()
