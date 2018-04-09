@@ -179,7 +179,7 @@ Written more succinctly:
 
 \subsection {Condensing Sets}
 
-The satisfying assignment can be achieved through any permutation of cards of a set. Therefore, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards. This will break the symmetry in the encoding and speed up the process of the SMT solver, as the SMT solver will not need to search branches of its search tree that are duplicates of another branch. Therefore, we need to encode this relation of forcing a single set for all permutations of cards. Therefore, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
+To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
 
 \begin{multline}
 	(k_{1,1} \leq k_{2,1} \leq ... \leq k_{v,1}) \wedge (   (k_{1,2} \leq k_{2,2} \leq ... \leq k_{v,2})  \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
@@ -256,32 +256,39 @@ As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{3p4v10000Draw.png}
-\caption{3 properties, 4 values, 10,000 trials Board Distribution after One Draw}
+\caption{3 properties, 4 values, 10,000 trials Distribution of $4$ New Cards Drawn}
 \label{fig:draw1}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{4p5v10000Draw.png}
-\caption{4 properties, 5 values, 10,000 trials Initial Board Distribution after One draw}
+\caption{4 properties, 5 values, 10,000 trials Distribution of $5$ New Cards Drawn}
 \label{fig:draw2}
 \end{minipage}
 \end{figure}
 
 \subsection{Brute Force Implementation}
 
-As a very naive implementation, I implemented a Brute Force solution that tests all possible combinations of cards till a set is found and returns this set. This can be carried out $n$ times to find $n$ sets and therefore does not build on any previous knowledge, completely checking all possible sets each iteration though it may have checked the possible set in a previous search. 
+As a very naive implementation, I implemented a Brute Force solution that tests all possible combinations of $v$ cards till a set is found and returns this set. This can be carried out $n$ times to find $n$ sets and therefore does not build on any previous knowledge, completely checking all possible sets each iteration, though it may have checked the possible set in a previous search. Though not optimized in anyway, the Brute Force implementation provides a benchmark algorithm to compare the SMT based and Dynamic Algorithm based algorithm against. 
 
 \subsection{SMT Solver Implementation}
 
 
+\subsubsection{Z3:}
 For the SMT Solver implementation, I used Z3, a high performance theorem prover created by Microsoft Research. The software creates an easy way to create variables and constraints in Python. Each card that needs to be found represented $p$ variables. I coded the above constraints (7, 9, 11) in Z3 to be only all satisfied if there exists a set within the board. 
 
 % Once a set has been found,  I then queue the set to be removed, with all preceding sets to be removed if there exists any. This would take advantage of the fact that if there exists many sets on the board, then the SMT solver would only add constraint 14 to negate any cards of the satisfying set to be one of the cards already found to be a part of set. This would provide a marginal speedup, but is important for creating a fast as possible benchmark for the dynamic algorithm to compete against. 
 
+\subsubsection{Delayed Deletion Optimization:}
+
 To optimize the SMT Solver implementation, I queue up the set to be removed and add the constraints defined in constraint 14 to run through the SMT Solver again to find another set to be removed in case there existed many sets already on the starting board. Once the SMT Solver no longer says that with the constraints and variables it is satisfied, I then know to add $v$ new cards (or more if the board had a lot of sets and therefore the SMT solver was able to find my sets without having to update the constraints) to hopefully create a new set. I will only do this once no sets exist on the board after removing so many cards to hopefully provide marginal speedup to the program. Also, the cards need to be deleted from the board and therefore, I will call upon the Randomizer method to delete all the cards found by the SMT before no sets existed on the board. Therefore, this will make sure that the dynamic algorithm doesn't have too much of a lead when removing cards. Now, I will add $v$ new cards and rebuild the constraints (7, 9, 11) and run the SMT solver to hopefully find another set of cards. 
 
 This iterative sequence will take place $n$ times to find $n$ sets within a game and the SMT solver will return these sets for validation of a legal set. 
+
+\subsubsection{Constraining the Domain Optimization:}
+
+The SMT solver iteratively searches for a solution through a search tree, attempting to constrain the domain for each variable until a satisfying assignment has been discovered, a process called Forward Checking, or all the possible assignments have been exhausted and the constraints cannot be satisfied  \cite{search_from_AI}. Therefore, without constraint 13, the satisfying assignment can be achieved through any permutation of cards of a set and the domain would be much larger to be searched through. The SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards to satisfy the constraints. To break this symmetry for multiple sets, constraint 13 enforces that the cards in a set are in sorted order (ie. by the first property or if all equal then by the second property and so forth for all properties) and constrains the domain of each variable. This will break the symmetry in the encoding and speed up the process of the SMT solver, as the SMT solver will not need to search branches of its search tree that are duplicates of another branch. 
 
 \subsection{Dynamic Algorithm Implementation}
 

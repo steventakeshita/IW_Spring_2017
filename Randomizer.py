@@ -96,11 +96,11 @@ def run_rand_next_card_tests(val, prop, num_trials):
 
 	# run trials to test for distribution of next card + board
 	rand_next_card = Randomizer(val, prop)
-	count = Counter(rand_next_card.board)
+	count = Counter()
 	for _ in range(num_trials-1):
 		rand_next_card = Randomizer(val, prop)
 		rand_next_card.draw_new_cards()
-		count.update(rand_next_card.board)
+		count.update(rand_next_card.board[len(rand_next_card.board)-val:])
 
 	# graph the 1000 trials as a histogram of counts 
 	labels, values = zip(*count.items())
@@ -118,6 +118,6 @@ def run_rand_next_card_tests(val, prop, num_trials):
 	return	
 
 # 10,000 trials for random beginning board
-# run_rand_initial_tests(4,5,10000)
+# run_rand_initial_tests(3,4,10000)
 
-# run_rand_next_card_tests(4,5,10000)
+# run_rand_next_card_tests(3,4,1000)

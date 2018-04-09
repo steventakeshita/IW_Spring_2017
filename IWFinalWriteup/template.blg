@@ -8,6 +8,7 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: references.bib
+Warning--I didn't find a database entry for "norvig"
 -- IEEEtranS.bst version 1.13 (2008/09/30) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
@@ -19,42 +20,43 @@ Database file #1: references.bib
 Done.
 You've used 12 entries,
             4498 wiz_defined-function locations,
-            939 strings with 8984 characters,
-and the built_in function-call counts, 5369 in all, are:
-= -- 428
-> -- 129
-< -- 16
-+ -- 57
-- -- 33
-* -- 248
-:= -- 829
+            942 strings with 9037 characters,
+and the built_in function-call counts, 5507 in all, are:
+= -- 430
+> -- 139
+< -- 19
++ -- 59
+- -- 35
+* -- 261
+:= -- 843
 add.period$ -- 19
 call.type$ -- 12
-change.case$ -- 46
-chr.to.int$ -- 47
+change.case$ -- 47
+chr.to.int$ -- 56
 cite$ -- 12
-duplicate$ -- 380
-empty$ -- 510
-format.name$ -- 38
-if$ -- 1177
+duplicate$ -- 391
+empty$ -- 527
+format.name$ -- 41
+if$ -- 1214
 int.to.chr$ -- 0
 int.to.str$ -- 9
-missing$ -- 71
+missing$ -- 70
 newline$ -- 50
 num.names$ -- 18
 pop$ -- 228
 preamble$ -- 1
-purify$ -- 35
+purify$ -- 36
 quote$ -- 8
-skip$ -- 414
+skip$ -- 421
 stack$ -- 0
-substring$ -- 131
-swap$ -- 198
+substring$ -- 137
+swap$ -- 203
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 9
-type$ -- 89
+type$ -- 84
 warning$ -- 0
-while$ -- 26
+while$ -- 27
 width$ -- 10
 write$ -- 89
+(There was 1 warning)

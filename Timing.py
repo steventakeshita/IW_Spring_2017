@@ -10,15 +10,10 @@ import time
 from SMTsolver import *
 from Dynamicsolver import *
 from BruteForce import *
+from pylab import savefig
 
-# list the number of sets to find, values and properties of each deck
-sets_to_find = [1,2,4,8]
-values = [3]
-properties = [4]
 
-# how many trials to run for each iteration to average
-num_trials = 10
-
+import matplotlib.pyplot as plt
 
 # run correctness tests
 def check_if_real_set(board, possible_set, prop, val):
@@ -103,12 +98,21 @@ def runBruteForce(randomizer, n):
 	# return total time it took to find the sets
 	return finish - start
 
-
-
 # run all the trials
-def run_trials():
+def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
+
+	time_smt = []
+	time_brute = []
+	time_dyn = []
+
+
 	for v in values:
+
+
 		for p in properties:
+
+
+
 			for n in sets_to_find:
 
 				SMT_time = []
@@ -130,7 +134,64 @@ def run_trials():
 				avg_Dynamic = sum(Dynamic_time)/float(num_trials)
 				avg_Brute = sum(BruteForce_time)/float(num_trials)
 
-				# print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Brute Force time: " + str(avg_Brute)
+
+				time_smt.append(avg_SMT)
+				time_dyn.append(avg_Dynamic)
+				time_brute.append(avg_Brute)
+
 				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avg_Brute)  
 
-run_trials()
+	# changing value
+	if setting == 1:
+
+		plt.plot(values, time_brute, 'r--')
+		plt.plot(values, time_smt, 'b--')
+		plt.plot(values, time_dyn, 'g--')
+		plt.ylabel('Time (Seconds)')
+		plt.xlabel('Values')
+
+		val_find = ""
+		for i in values:
+			val_find += str(i)
+
+
+		file_name = 'v' + val_find + 'p' + str(properties[0])  + 'n' + str(sets_to_find[0])
+		savefig(file_name)
+		# plt.show()
+
+	# changing property
+	elif setting == 2:
+		plt.plot(properties, time_brute, 'r--')
+		plt.plot(properties, time_smt, 'b--')
+		plt.plot(properties, time_dyn, 'g--')
+		plt.ylabel('Time (Seconds)')
+		plt.xlabel('Properties')
+		# savefig('foo.png')
+		plt.show()
+
+	# changing number of sets to find
+	else:
+		plt.plot(sets_to_find, time_brute, 'r--')
+		plt.plot(sets_to_find, time_smt, 'b--')
+		plt.plot(sets_to_find, time_dyn, 'g--')
+		plt.ylabel('Time (Seconds)')
+		plt.xlabel('Number of Sets to Find')
+		# savefig('foo.png')
+		plt.show()
+
+
+# setting at 1 = value changes, 2 = properties changes, 3 = number of sets changes
+
+def run_all():
+	# list the number of sets to find, values and properties of each deck
+	sets_to_find = [4]
+	values = [3,4]
+	properties = [3]
+
+	# how many trials to run for each iteration to average
+	num_trials = 1
+	run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+
+run_all()
+
+
