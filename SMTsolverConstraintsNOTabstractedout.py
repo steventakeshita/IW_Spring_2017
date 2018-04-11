@@ -32,17 +32,11 @@ class SMTsolver:
 		# store instance of randomizer to find new cards
 		self.rand = randomizer
 
-		# how many sets to add to the board after removing cards
-		self.sets_to_add = 0
-
-		# assign to variables since you only have to create these constraints one time for each run
-		self.satisfying = self.create_satisfying_constraint()
-		self.all_diff = self.create_all_diff_constraint()
-		self.condensing = self.create_condensing_constraint()
-
 		# create the inital SMT with all the starting constraints
 		self.create_SMT()
 
+		# how many sets to add to the board after removing cards
+		self.sets_to_add = 0
 
 		# collects all the cards that we ever on the board
 		# potentially make this only happen if we are in testing such that it reduces the amount of stuff
@@ -55,9 +49,9 @@ class SMTsolver:
 		self.s = Solver()
 
 		# create constraints
-		self.s.add(self.satisfying)
-		self.s.add(self.all_diff)
-		self.s.add(self.condensing)
+		self.create_satisfying_constraint()
+		self.create_all_diff_constraint()
+		self.create_condensing_constraint()
 
 		self.create_from_board_constraint()
 
@@ -79,7 +73,7 @@ class SMTsolver:
 		# alternate way where you only base it off of the sorted first elements
 		# tot_constraint = [self.K[coord_to_list(i,1,self.p)] <= self.K[coord_to_list(i+1,1,self.p)] for i in range(self.v-1)]
 
-		return And(tot_constraint)
+		self.s.add(And(tot_constraint))
 
 
 	# All cards in the satisfying set for all properties
@@ -100,7 +94,7 @@ class SMTsolver:
 			# combine them all 
 			tot_constraint.append(Or(all_same + all_different))
 
-		return And(tot_constraint)
+		self.s.add(And(tot_constraint))
 
 	# all cards selected for the set must be from the board
 	def create_from_board_constraint(self):
@@ -136,7 +130,7 @@ class SMTsolver:
 			every_card.append(And(in_board))
 
 		# add all the constraints
-		return And(every_card)
+		self.s.add(And(every_card))
 
 
 	# update constraint when remove cards

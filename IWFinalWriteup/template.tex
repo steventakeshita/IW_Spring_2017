@@ -311,9 +311,6 @@ if the value number is 2 then all pairs of cards are considered a set because fo
 
 
 
-
-
-
 \subsection{Testing}
 
 For both of these implementation, I will need to implement testing to ensure that the sets found by the solvers are indeed sets and that the algorithm correctly removed the sets from the board. 
@@ -330,10 +327,104 @@ Finally, the solver has to handle finding many sets, and to ensure that the solv
 
 \subsubsection{Testing Correct Deletion}
 
-The constraints created for the SMT solver also relies on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board set, I iterated over all cards and asserted that they were not in board at the termination of the program. This is also important for the Dynamic solver because it must output the correct board as well at the end from finding $n$ sets. 
+The constraints created for the SMT solver also relies on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board set, I iterated over all cards and asserted that all the cards found as part of sets were no longer part of the board at termination of the program. This is a good double check to ensure that SMT solver is functioning properly, because the SMT hinges on the fact that the cards that can no longer be used are to be deleted from the board for rebuilding the corresponding constraints. This is also important for the Dynamic solver and Brute Force implementation because they must output the correct board as well after finding $n$ sets. At termination, we iterate over all cards found as being part of sets and assert that they are no longer part of the board.
+
 
 \section{Results}
 
+\subsection{Testing Structure}
+
+To test the relative effectiveness of the three implementations, I divided the testing into three different cases to see how the implementations functioned on a variety of test cases. Since there are three variables to change, number of values, properties, and sets to find, I vary one of them and keep the other two constant . This creates a total of three overarching categories that can be broken down into multiple categories as the two constant variables can take on different values and have the third value vary. 
+
+To accurately test the timing of each solver, I utilized Python's time library to accurately test CPU time used for each of the processes. Therefore, if other processes are running in the background and take some real time, this will not factor into the timing tests of these solvers. Also, only the process of creating the solver data structure and finding $n$ sets is accounted as CPU time, as creating the randomizer and verification of correct sets following finding the sets is irrelevant to the speed of the solver itself. 
+
+To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate picture of an accurate test case. Also, before each one of these ten trials, a new board is created by instantiating a new randomizer such that the solver will not be redoing the same computation it had just finished. 
+
+I again used a Python package called matplotlib to graph all of the curves formed from the timing tests. These graphs are composed of connected dotted lines that are color coded by solver, red to Brute Force, blue to SMT, and green to Dynamic solver, and give an easy to read visualization of order of growth as a variable is changed. 
+
+
+\subsection{Varying the Number of Values}
+
+In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which the are larger than two for more accurate results. 
+
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Field} & \textbf{Value}\\
+    \hline
+    \hline
+    Paper size & US Letter 8.5in $\times$ 11in\\
+    \hline
+    Top margin & 1in\\
+    \hline
+    Bottom margin & 1in\\
+    \hline
+    Left margin & 1in\\
+    \hline
+    Right margin & 1in\\
+    \hline
+    Body font & 12pt\\
+    \hline
+    Abstract font & 12pt, italicized\\
+    \hline
+    Section heading font & 14pt, bold\\
+    \hline
+    Subsection heading font & 12pt, bold\\
+    \hline
+  \end{tabular}
+  \caption{Formatting guidelines. }
+  \label{table:formatting}
+\end{table}
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l|l|} \hline
+    \textbf{Some field} & \textbf{Another field}\\\hline
+    200          &  10000 \\ \hline 
+    400          &  20000 \\ \hline 
+    800          &  40000 \\ \hline 
+    1600        &  80000 \\ \hline 
+    3200        &  160000 \\ \hline 
+    6400        &  320000 \\ \hline 
+  \end{tabular}
+  \caption{Some data in a table. }
+  \label{table:data}
+\end{table}
+
+
+\subsection{Varying the Number of Properties}
+
+\subsection{Varying the Number of Sets to be Found}
+
+
+
+
+
+Changing Values:
+
+
+Changing Properties:
+
+
+
+
+Changing Number of Sets to Find:
+
+Over 10 trials
+Value: 3 | Properties: 4 | Sets found: 2 | SMT time: 0.0830945 | Dynamic time: 0.0012532 | Brute Force time: 0.0792278
+Value: 3 | Properties: 4 | Sets found: 3 | SMT time: 0.1309777 | Dynamic time: 0.0021258 | Brute Force time: 0.1288052
+Value: 3 | Properties: 4 | Sets found: 4 | SMT time: 0.1469017 | Dynamic time: 0.00206 | Brute Force time: 0.1598722
+Value: 3 | Properties: 4 | Sets found: 5 | SMT time: 0.1981986 | Dynamic time: 0.0031261 | Brute Force time: 0.2002846
+Value: 3 | Properties: 4 | Sets found: 6 | SMT time: 0.2494722 | Dynamic time: 0.0051556 | Brute Force time: 0.2630714
+
+Over 5 trials
+Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 0.8491608 | Dynamic time: 0.2452296 | Brute Force time: 1.1175872
+Value: 4 | Properties: 5 | Sets found: 3 | SMT time: 1.7955682 | Dynamic time: 0.2946156 | Brute Force time: 1.1840924
+Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.930447 | Dynamic time: 0.4328736 | Brute Force time: 1.7126942
+Value: 4 | Properties: 5 | Sets found: 5 | SMT time: 2.4920082 | Dynamic time: 0.3662846 | Brute Force time: 2.5330248
+Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 2.2934102 | Dynamic time: 0.4965884 | Brute Force time: 2.2322826
 
 \section{Conclusion}
 

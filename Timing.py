@@ -128,7 +128,7 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 					Dynamic_time.append(runDynamicsolver(Dynamic_rand, n))
 
 					Brute_rand = Randomizer(v,p) 
-					BruteForce_time.append(runSMTsolver(Brute_rand, n))
+					BruteForce_time.append(runBruteForce(Brute_rand, n))
 
 				avg_SMT = sum(SMT_time)/float(num_trials)
 				avg_Dynamic = sum(Dynamic_time)/float(num_trials)
@@ -141,56 +141,142 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avg_Brute)  
 
+	
+	print "NEXT TRIAL"	
+
+
 	# changing value
 	if setting == 1:
 
-		plt.plot(values, time_brute, 'r--')
-		plt.plot(values, time_smt, 'b--')
-		plt.plot(values, time_dyn, 'g--')
+		plt.plot(values, time_brute, 'r-o')
+		plt.plot(values, time_smt, 'b-o')
+		plt.plot(values, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Values')
 
 		val_find = ""
 		for i in values:
 			val_find += str(i)
+		file_name = 'VAL-v' + val_find + 'p' + str(properties[0])  + 'n' + str(sets_to_find[0])
 
-
-		file_name = 'v' + val_find + 'p' + str(properties[0])  + 'n' + str(sets_to_find[0])
 		savefig(file_name)
 		# plt.show()
 
 	# changing property
 	elif setting == 2:
-		plt.plot(properties, time_brute, 'r--')
-		plt.plot(properties, time_smt, 'b--')
-		plt.plot(properties, time_dyn, 'g--')
+		plt.plot(properties, time_brute, 'r-o')
+		plt.plot(properties, time_smt, 'b-o')
+		plt.plot(properties, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Properties')
-		# savefig('foo.png')
-		plt.show()
+
+		prop_find = ""
+		for i in properties:
+			prop_find += str(i)
+		file_name = 'PROP-v' + str(values[0]) + 'p' + prop_find  + 'n' + str(sets_to_find[0])
+
+		savefig(file_name)
+		# plt.show()
 
 	# changing number of sets to find
 	else:
-		plt.plot(sets_to_find, time_brute, 'r--')
-		plt.plot(sets_to_find, time_smt, 'b--')
-		plt.plot(sets_to_find, time_dyn, 'g--')
+		plt.plot(sets_to_find, time_brute, 'r-o')
+		plt.plot(sets_to_find, time_smt, 'b-o')
+		plt.plot(sets_to_find, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Number of Sets to Find')
-		# savefig('foo.png')
-		plt.show()
+
+
+		num_find = ""
+		for i in sets_to_find:
+			num_find += str(i)
+		file_name = 'SETS-v' + str(values[0]) + 'p' + str(properties[0])  + 'n' + num_find
+
+		savefig(file_name)
+		# plt.show()
 
 
 # setting at 1 = value changes, 2 = properties changes, 3 = number of sets changes
 
 def run_all():
-	# list the number of sets to find, values and properties of each deck
-	sets_to_find = [4]
-	values = [3,4]
-	properties = [3]
+	def change_val():
+		print "BEGIN CHANGING VALUE"
+		sets_to_find = [5]
+		values = [3,4,5,6,7,8,9,10]
+		properties = [3]
+		num_trials = 5
 
-	# how many trials to run for each iteration to average
-	num_trials = 1
-	run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+
+		sets_to_find = [10]
+		values = [3,4,5,6,7]
+		properties = [4]
+		num_trials = 5
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+
+		sets_to_find = [15]
+		values = [4,5,6,7]
+		properties = [5]
+		num_trials = 5
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		print "END CHANGING VALUE"
+
+	def change_prop():
+		print "BEGIN CHANGING PROP"
+		sets_to_find = [5]
+		values = [3]
+		properties = [3,4,5,6,7,8,9]
+		num_trials = 5
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+
+		sets_to_find = [10]
+		values = [4]
+		properties = [3,4,5,6,7,8]
+		num_trials = 5
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+
+		sets_to_find = [15]
+		values = [5]
+		properties = [3,4,5,6,7]
+		num_trials = 5
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+		print "END CHANGING PROP"
+
+	def change_n():
+		print "BEGIN CHANGING N"
+		sets_to_find = [1,2,3,4,5,6,7,8,9,10]
+		values = [3]
+		properties = [4]
+		num_trials = 10
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+
+		sets_to_find = [1,2,3,4,5,6,7,8,9,10]
+		values = [4]
+		properties = [5]
+		num_trials = 10
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+
+		sets_to_find = [1,2,3,4,5,6,7,8,9,10]
+		values = [5]
+		properties = [5]
+		num_trials = 10
+
+		run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+		print "END CHANGING N"
+
+
+	change_val()
+
+	change_prop()
+
+	change_n()
 
 run_all()
 
