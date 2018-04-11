@@ -21,7 +21,7 @@
 \thispagestyle{empty}
 \doublespacing
 \begin{abstract}
-This document is intended to serve as a sample you can use for independent work reports.  We provide some guidelines on content and formatting.  They are not required, but they might be helpful.
+This paper examines three implementations of a solver for the generalized version of the Game of Set. Brute force, SMT solver based, and dynamic algorithm approaches are used to create an efficient solver for the game. Through timing tests, it is shown that though a reduction to the SMT solver should create an efficient solution to the NP complete game, the dynamic algorithm approach yields the fastest solver in many test cases over both the SMT solver and brute force implementations. 
 \end{abstract}
 
 \section{Motivation and Goal}
@@ -195,7 +195,6 @@ Written more compactly:
 
 By building these four constraints (7, 9, 11, 12) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
 
-
 \subsection{Update Functions} 
 The solver to find sets must also support two update functions. The first update function of removing cards can be easily encoded into the SMT constraints. Let set $V$ be an arbitrary set that was located by the SMT solver. To remove the set from the board, we can add new constraints such that the new set to be found cannot be equal to any of the cards found in $V$, where $V$ contains $v$ cards. Again, to be a distinct card, at least one property must be differing. This can be written as:
 
@@ -231,9 +230,7 @@ The simulations for the randomizer and solvers were all written in python. Consi
 
 The randomization algorithm for creating a randomized deck is very important in terms of creating a real life scenario gameplay. Therefore, the algorithm must uniformly distribute all of the cards ($v*p$) initially so that no solver can have an unfair advantage knowing what cards are more likely to come out. To do so, I used a couple of important libraries to ensure randomness and to plot the distribution in order to guarantee its uniform distribution. I used the Random library in python to be able to generate random indices to pull for the beginning board ($v*p$) and for the next $v$ cards when sets are found. I assumed the Random library to be perfectly random. To ensure that the next $v$ cards are always random from the set, I employed the use of a modified version of Fisher Yates Shuffle, creating a Las Vegas algorithm. Fisher Yates Shuffle works by iteratively randomly picking indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert the algorithm for use on a deck, I use rejection sampling to determine new cards to add to the board. I create a randomized card and if it is not in the board already and not in the removed cards set, I add it. If it is, I generate another card until I have created $v*p$ cards that are all distinct. Since the algorithm uses a randomized strategy but will always a board, whose cards are all distinct and from the deck with equal probabilities, this is known as a Las Vegas algorithm. To support the update function of removing cards, I append those cards to a set of removed cards. Therefore, when $v$ new cards are to be added, I generate $v$ new random cards through the above algorithm to be added to the board. This yields a randomized $v*p$ starting boards and unbiased drawing of $v$ cards from the deck.
 
-To confirm that this in fact created random beginning boards and new cards, I graphed the distribution of the beginning board for $1000$ trials with $v = 10$ and $p = 10$. I then used numpy to and matplotlib to count all the occurrences of each card and then graph them as a histogram. See the figure below.
-
-As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases, the distribution of cards that were selected form a uniform distribution. Therefore, this confirms that the implementation of the Fisher Yates shuffle in creating a perfectly random board and draws was successful. 
+To confirm that this in fact created random beginning boards and new cards, I graphed the distribution of the beginning board for $1000$ trials with $v = 10$ and $p = 10$. I then used numpy to and matplotlib to count all the occurrences of each card and then graph them as a histogram. In Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases (3 properties, 4 values and 4 properties, 5 vales), the distribution of cards that were initially selected to be on the board form a uniform distribution over 10,000 trials.
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -252,6 +249,8 @@ As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases
 \end{figure}
 
 
+The distribution of cards drawn (excluding the starting board only isolating the $v$ cards drawn) also forms a uniform distribution as can be seen in Figure~\ref{fig:draw1}  and~\ref{fig:draw2}, when the boards have 3 properties, 4 values or 4 properties, 5 values over 10,000 trials. Therefore, this confirms that the implementation of the Fisher Yates shuffle in creating a perfectly random board and draws was successful. 
+
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
 \centering
@@ -268,15 +267,19 @@ As in Figure~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases
 \end{minipage}
 \end{figure}
 
+
+
+
+
 \subsection{Brute Force Implementation}
 
-As a very naive implementation, I implemented a Brute Force solution that tests all possible combinations of $v$ cards till a set is found and returns this set. This can be carried out $n$ times to find $n$ sets and therefore does not build on any previous knowledge, completely checking all possible sets each iteration, though it may have checked the possible set in a previous search. Though not optimized in anyway, the Brute Force implementation provides a benchmark algorithm to compare the SMT based and Dynamic Algorithm based algorithm against. 
+As a very naive implementation, I implemented a Brute Force solution that tests all possible combinations of $v$ cards till a set is found and returns this set. A maximum total number of ${v*p}\choose{3}$ sets will have to be examined before a set is found. This can be carried out $n$ times to find $n$ sets and therefore does not build on any previous knowledge, completely checking all possible sets each iteration, though it may have checked the possible set in a previous search. Though not optimized in anyway, the Brute Force implementation provides a benchmark algorithm to compare the SMT based and Dynamic Algorithm based algorithm against. 
 
 \subsection{SMT Solver Implementation}
 
 
 \subsubsection{Z3:}
-For the SMT Solver implementation, I used Z3, a high performance theorem prover created by Microsoft Research. The software creates an easy way to create variables and constraints in Python. Each card that needs to be found represented $p$ variables. I coded the above constraints (7, 9, 11) in Z3 to be only all satisfied if there exists a set within the board. 
+I used Z3, a high performance theorem prover created by Microsoft Research. The software creates an easy way to create variables and constraints in Python. Each card that needs to be found represents $p$ variables. I coded the above constraints in Z3 and if the SMT solver outputs "sat," then we know there exists a satisfying set of assignments for the variables that will can be satisfied under the constraints. Therefore, this satisfying assignments represents the $v$ cards, or $v*p$ total variables, that compose a set. If the SMT solver is "unsat," then there exists no satisfying assignment and more cards must be drawn to find a set. 
 
 % Once a set has been found,  I then queue the set to be removed, with all preceding sets to be removed if there exists any. This would take advantage of the fact that if there exists many sets on the board, then the SMT solver would only add constraint 14 to negate any cards of the satisfying set to be one of the cards already found to be a part of set. This would provide a marginal speedup, but is important for creating a fast as possible benchmark for the dynamic algorithm to compete against. 
 
@@ -292,24 +295,36 @@ The SMT solver iteratively searches for a solution through a search tree, attemp
 
 \subsection{Dynamic Algorithm Implementation}
 
-
 The Dynamic Algorithm approach hinges on the tradeoff between memory and speed. The Brute Force solution does not need to keep track of partial sets and can spend time iterating over all combos as fast possible. The SMT solver computes a set even faster by pruning the search as it continues through the algorithm to create marginal speed up while recording down possible search paths and deleting branches that have no chance of yielding a correct solution. And in the extreme case, the Dynamic Algorithm will utilize more space, recording down possible sets that can be quickly completed when new card are drawn. Therefore, the Dynamic Algorithm can complete sets in almost instantaneous time when large numbers of sets are to be found and when there is a low chance of there being a set in the board at a given time. 
 
-The Dynamic Algorithm's main speedup is in the way that it creates a list of partial sets, attempting to complete these when new cards are drawn. 
+The Dynamic Algorithm's main speedup is in the way that it creates a list of partial sets and a dictionary mapping the missing card to an almost complete partial set so it can quickly finish these sets when new cards are drawn. 
 
 \subsubsection{Set Up}
 
-To create all partial sets, the Dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${n*p}\choose{2}$ using Python's built in itertools library since a possible set can be wholly determined by two cards. Next, for each partial set, the algorithm will determine add any cards that satisfy the constraints that for each property, the values are either the same or all different. At the end of iterating over all cards on the board, if the partial set would be satisfied completely by one card, it will map the missing card to the partial set it will complete in a cards searching for data structure. This will continue for all partial sets. 
+To create all partial sets, the Dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${v*p}\choose{2}$ using Python's built in itertools library since a possible set can be wholly determined by two cards(ie. if the first two cards have the same value for a given property, the satisfying cards must have the same value for that property). These two card partial sets will be the basis for creating larger partial sets and will ensure that all combinations of cards are checked for completing a set. 
+
+\subsubsection{Partial Set List and Quick Complete Dictionary Creation}
+
+Next, for each partial set, the algorithm will determine which cards to add to the partial set from the board that satisfy the constraints that for each property, the values are either the same or all different and must not be in the set of cards that we flag as unusable cards as they have been used to complete a set in a previous iteration. At the end of iterating over all cards on the board, there are two important cases that a partial set could be in:
+
+\textbf{Case 1: Size $v$:} If the partial set is completely full and at size $v$, then the partial set is a complete satisfying set and can therefore be queued as a found set. These cards will also be queued up as cards that will need to be deleted from the partial sets and board and cannot be used to complete other partial sets.
+
+\textbf{Case 2: Size $v-1$:} This partial set is missing one card that can be determined by the rest of the cards in the partial set as the value will be the same if the set has the same value for a given property and if they are all different then it will be the last missing value. Therefore, to create the quick complete data structure, I add to the dictionary the missing card mapped to the partial set. 
+
+Otherwise, the partial set is not complete enough to create a data structure for and therefore will be left. This process will continue for all partial sets. 
 
 
 \subsubsection{Quick Complete Upon Drawing Cards}
 
+When more sets are needed to be found than exist on the board, new cards must be drawn to create opportunity for more sets. When these $v$ new cards are drawn, the dynamic algorithm will use its quick complete dictionary to quickly search to see if any of the $v$ cards drawn satisfy and of the partial sets that are missing one card. If they complete a partial set, the dictionary will delete the card from the dictionary, append it to the partial set it completes, and add it to the queue of found cards. As we iterate through, it is possible that the cards used in one of these quick completed sets could be used for another completed set and therefore we need to iterate through the cards in a possibly quick completed set to make sure that it was not used to complete a previous set. 
 
+After we have completed all of the partial sets we could have with the new drawn cards, we must create new basis partial sets from these new cards that remain not completing any partial set. Therefore, I again use the itertools library and use combinations to append all combinations of two cards from the unused new cards drawn, and append these to the list of partial sets. With these new partial sets appended, the program then reruns the algorithm described above (5.4.2) to append new cards from the board onto the partial sets, potentially complete sets using a combination of the cards drawn, and add new entries to the quick complete dictionary if necessary. 
 
-if the value number is 1 then all cards are considered a set
-if the value number is 2 then all pairs of cards are considered a set because for all combos they must differ or be the same by definition of having only two values. Therefore, only two cards comprise a set. 
+\subsubsection{Deletion Bookkeeping}
 
+After both of the above steps, we need to ensure that any set found is appropriately removed from the partial sets. Therefore, I iterate over all partial sets and see if any of them contain a card that was used to complete a set. If it does, I delete the card from the partial set. After we iterate through all of the partial sets, any partial set that is now of length one or zero is no longer a partial set as either it no longer contains any cards or it non longer has specific cards it is searching for since a set needs two cards to determine what cards it is searching for.
 
+I also iterate over the quick complete dictionary and see whether any of the almost completed, partial sets contain the cards we are removing. If they do, we must delete it from the dictionary as it is now missing more than one card which was the criteria to be included in the quick complete dictionary. Once we have deleted the cards from the appropriate data structures, we can iteratively continue these steps until $n$ sets have been found. 
 
 \subsection{Testing}
 
@@ -345,7 +360,7 @@ I again used a Python package called matplotlib to graph all of the curves forme
 
 \subsection{Varying the Number of Values}
 
-In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which the are larger than two for more accurate results. 
+In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which the are larger than two for accurate results. 
 
 
 \begin{table}[hbt]
