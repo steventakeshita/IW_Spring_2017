@@ -32,17 +32,11 @@ class SMTsolver:
 		# store instance of randomizer to find new cards
 		self.rand = randomizer
 
-		# how many sets to add to the board after removing cards
-		self.sets_to_add = 0
-
-		# assign to variables since you only have to create these constraints one time for each run
-		self.satisfying = self.create_satisfying_constraint()
-		self.all_diff = self.create_all_diff_constraint()
-		self.condensing = self.create_condensing_constraint()
-
 		# create the inital SMT with all the starting constraints
 		self.create_SMT()
 
+		# how many sets to add to the board after removing cards
+		self.sets_to_add = 0
 
 		# collects all the cards that we ever on the board
 		# potentially make this only happen if we are in testing such that it reduces the amount of stuff
@@ -55,9 +49,9 @@ class SMTsolver:
 		self.s = Solver()
 
 		# create constraints
-		self.s.add(self.satisfying)
-		self.s.add(self.all_diff)
-		self.s.add(self.condensing)
+		self.create_satisfying_constraint()
+		self.create_all_diff_constraint()
+		self.create_condensing_constraint()
 
 		self.create_from_board_constraint()
 
@@ -66,45 +60,20 @@ class SMTsolver:
 	def create_condensing_constraint(self):
 		tot_constraint = []
 
-		# for i in range(self.p):
-		# 	# All cards need to be the same for a given property
-		# 	sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  == self.K[coord_to_list(c+1,i,self.p)] for c in range(self.v-1)])]
-
-		# 	# OR the first card should be 0, 2nd be 1, 3rd be 2, .. so forth
-		# 	if i == 0:
-		# 		should_be_equal_for = [And([self.K[coord_to_list(c,i,self.p)] == c for c in range(self.v)])]
-
-		# 	tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
-
-		# sorted by the ith property
+		# # sorted by the ith property
 		for i in range(self.p):
 			# sorted by the ith property
-			sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  == c for c in range(self.v)])]
+			sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  <= self.K[coord_to_list(c+1,i,self.p)] for c in range(self.v-1)])]
 
 			# OR properties less than I should not be equal
 			should_be_equal_for = [Not(And([self.K[coord_to_list(c,j,self.p)] == self.K[coord_to_list(c+1,j,self.p)] for c in range(self.v-1)])) for j in range(i)]
 
-
 			tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
-
-
-		# # sorted by the ith property
-		# for i in range(self.p):
-		# 	# sorted by the ith property
-		# 	sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  <= self.K[coord_to_list(c+1,i,self.p)] for c in range(self.v-1)])]
-
-		# 	# OR properties less than I should not be equal
-		# 	should_be_equal_for = [Not(And([self.K[coord_to_list(c,j,self.p)] == self.K[coord_to_list(c+1,j,self.p)] for c in range(self.v-1)])) for j in range(i)]
-
-		# 	tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
-
-
-
 
 		# alternate way where you only base it off of the sorted first elements
 		# tot_constraint = [self.K[coord_to_list(i,1,self.p)] <= self.K[coord_to_list(i+1,1,self.p)] for i in range(self.v-1)]
 
-		return And(tot_constraint)
+		self.s.add(And(tot_constraint))
 
 
 	# All cards in the satisfying set for all properties
@@ -125,7 +94,7 @@ class SMTsolver:
 			# combine them all 
 			tot_constraint.append(Or(all_same + all_different))
 
-		return And(tot_constraint)
+		self.s.add(And(tot_constraint))
 
 	# all cards selected for the set must be from the board
 	def create_from_board_constraint(self):
@@ -161,7 +130,7 @@ class SMTsolver:
 			every_card.append(And(in_board))
 
 		# add all the constraints
-		return And(every_card)
+		self.s.add(And(every_card))
 
 
 	# update constraint when remove cards
@@ -305,62 +274,23 @@ def check_if_removed(board, model_set):
 
 #### TESTING
 
-# avg = []
+avg = []
 
-# for _ in range(5):
-# 	# 3 values 4 properties test and remove 10 sets
-# 	remove2 = Randomizer(3,4) 
+for _ in range(10):
+	# 3 values 4 properties test and remove 10 sets
+	remove2 = Randomizer(4,5) 
 
-# 	start = time.clock()
+	start = time.clock()
 
-# 	test = SMTsolver(remove2.v, remove2.p, remove2)
-# 	model = test.find_n_sets(10)
+	test = SMTsolver(remove2.v, remove2.p, remove2)
+	model = test.find_n_sets(10)
 
-# 	finish = time.clock()
-
-
-# 	avg.append(finish-start)
-
-# print(sum(avg)/5)
+	finish = time.clock()
 
 
-# avg = []
+	avg.append(finish-start)
 
-# for _ in range(5):
-# 	# 3 values 4 properties test and remove 10 sets
-# 	remove2 = Randomizer(4,5) 
-
-# 	start = time.clock()
-
-# 	test = SMTsolver(remove2.v, remove2.p, remove2)
-# 	model = test.find_n_sets(10)
-
-# 	finish = time.clock()
-
-
-# 	avg.append(finish-start)
-
-# print(sum(avg)/5)
-
-
-
-# avg = []
-
-# for _ in range(5):
-# 	# 3 values 4 properties test and remove 10 sets
-# 	remove2 = Randomizer(5,4) 
-
-# 	start = time.clock()
-
-# 	test = SMTsolver(remove2.v, remove2.p, remove2)
-# 	model = test.find_n_sets(10)
-
-# 	finish = time.clock()
-
-
-# 	avg.append(finish-start)
-
-# print(sum(avg)/5)
+print(sum(avg)/10)
 
 
 
@@ -453,7 +383,7 @@ def run_test():
 
 
 	# 3 values 4 properties test and remove 10 sets
-	remove2 = Randomizer(4,5) 
+	remove2 = Randomizer(3,4) 
 
 	test = SMTsolver(remove2.v, remove2.p, remove2)
 	model = test.find_n_sets(10)
@@ -471,6 +401,5 @@ def run_test():
 	for i in model:
 		check_if_removed(remove2.board, i)
 
-	print "all tests complete!"
 # RUN TESTING 
 # run_test()

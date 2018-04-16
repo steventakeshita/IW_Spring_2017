@@ -33,29 +33,11 @@ R.~A. Fisher and F.~Yates, \emph{{Statistical tables for biological,
 F.~S.~M. Jorquera and A.~Legge, ``Set® card game solver using image processing
   techniques on smart-phone photos,'' 2013.
 
-\bibitem{lamport94}
-L.~Lamport, \emph{{\LaTeX: A Document Preparation System}}, 2nd~ed.\hskip 1em
-  plus 0.5em minus 0.4em\relax Reading, Massachusetts: Addison-Wesley, 1994.
-
-\bibitem{nicepaper}
-F.~Lastname1 and F.~Lastname2, ``A very nice paper to cite,'' in
-  \emph{International Symposium on Computer Architecture}, 2000.
-
-\bibitem{nicepaper2}
-F.~Lastname1 and F.~Lastname2, ``Another very nice paper to cite,'' in
-  \emph{International Symposium on Computer Architecture}, 2001.
-
 \bibitem{nolte}
 S.~Nolte, ``Javascript set game solver.''
 
 \bibitem{search_from_AI}
 S.~Russel and P.~Norvig, \emph{Artificial Intelligence: A Modern Approach},
   2nd~ed.\hskip 1em plus 0.5em minus 0.4em\relax Prentice Hall, 2002.
-
-\bibitem{Salzberg:2005}
-B.~Salzberg and T.~Murphy, ``Latex: When {Word} fails you,'' in
-  \emph{Proceedings of the 33rd Annual ACM SIGUCCS Conference on User
-  Services}, ser. SIGUCCS '05.\hskip 1em plus 0.5em minus 0.4em\relax New York,
-  NY, USA: ACM, 2005, pp. 241--243.
 
 \end{thebibliography}

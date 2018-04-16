@@ -21,8 +21,12 @@
 \thispagestyle{empty}
 \doublespacing
 \begin{abstract}
-This paper examines three implementations of a solver for the generalized version of the Game of Set. Brute force, SMT solver based, and dynamic algorithm approaches are used to create an efficient solver for the game. Through timing tests, it is shown that though a reduction to the SMT solver should create an efficient solution to the NP complete game, the dynamic algorithm approach yields the fastest solver in many test cases over both the SMT solver and brute force implementations. 
+This paper examines three implementations of a solver for the generalized version of the Game of Set. Brute force, SMT solver based, and dynamic algorithm approaches are used to create an efficient solver for the game. Through timing tests, it is shown that though a reduction to the SMT solver should create an efficient solution to the NP complete game, the dynamic algorithm approach yields the fastest solver for relatively smaller test cases over both the SMT solver and brute force implementations. Interestingly, the order of growth of the SMT program follows a relatively linear progression, whereas the brute force and dynamic algorithm are exponentially growing, meaning at very high values and properties the SMT solver is a more efficient solver than the brute force and dynamic algorithm. 
 \end{abstract}
+
+\section{Introduction}
+
+
 
 \section{Motivation and Goal}
 
@@ -182,15 +186,15 @@ Written more succinctly:
 To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
 
 \begin{multline}
-	(k_{1,1} \leq k_{2,1} \leq ... \leq k_{v,1}) \wedge (   (k_{1,2} \leq k_{2,2} \leq ... \leq k_{v,2})  \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
-	\wedge (   (k_{1,3} \leq k_{2,3} \leq ... \leq k_{v,3})  \vee \neg (k_{1,2} = k_{2,2} = ... = k_{v,2}) \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
-	\wedge ... \wedge (   (k_{1,p} \leq k_{2,p} \leq ... \leq k_{v,p})  \vee \neg (k_{1,p-1} = k_{2,p-1} = ... = k_{v,p-1}) \vee ... \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1}))
+	(k_{1,1} = 0, k_{2,1} = 1 , ... , k_{v,1} = v-1) \wedge (   (k_{1,2} = 0, k_{2,2} = 1 \leq ... \leq k_{v,2} = v-1)  \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge (   (k_{1,3} = 0,  k_{2,3} = 1,  ... , k_{v,3} = v-1)  \vee \neg (k_{1,2} = k_{2,2} = ... = k_{v,2}) \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge ... \wedge (   (k_{1,p} = 0 , k_{2,p} =1,  ... , k_{v,p} = v-1)  \vee \neg (k_{1,p-1} = k_{2,p-1} = ... = k_{v,p-1}) \vee ... \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1}))
 \end{multline}
 
 Written more compactly:
 
 \begin{align}
-	\bigwedge \limits_{i=1}^{p}   \left(  (k_{1,i} \leq k_{2,i} \leq ... \leq k_{v,i}) \bigvee \limits_{j=1}^{i-1}  \left( \neg (k_{1,j} = k_{2,j} = ... = k_{v,j})  \right)   \right)
+	\bigwedge \limits_{i=1}^{p}   \left(  (k_{1,i} = 0, k_{2,i} =1,  ... , k_{v,i} = v-1) \bigvee \limits_{j=1}^{i-1}  \left( \neg (k_{1,j} = k_{2,j} = ... = k_{v,j})  \right)   \right)
 \end{align}
 
 By building these four constraints (7, 9, 11, 12) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
@@ -344,10 +348,11 @@ Finally, the solver has to handle finding many sets, and to ensure that the solv
 
 The constraints created for the SMT solver also relies on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board set, I iterated over all cards and asserted that all the cards found as part of sets were no longer part of the board at termination of the program. This is a good double check to ensure that SMT solver is functioning properly, because the SMT hinges on the fact that the cards that can no longer be used are to be deleted from the board for rebuilding the corresponding constraints. This is also important for the Dynamic solver and Brute Force implementation because they must output the correct board as well after finding $n$ sets. At termination, we iterate over all cards found as being part of sets and assert that they are no longer part of the board.
 
+\section{Results and Evaluation}
 
-\section{Results}
 
-\subsection{Testing Structure}
+
+\subsection{Timing Tests}
 
 To test the relative effectiveness of the three implementations, I divided the testing into three different cases to see how the implementations functioned on a variety of test cases. Since there are three variables to change, number of values, properties, and sets to find, I vary one of them and keep the other two constant . This creates a total of three overarching categories that can be broken down into multiple categories as the two constant variables can take on different values and have the third value vary. 
 
@@ -356,6 +361,7 @@ To accurately test the timing of each solver, I utilized Python's time library t
 To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate picture of an accurate test case. Also, before each one of these ten trials, a new board is created by instantiating a new randomizer such that the solver will not be redoing the same computation it had just finished. 
 
 I again used a Python package called matplotlib to graph all of the curves formed from the timing tests. These graphs are composed of connected dotted lines that are color coded by solver, red to Brute Force, blue to SMT, and green to Dynamic solver, and give an easy to read visualization of order of growth as a variable is changed. 
+
 
 
 \subsection{Varying the Number of Values}
@@ -419,29 +425,46 @@ In the case of changing the value of the deck to be used, the value has to be re
 
 Changing Values:
 
+THIS SHOWS WHY BRUTE FORCE IS BAD!!!
+Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.151558 | Dynamic time: 0.0011556 | Brute Force time: 0.0005788
+Value: 4 | Properties: 3 | Sets found: 5 | SMT time: 0.3181856 | Dynamic time: 0.0076392 | Brute Force time: 0.0088644
+Value: 5 | Properties: 3 | Sets found: 5 | SMT time: 0.5297282 | Dynamic time: 0.0303382 | Brute Force time: 0.4365208
+Value: 6 | Properties: 3 | Sets found: 5 | SMT time: 0.9475802 | Dynamic time: 0.1281706 | Brute Force time: 14.238836
+
 
 Changing Properties:
 
+
+THIS SHOWS WHY BRUTE FORCE IS BAD!!!
+
+Value: 4 | Properties: 3 | Sets found: 10 | SMT time: 0.515003 | Dynamic time: 0.0131808 | Brute Force time: 0.0244682
+Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 1.0666256 | Dynamic time: 0.0920564 | Brute Force time: 0.4419958
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 2.699265 | Dynamic time: 0.8713774 | Brute Force time: 8.1313608
+Value: 4 | Properties: 6 | Sets found: 10 | SMT time: 7.3704448 | Dynamic time: 6.2403746 | Brute Force time: 65.0100778
 
 
 
 Changing Number of Sets to Find:
 
-Over 10 trials
-Value: 3 | Properties: 4 | Sets found: 2 | SMT time: 0.0830945 | Dynamic time: 0.0012532 | Brute Force time: 0.0792278
-Value: 3 | Properties: 4 | Sets found: 3 | SMT time: 0.1309777 | Dynamic time: 0.0021258 | Brute Force time: 0.1288052
-Value: 3 | Properties: 4 | Sets found: 4 | SMT time: 0.1469017 | Dynamic time: 0.00206 | Brute Force time: 0.1598722
-Value: 3 | Properties: 4 | Sets found: 5 | SMT time: 0.1981986 | Dynamic time: 0.0031261 | Brute Force time: 0.2002846
-Value: 3 | Properties: 4 | Sets found: 6 | SMT time: 0.2494722 | Dynamic time: 0.0051556 | Brute Force time: 0.2630714
+THIS SHOWS WHY BRUTE FORCE IS BAD!!!
 
-Over 5 trials
-Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 0.8491608 | Dynamic time: 0.2452296 | Brute Force time: 1.1175872
-Value: 4 | Properties: 5 | Sets found: 3 | SMT time: 1.7955682 | Dynamic time: 0.2946156 | Brute Force time: 1.1840924
-Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.930447 | Dynamic time: 0.4328736 | Brute Force time: 1.7126942
-Value: 4 | Properties: 5 | Sets found: 5 | SMT time: 2.4920082 | Dynamic time: 0.3662846 | Brute Force time: 2.5330248
-Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 2.2934102 | Dynamic time: 0.4965884 | Brute Force time: 2.2322826
+Value: 4 | Properties: 5 | Sets found: 1 | SMT time: 0.4885771 | Dynamic time: 0.165111 | Brute Force time: 0.192901
+Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 0.8434341 | Dynamic time: 0.1644045 | Brute Force time: 0.9045717
+Value: 4 | Properties: 5 | Sets found: 3 | SMT time: 1.3540622 | Dynamic time: 0.2729211 | Brute Force time: 1.4737172
+Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.358116 | Dynamic time: 0.3569608 | Brute Force time: 1.8925655
+Value: 4 | Properties: 5 | Sets found: 5 | SMT time: 1.5512601 | Dynamic time: 0.4747814 | Brute Force time: 2.3848884
+Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 1.5569981 | Dynamic time: 0.6256077 | Brute Force time: 2.0579355
+Value: 4 | Properties: 5 | Sets found: 7 | SMT time: 2.3483779 | Dynamic time: 0.7106884 | Brute Force time: 3.3225479
+Value: 4 | Properties: 5 | Sets found: 8 | SMT time: 2.3680173 | Dynamic time: 0.6465143 | Brute Force time: 4.0763619
+Value: 4 | Properties: 5 | Sets found: 9 | SMT time: 2.7270461 | Dynamic time: 0.8219845 | Brute Force time: 5.8325919
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 3.0290509 | Dynamic time: 0.7972899 | Brute Force time: 5.6602476
+
+
+
+The brute force algorithm ONLY works for small values of v,p, and n. As we increase either one of these, the order of growth is much higher. This makes sense as n choose 3 is much higher than n choose 2. Therefore, in further testing, we must delete the brute force solution for timing tests, as the order of growth is much too high and ruins the graphs. 
 
 \section{Conclusion}
+
 
 
 
