@@ -181,7 +181,7 @@ Written more succinctly:
 	\bigwedge \limits_{i=1}^{v-1}   \left( \bigwedge \limits_{j=i+1}^{v}   \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq k_{j,m} \right)  \right)
 \end{align}
 
-\subsection {Condensing Sets}
+\subsection {Condensing Search Tree}
 
 To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
 
@@ -368,56 +368,100 @@ I again used a Python package called matplotlib to graph all of the curves forme
 
 In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which the are larger than two for accurate results. 
 
+GOOD DATA ON HOW IT CHANGES!!!!! 
 
-\begin{table}[hbt]
-  \centering
-  \begin{tabular}{|l|l|}
-    \hline
-    \textbf{Field} & \textbf{Value}\\
-    \hline
-    \hline
-    Paper size & US Letter 8.5in $\times$ 11in\\
-    \hline
-    Top margin & 1in\\
-    \hline
-    Bottom margin & 1in\\
-    \hline
-    Left margin & 1in\\
-    \hline
-    Right margin & 1in\\
-    \hline
-    Body font & 12pt\\
-    \hline
-    Abstract font & 12pt, italicized\\
-    \hline
-    Section heading font & 14pt, bold\\
-    \hline
-    Subsection heading font & 12pt, bold\\
-    \hline
-  \end{tabular}
-  \caption{Formatting guidelines. }
-  \label{table:formatting}
-\end{table}
+Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.1257358 | Dynamic time: 0.0008304
+Value: 4 | Properties: 3 | Sets found: 5 | SMT time: 0.2644708 | Dynamic time: 0.0083076
+Value: 5 | Properties: 3 | Sets found: 5 | SMT time: 0.4514688 | Dynamic time: 0.0359664
+Value: 6 | Properties: 3 | Sets found: 5 | SMT time: 0.7417416 | Dynamic time: 0.0803804
+Value: 7 | Properties: 3 | Sets found: 5 | SMT time: 1.4359572 | Dynamic time: 0.1935164
+Value: 8 | Properties: 3 | Sets found: 5 | SMT time: 1.8732762 | Dynamic time: 0.4091774
+Value: 9 | Properties: 3 | Sets found: 5 | SMT time: 2.7668494 | Dynamic time: 0.9010356
+Value: 10 | Properties: 3 | Sets found: 5 | SMT time: 2.9921312 | Dynamic time: 1.612187
+NEXT TRIAL
+Value: 3 | Properties: 4 | Sets found: 10 | SMT time: 0.46447 | Dynamic time: 0.0076216
+Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 1.1025802 | Dynamic time: 0.1011564
+Value: 5 | Properties: 4 | Sets found: 10 | SMT time: 2.202276 | Dynamic time: 0.5098762
+Value: 6 | Properties: 4 | Sets found: 10 | SMT time: 3.9383578 | Dynamic time: 1.931648
+Value: 7 | Properties: 4 | Sets found: 10 | SMT time: 5.764772 | Dynamic time: 3.5160572
+Value: 8 | Properties: 4 | Sets found: 10 | SMT time: 7.1794012 | Dynamic time: 10.4565914
+Value: 9 | Properties: 4 | Sets found: 10 | SMT time: 12.4988774 | Dynamic time: 25.449269
+Value: 10 | Properties: 4 | Sets found: 10 | SMT time: 16.2566918 | Dynamic time: 42.8804984
+NEXT TRIAL
+Value: 3 | Properties: 5 | Sets found: 15 | SMT time: 0.9496786 | Dynamic time: 0.0557728
+Value: 4 | Properties: 5 | Sets found: 15 | SMT time: 3.2645108 | Dynamic time: 1.304426
+Value: 5 | Properties: 5 | Sets found: 15 | SMT time: 8.317706 | Dynamic time: 6.9674558
+Value: 6 | Properties: 5 | Sets found: 15 | SMT time: 16.0790088 | Dynamic time: 38.705726
+Value: 7 | Properties: 5 | Sets found: 15 | SMT time: 29.0545048 | Dynamic time: 109.3020176
+Value: 8 | Properties: 5 | Sets found: 15 | SMT time: 54.0043446 | Dynamic time: 425.1356296
+Value: 9 | Properties: 5 | Sets found: 15 | SMT time: 104.355414 | Dynamic time: 978.5716292
+Value: 10 | Properties: 5 | Sets found: 15 | SMT time: 233.6749484 | Dynamic time: 3064.509777
 
-\begin{table}[hbt]
-  \centering
-  \begin{tabular}{|l|l|} \hline
-    \textbf{Some field} & \textbf{Another field}\\\hline
-    200          &  10000 \\ \hline 
-    400          &  20000 \\ \hline 
-    800          &  40000 \\ \hline 
-    1600        &  80000 \\ \hline 
-    3200        &  160000 \\ \hline 
-    6400        &  320000 \\ \hline 
-  \end{tabular}
-  \caption{Some data in a table. }
-  \label{table:data}
-\end{table}
 
 
 \subsection{Varying the Number of Properties}
 
+GOOD DATA!! On how it changes
+
+Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.1647222 | Dynamic time: 0.0013222
+Value: 3 | Properties: 4 | Sets found: 5 | SMT time: 0.2665312 | Dynamic time: 0.0037172
+Value: 3 | Properties: 5 | Sets found: 5 | SMT time: 0.3763496 | Dynamic time: 0.029906
+Value: 3 | Properties: 6 | Sets found: 5 | SMT time: 0.736525 | Dynamic time: 0.0538004
+Value: 3 | Properties: 7 | Sets found: 5 | SMT time: 1.504038 | Dynamic time: 0.216551
+Value: 3 | Properties: 8 | Sets found: 5 | SMT time: 2.7152826 | Dynamic time: 1.708032
+Value: 3 | Properties: 9 | Sets found: 5 | SMT time: 7.2573276 | Dynamic time: 8.361109
+Value: 3 | Properties: 10 | Sets found: 5 | SMT time: 14.2687426 | Dynamic time: 76.6603506
+NEXT TRIAL
+Value: 4 | Properties: 3 | Sets found: 10 | SMT time: 0.6384594 | Dynamic time: 0.0170932
+Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 1.258413 | Dynamic time: 0.0889914
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 2.9677272 | Dynamic time: 1.018774
+Value: 4 | Properties: 6 | Sets found: 10 | SMT time: 8.1222204 | Dynamic time: 6.4536606
+Value: 4 | Properties: 7 | Sets found: 10 | SMT time: 27.638862 | Dynamic time: 50.590522
+NEXT TRIAL
+Value: 5 | Properties: 3 | Sets found: 15 | SMT time: 1.121967 | Dynamic time: 0.0551576
+Value: 5 | Properties: 4 | Sets found: 15 | SMT time: 2.8363338 | Dynamic time: 0.6131458
+Value: 5 | Properties: 5 | Sets found: 15 | SMT time: 10.0892746 | Dynamic time: 9.8465518
+Value: 5 | Properties: 6 | Sets found: 15 | SMT time: 40.9048692 | Dynamic time: 106.8697728
+
 \subsection{Varying the Number of Sets to be Found}
+
+
+GOOD DATA!!
+
+Value: 3 | Properties: 4 | Sets found: 1 | SMT time: 0.0742242 | Dynamic time: 0.00134179999995
+Value: 3 | Properties: 4 | Sets found: 2 | SMT time: 0.1159722 | Dynamic time: 0.00223939999998
+Value: 3 | Properties: 4 | Sets found: 3 | SMT time: 0.1598114 | Dynamic time: 0.0017728
+Value: 3 | Properties: 4 | Sets found: 4 | SMT time: 0.2195522 | Dynamic time: 0.00205520000002
+Value: 3 | Properties: 4 | Sets found: 5 | SMT time: 0.23839 | Dynamic time: 0.00443360000002
+Value: 3 | Properties: 4 | Sets found: 6 | SMT time: 0.2626134 | Dynamic time: 0.00429979999999
+Value: 3 | Properties: 4 | Sets found: 7 | SMT time: 0.3173918 | Dynamic time: 0.00360619999999
+Value: 3 | Properties: 4 | Sets found: 8 | SMT time: 0.3970942 | Dynamic time: 0.00706260000002
+Value: 3 | Properties: 4 | Sets found: 9 | SMT time: 0.3621434 | Dynamic time: 0.0067286
+Value: 3 | Properties: 4 | Sets found: 10 | SMT time: 0.4111392 | Dynamic time: 0.008017
+
+
+Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 0.7256016 | Dynamic time: 0.1639322
+Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.5329946 | Dynamic time: 0.5084892
+Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 2.1488998 | Dynamic time: 0.485404
+Value: 4 | Properties: 5 | Sets found: 8 | SMT time: 2.6768996 | Dynamic time: 0.9362458
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 3.0043958 | Dynamic time: 1.0584696
+Value: 4 | Properties: 5 | Sets found: 12 | SMT time: 3.4092762 | Dynamic time: 1.0686106
+Value: 4 | Properties: 5 | Sets found: 14 | SMT time: 3.9859994 | Dynamic time: 1.1677256
+Value: 4 | Properties: 5 | Sets found: 16 | SMT time: 3.2949998 | Dynamic time: 1.363676
+Value: 4 | Properties: 5 | Sets found: 18 | SMT time: 3.545886 | Dynamic time: 1.3346482
+Value: 4 | Properties: 5 | Sets found: 20 | SMT time: 4.2144934 | Dynamic time: 1.414747
+
+
+Value: 5 | Properties: 6 | Sets found: 1 | SMT time: 9.8615314 | Dynamic time: 7.9263492
+Value: 5 | Properties: 6 | Sets found: 2 | SMT time: 11.0955332 | Dynamic time: 21.1243226
+Value: 5 | Properties: 6 | Sets found: 3 | SMT time: 15.2542108 | Dynamic time: 25.606412
+Value: 5 | Properties: 6 | Sets found: 4 | SMT time: 22.672351 | Dynamic time: 26.1943384
+Value: 5 | Properties: 6 | Sets found: 5 | SMT time: 17.2433334 | Dynamic time: 47.3041162
+Value: 5 | Properties: 6 | Sets found: 6 | SMT time: 20.3006664 | Dynamic time: 49.1179934
+Value: 5 | Properties: 6 | Sets found: 7 | SMT time: 25.4241238 | Dynamic time: 66.2553498
+Value: 5 | Properties: 6 | Sets found: 8 | SMT time: 23.322687 | Dynamic time: 63.31625
+Value: 5 | Properties: 6 | Sets found: 9 | SMT time: 29.7868654 | Dynamic time: 56.9822622
+Value: 5 | Properties: 6 | Sets found: 10 | SMT time: 26.955211 | Dynamic time: 51.7786976
 
 
 
@@ -425,11 +469,39 @@ In the case of changing the value of the deck to be used, the value has to be re
 
 Changing Values:
 
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l   |l   |l |l | } \hline
+    \textbf{Value} & \textbf{SMT Time}  & \textbf{Dynamic Time} & \textbf{Brute Force Time} \\\hline
+    3          &   0.151558  &  0.0011556 & 0.0005788 \\ \hline 
+    4          &   0.3181856 &  0.0076392 &  0.0088644 \\ \hline 
+    5          &   0.5297282 &  0.0303382 &  0.4365208\\ \hline 
+    6        &   0.9475802 &  0.1281706  & 14.238836 \\ \hline 
+  \end{tabular}
+  \caption{3 Properties and 5 Sets Found Varying Values}
+  \label{table:data}
+\end{table}
+
+
+\begin{figure}[htbb]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{BADBRUTEVAL-v3456p3n5.png}
+\caption{3 properties, 4 values, 10,000 trials Initial Board Distribution}
+\label{fig:bruteVal}
+\end{minipage}
+\end{figure}
+
+
+
+When the value was raised to 7, it ran overnight and did not finish in over 8 hours of CPU time. 
+
 THIS SHOWS WHY BRUTE FORCE IS BAD!!!
 Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.151558 | Dynamic time: 0.0011556 | Brute Force time: 0.0005788
 Value: 4 | Properties: 3 | Sets found: 5 | SMT time: 0.3181856 | Dynamic time: 0.0076392 | Brute Force time: 0.0088644
 Value: 5 | Properties: 3 | Sets found: 5 | SMT time: 0.5297282 | Dynamic time: 0.0303382 | Brute Force time: 0.4365208
 Value: 6 | Properties: 3 | Sets found: 5 | SMT time: 0.9475802 | Dynamic time: 0.1281706 | Brute Force time: 14.238836
+
 
 
 Changing Properties:
@@ -458,6 +530,9 @@ Value: 4 | Properties: 5 | Sets found: 7 | SMT time: 2.3483779 | Dynamic time: 0
 Value: 4 | Properties: 5 | Sets found: 8 | SMT time: 2.3680173 | Dynamic time: 0.6465143 | Brute Force time: 4.0763619
 Value: 4 | Properties: 5 | Sets found: 9 | SMT time: 2.7270461 | Dynamic time: 0.8219845 | Brute Force time: 5.8325919
 Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 3.0290509 | Dynamic time: 0.7972899 | Brute Force time: 5.6602476
+
+
+
 
 
 

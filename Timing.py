@@ -105,7 +105,6 @@ def runBruteForce(randomizer, n):
 # run all the trials
 def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	time_smt = []
-	time_brute = []
 	time_dyn = []
 
 
@@ -120,7 +119,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 				SMT_time = []
 				Dynamic_time = []
-				BruteForce_time = []
 
 				# have to create new randomizer or else the next solver uses the same "used" board
 				for _ in range(num_trials):
@@ -130,19 +128,14 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 					Dynamic_rand = Randomizer(v,p) 
 					Dynamic_time.append(runDynamicsolver(Dynamic_rand, n))
 
-					Brute_rand = Randomizer(v,p) 
-					BruteForce_time.append(runBruteForce(Brute_rand, n))
-
 				avg_SMT = sum(SMT_time)/float(num_trials)
 				avg_Dynamic = sum(Dynamic_time)/float(num_trials)
-				avg_Brute = sum(BruteForce_time)/float(num_trials)
 
 
 				time_smt.append(avg_SMT)
 				time_dyn.append(avg_Dynamic)
-				time_brute.append(avg_Brute)
 
-				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic) + " | Brute Force time: " + str(avg_Brute)  
+				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic)
 
 	
 	print "NEXT TRIAL"	
@@ -153,7 +146,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	# changing value
 	if setting == 1:
 
-		plt.plot(values, time_brute, 'r-o')
 		plt.plot(values, time_smt, 'b-o')
 		plt.plot(values, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
@@ -169,7 +161,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 	# changing property
 	elif setting == 2:
-		plt.plot(properties, time_brute, 'r-o')
 		plt.plot(properties, time_smt, 'b-o')
 		plt.plot(properties, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
@@ -185,7 +176,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 	# changing number of sets to find
 	else:
-		plt.plot(sets_to_find, time_brute, 'r-o')
 		plt.plot(sets_to_find, time_smt, 'b-o')
 		plt.plot(sets_to_find, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
@@ -207,80 +197,79 @@ def run_all():
 	def change_val():
 		print "BEGIN CHANGING VALUE"
 		sets_to_find = [5]
-		#  when i get to 7 it's staking verrryyyyy long
-		values = [3,4,5,6]
+		values = [3,4,5,6,7,8,9,10]
 		properties = [3]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 
-		# sets_to_find = [10]
-		# values = [3,4,5]
-		# properties = [4]
-		# num_trials = 5
+		sets_to_find = [10]
+		values = [3,4,5,6,7,8,9,10]
+		properties = [4]
+		num_trials = 5
 
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 
-		# sets_to_find = [15]
-		# values = [3,4]
-		# properties = [5]
-		# num_trials = 5
+		sets_to_find = [15]
+		values = [3,4,5,6,7,8,9,10]
+		properties = [5]
+		num_trials = 5
 
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 		print "END CHANGING VALUE"
 
 	def change_prop():
 		print "BEGIN CHANGING PROP"
-		sets_to_find = [10]
-		values = [4]
-		properties = [3,4,5,6]
+		sets_to_find = [5]
+		values = [3]
+		properties = [3,4,5,6,7,8,9,10]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
 
-		# sets_to_find = [10]
-		# values = [4]
-		# properties = [3,4,5,6,7,8]
-		# num_trials = 5
+		sets_to_find = [10]
+		values = [4]
+		properties = [3,4,5,6,7]
+		num_trials = 5
 
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
 
-		# sets_to_find = [15]
-		# values = [5]
-		# properties = [3,4,5,6,7]
-		# num_trials = 5
+		sets_to_find = [15]
+		values = [5]
+		properties = [3,4,5,6]
+		num_trials = 5
 
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
 		print "END CHANGING PROP"
 
 	def change_n():
 		print "BEGIN CHANGING N"
+		# sets_to_find = [1,2,3,4,5,6,7,8,9,10]
+		# values = [3]
+		# properties = [4]
+		# num_trials = 5
+
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+
+		# sets_to_find = [2,4,6,8,10,12,14,16,18,20]
+		# values = [4]
+		# properties = [5]
+		# num_trials = 5
+
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+
 		sets_to_find = [1,2,3,4,5,6,7,8,9,10]
-		values = [4]
-		properties = [5]
+		values = [5]
+		properties = [6]
 		num_trials = 10
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 3)
-
-		# sets_to_find = [1,2,3,4,5,6,7,8,9,10]
-		# values = [4]
-		# properties = [5]
-		# num_trials = 10
-
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
-
-		# sets_to_find = [1,2,3,4,5,6,7,8,9,10]
-		# values = [5]
-		# properties = [5]
-		# num_trials = 10
-
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
 		print "END CHANGING N"
 
 
 	# change_val()
 
-	change_prop()
+	# change_prop()
 
 	change_n()
 
