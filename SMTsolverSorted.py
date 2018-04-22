@@ -17,7 +17,7 @@ import time
 def coord_to_list(row,col,prop):
 	return row*prop + col
 
-class SMTsolver: 
+class SMTsolverSorted: 
 	# Initialize the SMT solver with the board
 	def __init__(self, values, prop, randomizer):
 		# number of values
@@ -66,33 +66,30 @@ class SMTsolver:
 	def create_condensing_constraint(self):
 		tot_constraint = []
 
-		# sorted by the ith property
-		for i in range(self.p):
-			# sorted by the ith property
-			sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  == c for c in range(self.v)])]
-
-			# OR properties less than I should not be equal
-			should_be_equal_for = [Not(And([self.K[coord_to_list(c,j,self.p)] == self.K[coord_to_list(c+1,j,self.p)] for c in range(self.v-1)])) for j in range(i)]
-
-
-			tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
-
-
 		# # sorted by the ith property
 		# for i in range(self.p):
 		# 	# sorted by the ith property
-		# 	sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  <= self.K[coord_to_list(c+1,i,self.p)] for c in range(self.v-1)])]
+		# 	sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  == c for c in range(self.v)])]
 
 		# 	# OR properties less than I should not be equal
 		# 	should_be_equal_for = [Not(And([self.K[coord_to_list(c,j,self.p)] == self.K[coord_to_list(c+1,j,self.p)] for c in range(self.v-1)])) for j in range(i)]
 
+
 		# 	tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
 
 
+		# sorted by the ith property
+		for i in range(self.p):
+			# sorted by the ith property
+			sorted_by_i_property = [And([self.K[coord_to_list(c,i,self.p)]  <= self.K[coord_to_list(c+1,i,self.p)] for c in range(self.v-1)])]
+
+			# OR properties less than I should not be equal
+			should_be_equal_for = [Not(And([self.K[coord_to_list(c,j,self.p)] == self.K[coord_to_list(c+1,j,self.p)] for c in range(self.v-1)])) for j in range(i)]
+
+			tot_constraint.append(Or(sorted_by_i_property + should_be_equal_for))
 
 
-		# alternate way where you only base it off of the sorted first elements
-		# tot_constraint = [self.K[coord_to_list(i,1,self.p)] <= self.K[coord_to_list(i+1,1,self.p)] for i in range(self.v-1)]
+
 
 		return And(tot_constraint)
 
@@ -369,7 +366,7 @@ def run_test():
 
 	# basic starting board where the board will contain ALL the cards and therefore must contain a set 
 	basic1 = Randomizer(2,2)
-	test = SMTsolver(basic1.v, basic1.p, basic1)
+	test = SMTsolverSorted(basic1.v, basic1.p, basic1)
 	original_board = test.all_cards_on_board
 	model = test.find_set()
 	extract_cards(basic1.v, basic1.p, test.K, model, False)
@@ -377,7 +374,7 @@ def run_test():
 
 	# 2 values 3 properties
 	basic2 = Randomizer(2,3)
-	test = SMTsolver(basic2.v, basic2.p, basic2)
+	test = SMTsolverSorted(basic2.v, basic2.p, basic2)
 	original_board = test.all_cards_on_board
 	model = test.find_set()
 	extract_cards(basic2.v, basic2.p, test.K, model, False)
@@ -385,7 +382,7 @@ def run_test():
 
 	# actual game of set
 	basic3 = Randomizer(3,4)
-	test = SMTsolver(basic3.v, basic3.p, basic3)
+	test = SMTsolverSorted(basic3.v, basic3.p, basic3)
 	original_board = test.all_cards_on_board
 	model = test.find_set()
  	extract_cards(basic3.v, basic3.p, test.K, model, False)
@@ -396,7 +393,7 @@ def run_test():
 
 	# 2 values 3 properties test if remove_card_works
 	remove1 = Randomizer(2,3)
-	test = SMTsolver(remove1.v, remove1.p, remove1)
+	test = SMTsolverSorted(remove1.v, remove1.p, remove1)
 	original_board = test.all_cards_on_board
 	model = test.find_set()
 	extract_cards(remove1.v, remove1.p, test.K, model, False)
@@ -408,7 +405,7 @@ def run_test():
 
 	# 3 values 4 properties test if remove_card_works
 	remove2 = Randomizer(3,4)
-	test = SMTsolver(remove2.v, remove2.p, remove2)
+	test = SMTsolverSorted(remove2.v, remove2.p, remove2)
 	original_board = test.all_cards_on_board
 	model = test.find_set()
 	extract_cards(remove2.v, remove2.p, test.K, model, False)
@@ -423,7 +420,7 @@ def run_test():
 
 	# 3 values 4 properties test and remove 2 sets
 	remove2 = Randomizer(3,4) 
-	test = SMTsolver(remove2.v, remove2.p, remove2)
+	test = SMTsolverSorted(remove2.v, remove2.p, remove2)
 	model = test.find_n_sets(2)
 
 	check_all_sets_distinct(model)
@@ -445,7 +442,7 @@ def run_test():
 	# 3 values 4 properties test and remove 10 sets
 	remove2 = Randomizer(4,5) 
 
-	test = SMTsolver(remove2.v, remove2.p, remove2)
+	test = SMTsolverSorted(remove2.v, remove2.p, remove2)
 	model = test.find_n_sets(10)
 
 	check_all_sets_distinct(model)

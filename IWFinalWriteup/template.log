@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  17 APR 2018 17:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  19 APR 2018 16:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -913,6 +913,12 @@ LaTeX Info: Redefining \] on input line 2740.
 
 LaTeX Warning: Label `table:data' multiply defined.
 
+
+LaTeX Warning: Label `table:data' multiply defined.
+
+
+LaTeX Warning: Label `table:data' multiply defined.
+
 )
 \openout1 = `template.aux'.
 
@@ -1102,14 +1108,49 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
  [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<nolte.png, id=205, 896.34875pt x 527.9725pt>
+File: nolte.png Graphic file (type png)
+ <use nolte.png>
+Package pdftex.def Info: nolte.png used on input line 46.
+(pdftex.def)             Requested size: 352.31625pt x 207.51968pt.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 47.
+
+(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/t1phv.fd
+File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
+)
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 9.99591pt on input line 47.
+Package microtype Info: Loading generic settings for font family
+(microtype)             `phv' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 47.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 9.99591pt on input line 47.
+ [2 <./nolte.png>]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 43.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 56.
 
 
-LaTeX Warning: Citation `norvig' on page 2 undefined on input line 51.
+LaTeX Warning: Citation `norvig' on page 3 undefined on input line 64.
 
-[2] [3] [4] [5]
-Overfull \hbox (22.25363pt too wide) detected at line 192
+[3] [4] [5] [6]
+Overfull \hbox (4.11305pt too wide) detected at line 206
+ []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
+m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 k[] 
+\OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m
+/it/12 k[]\OT1/ztmcm/m/n/12 ) \OMS/ztmcm/m/n/12 _ :\OT1/ztmcm/m/n/12 (\OML/ztmc
+m/m/it/12 k[] \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = \O
+ML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[]\OT1/ztmcm/m/n/1
+2 ) \OMS/ztmcm/m/n/12 _ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 _ :\OT1/ztmcm/
+m/n/12 (\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[] \OT1/
+ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[
+]\OT1/ztmcm/m/n/12 ))$ []  
+ []
+
+[7]
+Overfull \hbox (22.25363pt too wide) detected at line 225
  []$[]  \OT1/ztmcm/m/n/12 (\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztm
 cm/m/it/12 ; k[] \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/
 m/n/12 = \OML/ztmcm/m/it/12 v \OMS/ztmcm/m/n/12 ^^@ \OT1/ztmcm/m/n/12 1) \OMS/z
@@ -1123,7 +1164,7 @@ tmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$
  []
 
 
-Overfull \hbox (52.73636pt too wide) detected at line 192
+Overfull \hbox (52.73636pt too wide) detected at line 225
  []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
 m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztmcm/m/it/12 ; k[]
  \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/m/n/12 = \OML/zt
@@ -1136,143 +1177,143 @@ OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n
 /12 = \OML/ztmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$ []  
  []
 
-[6] [7] [8] <3p4v10000Init.png, id=256, 578.16pt x 433.62pt>
+[8] [9] <3p4v10000Init.png, id=271, 578.16pt x 433.62pt>
 File: 3p4v10000Init.png Graphic file (type png)
 
 <use 3p4v10000Init.png>
-Package pdftex.def Info: 3p4v10000Init.png used on input line 242.
+Package pdftex.def Info: 3p4v10000Init.png used on input line 275.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 243.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/t1phv.fd
-File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
-)
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 9.99591pt on input line 243.
-Package microtype Info: Loading generic settings for font family
-(microtype)             `phv' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 243.
-LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 9.99591pt on input line 243.
-
-<4p5v10000Init.png, id=258, 578.16pt x 433.62pt>
+ <4p5v10000Init.png, id=272, 578.16pt x 433.62pt>
 File: 4p5v10000Init.png Graphic file (type png)
- <use 4p5v10000Init.png>
-Package pdftex.def Info: 4p5v10000Init.png used on input line 249.
+
+<use 4p5v10000Init.png>
+Package pdftex.def Info: 4p5v10000Init.png used on input line 282.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 240--253
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 273--286
 [][]   [] 
  []
 
-<3p4v10000Draw.png, id=261, 578.16pt x 433.62pt>
+[10] <3p4v10000Draw.png, id=282, 578.16pt x 433.62pt>
 File: 3p4v10000Draw.png Graphic file (type png)
  <use 3p4v10000Draw.png>
-Package pdftex.def Info: 3p4v10000Draw.png used on input line 261.
+Package pdftex.def Info: 3p4v10000Draw.png used on input line 294.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<4p5v10000Draw.png, id=262, 578.16pt x 433.62pt>
+<4p5v10000Draw.png, id=283, 578.16pt x 433.62pt>
 File: 4p5v10000Draw.png Graphic file (type png)
  <use 4p5v10000Draw.png>
-Package pdftex.def Info: 4p5v10000Draw.png used on input line 268.
+Package pdftex.def Info: 4p5v10000Draw.png used on input line 301.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 259--272
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 292--305
 [][]   [] 
  []
 
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 280.
+(amsmath)                 on input line 313.
 
-[9 <./3p4v10000Init.png> <./4p5v10000Init.png>] [10 <./3p4v10000Draw.png> <./4p
-5v10000Draw.png>] [11] [12] [13] [14] [15] [16] [17]
-<BADBRUTEVAL-v3456p3n5.png, id=310, 578.16pt x 433.62pt>
+[11 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5v10
+000Draw.png>] [12] [13] [14] [15] [16] [17]
+<BADBRUTEVAL-v3456p3n5.png, id=321, 578.16pt x 433.62pt>
 File: BADBRUTEVAL-v3456p3n5.png Graphic file (type png)
 
 <use BADBRUTEVAL-v3456p3n5.png>
-Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 477.
+Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 410.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
- [18] [19 <./BADBRUTEVAL-v3456p3n5.png>]
 
-LaTeX Warning: Citation `lamport94' on page 20 undefined on input line 546.
+<BADBRUTEPROP-v4p3456n10.png, id=322, 578.16pt x 433.62pt>
+File: BADBRUTEPROP-v4p3456n10.png Graphic file (type png)
 
-[20]
+<use BADBRUTEPROP-v4p3456n10.png>
+Package pdftex.def Info: BADBRUTEPROP-v4p3456n10.png used on input line 417.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-LaTeX Warning: Citation `nicepaper' on page 21 undefined on input line 598.
+<BADBRUTESETS-v4p5n12345678910.png, id=323, 578.16pt x 433.62pt>
+File: BADBRUTESETS-v4p5n12345678910.png Graphic file (type png)
+
+<use BADBRUTESETS-v4p5n12345678910.png>
+Package pdftex.def Info: BADBRUTESETS-v4p5n12345678910.png used on input line 4
+24.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
+
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 408--428
+[][]   []
+ []
+
+[18 <./BADBRUTEVAL-v3456p3n5.png> <./BADBRUTEPROP-v4p3456n10.png> <./BADBRUTESE
+TS-v4p5n12345678910.png>] [19] [20] [21]
+
+LaTeX Warning: Citation `lamport94' on page 22 undefined on input line 618.
+
+[22]
+
+LaTeX Warning: Citation `nicepaper' on page 23 undefined on input line 670.
 
 
-LaTeX Warning: Citation `nicepaper2' on page 21 undefined on input line 598.
+LaTeX Warning: Citation `nicepaper2' on page 23 undefined on input line 670.
 
 
-LaTeX Warning: Citation `Salzberg:2005' on page 21 undefined on input line 600.
+LaTeX Warning: Citation `Salzberg:2005' on page 23 undefined on input line 672.
 
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 607.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 679.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 607.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 679.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 607.
-[21] <gray.jpg, id=335, 329.23pt x 154.5775pt>
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 679.
+[23] <gray.jpg, id=360, 329.23pt x 154.5775pt>
 File: gray.jpg Graphic file (type jpg)
  <use gray.jpg>
-Package pdftex.def Info: gray.jpg used on input line 623.
+Package pdftex.def Info: gray.jpg used on input line 695.
 (pdftex.def)             Requested size: 352.31625pt x 165.41985pt.
 
-<checkerboard-squares-black-white.jpg, id=340, 216.81pt x 216.81pt>
+<checkerboard-squares-black-white.jpg, id=365, 216.81pt x 216.81pt>
 File: checkerboard-squares-black-white.jpg Graphic file (type jpg)
 
 <use checkerboard-squares-black-white.jpg>
 Package pdftex.def Info: checkerboard-squares-black-white.jpg used on input lin
-e 655.
+e 727.
 (pdftex.def)             Requested size: 176.15813pt x 176.1676pt.
 
-<swirl-squares-black-white.jpg, id=341, 216.81pt x 216.81pt>
+<swirl-squares-black-white.jpg, id=366, 216.81pt x 216.81pt>
 File: swirl-squares-black-white.jpg Graphic file (type jpg)
 
 <use swirl-squares-black-white.jpg>
-Package pdftex.def Info: swirl-squares-black-white.jpg used on input line 662.
+Package pdftex.def Info: swirl-squares-black-white.jpg used on input line 734.
 (pdftex.def)             Requested size: 176.15813pt x 176.1676pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 653--666
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 725--738
 [][]   [] 
  []
 
-[22 <./gray.jpg>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 692.
+[24 <./gray.jpg>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 764.
 
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 692.
- [23 <./checkerboard-squares-black-white.jpg> <./swirl-squares-black-white.jpg>
-] [24]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 764.
+ [25 <./checkerboard-squares-black-white.jpg> <./swirl-squares-black-white.jpg>
+] [26]
 (./template.bbl
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 753.
- [25]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 753.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 825.
+ [27]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 825.
  (./template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 753.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 753.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 825.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 825.
+Package rerunfilecheck Info: File `template.out' has not changed.
+(rerunfilecheck)             Checksum: FD601D627F6679E8C530F064390EEB4A;7568.
 
-
-Package rerunfilecheck Warning: File `template.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `template.out':
-(rerunfilecheck)             Before: 7AF609183B616911CC47B01B1B0C0456;7346
-(rerunfilecheck)             After:  08B42105A12B24039147C9AC6165769B;7384.
 
 LaTeX Warning: There were undefined references.
 
@@ -1281,13 +1322,13 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 15691 strings out of 493014
- 227646 string characters out of 6133351
- 349478 words of memory out of 5000000
- 18675 multiletter control sequences out of 15000+600000
- 80320 words of font info for 246 fonts, out of 8000000 for 9000
+ 15715 strings out of 493014
+ 228181 string characters out of 6133351
+ 355091 words of memory out of 5000000
+ 18691 multiletter control sequences out of 15000+600000
+ 80095 words of font info for 244 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 48i,16n,40p,1835b,507s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,16n,40p,1835b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -1297,10 +1338,10 @@ e/2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/
 texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on template.pdf (25 pages, 293014 bytes).
+Output written on template.pdf (27 pages, 538195 bytes).
 PDF statistics:
- 415 PDF objects out of 1000 (max. 8388607)
- 363 compressed objects within 4 object streams
- 102 named destinations out of 1000 (max. 500000)
- 46489 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 443 PDF objects out of 1000 (max. 8388607)
+ 383 compressed objects within 4 object streams
+ 110 named destinations out of 1000 (max. 500000)
+ 46512 words of extra memory for PDF output out of 51595 (max. 10000000)
 

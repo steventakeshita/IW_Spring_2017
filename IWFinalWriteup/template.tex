@@ -21,7 +21,7 @@
 \thispagestyle{empty}
 \doublespacing
 \begin{abstract}
-This paper examines three implementations of a solver for the generalized version of the Game of Set. Brute force, SMT solver based, and dynamic algorithm approaches are used to create an efficient solver for the game. Through timing tests, it is shown that though a reduction to the SMT solver should create an efficient solution to the NP complete game, the dynamic algorithm approach yields the fastest solver for relatively smaller test cases over both the SMT solver and brute force implementations. Interestingly, the order of growth of the SMT program follows a relatively linear progression, whereas the brute force and dynamic algorithm are exponentially growing, meaning at very high values and properties the SMT solver is a more efficient solver than the brute force and dynamic algorithm. 
+This paper examines three implementations of a solver for the generalized version of the Game of Set. Brute force, SMT solver based, and dynamic algorithm approaches are used to create an efficient solver for the game. Through timing tests, it is shown that though a reduction to the SMT solver should create an efficient solution to the NP complete game, the dynamic algorithm approach yields the fastest solver for relatively smaller test cases over both the SMT solver and brute force implementations. Interestingly, the order of growth of the SMT program follows a relatively linear progression, whereas the brute force and dynamic algorithm are exponentially growing, meaning at very high values and properties the SMT solver yields a more efficient solver than the brute force and dynamic algorithm. 
 \end{abstract}
 
 \section{Introduction}
@@ -38,7 +38,20 @@ The Game of Set was created in 1974 and published in 1991. The game consists of 
 
 The Game of Set has been researched thoroughly for education and as a motivating example for cap sets, but little research exists about solving a generalized version. Chaudhuri et al (2003) proved that the generalized version of Set is in fact NP-Complete through a reduction from perfect-Dimensional Matching, a known NP-Hard problem ~\cite{chaudhuri}.  
 
-This paper proves computational complexity bounds, but does not solve the problem in practice. Solvers do exist on the internet and can be readily found ~\cite{nolte}. Some solvers even employ image processing to identify sets ~\cite{jorquera}. However, the solvers are constrained to have four properties and three values. Therefore, the solver I will build will be able to solve the generic case of Set in which it has $p$ properties and $v$ values.  
+This paper proves computational complexity bounds, but does not solve the problem in practice. Solvers do exist on the internet and can be readily found. For example, this online JavaScript solver created by Steve Nolte, takes in the exact cards that appear on the board and output the total number of sets that exist on the board and the configurations ~\cite{nolte}. The solver has a great UI and an easy way to find sets as seen in Figure~\ref{fig:nolteUI}. However, this solver can only find a Set within the given board and outputs sets that contain the same card, overlapping sets which are not valid sets in the game, as can be seen in the figure (3-8-11 and 6-9-11 both contain card 11). 
+
+\begin{figure}[htbb]
+\centering
+\begin{minipage}[b]{.75\linewidth}
+\includegraphics[width=\linewidth]{nolte.png}
+\caption{Javascript SET Game Solver by Steve Nolte}
+\label{fig:nolteUI}
+\end{minipage}
+\end{figure}
+
+
+Some solvers even employ image processing to identify sets ~\cite{jorquera}. These more advanced programs are able to parse the cards from an image using computer vision and determine sets without a user inputting the cards manually. Again, this solver only supports use for one iteration of the game and will need to be updated manually to load in the new cards when the sets have been removed. However, the solvers are constrained to have four properties and three values as they only apply to the original Game of Set and cannot be used for a generalized version. Moreover, all the solvers found restrict their solving mechanism to the brute force solution. They iteratively check all possible combinations of cards and to determine satisfying Sets. Therefore, the solvers I will build will be able to solve the generic case of Set in which it has $p$ properties, $v$ values, and we are searching for $n$ sets. 
+
 
 \subsection{Problem Definition}
 
@@ -182,6 +195,26 @@ Written more succinctly:
 \end{align}
 
 \subsection {Condensing Search Tree}
+
+% initial way to do it by sorted!
+To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
+
+\begin{multline}
+	(k_{1,1} \leq k_{2,1} \leq ... \leq k_{v,1}) \wedge (   (k_{1,2} \leq k_{2,2} \leq ... \leq k_{v,2})  \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge (   (k_{1,3} \leq k_{2,3} \leq ... \leq k_{v,3})  \vee \neg (k_{1,2} = k_{2,2} = ... = k_{v,2}) \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1})) \\
+	\wedge ... \wedge (   (k_{1,p} \leq k_{2,p} \leq ... \leq k_{v,p})  \vee \neg (k_{1,p-1} = k_{2,p-1} = ... = k_{v,p-1}) \vee ... \vee \neg (k_{1,1} = k_{2,1} = ... = k_{v,1}))
+\end{multline}
+
+Written more compactly:
+
+\begin{align}
+	\bigwedge \limits_{i=1}^{p}   \left(  (k_{1,i} \leq k_{2,i} \leq ... \leq k_{v,i}) \bigvee \limits_{j=1}^{i-1}  \left( \neg (k_{1,j} = k_{2,j} = ... = k_{v,j})  \right)   \right)
+\end{align}
+
+
+
+
+% other way... CHECK SPEEDS!!!
 
 To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
 
@@ -364,6 +397,164 @@ I again used a Python package called matplotlib to graph all of the curves forme
 
 
 
+
+
+\subsection{Brute Force Inefficiency}
+
+The brute force implementation is the solution that many solvers online employ. The brute force solution is efficient enough and fast in the case of the actual Game of Set in which there are only $3$ values and $4$ properties, even being able to beat the SMT solver and dynamic algorithm in some cases. However, as $v$, $p$, and $n$ are increased to add complexity to the problem, the brute force solution time begins to take exponential time. Therefore, the brute force solution must be deleted in real timing tests between the SMT solver and dynamic algorithm to provide fair competition and not ruin the graphs. As an example, see Figure~\ref{fig:bruteVal}.
+
+
+\begin{figure}[htbb]
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{BADBRUTEVAL-v3456p3n5.png}
+\caption{3 Properties and 5 Sets Found Varying Values Showing Inefficiency of Brute Force. When the value was raised to 7, it ran overnight and did not finish in over 8 hours of CPU time.}
+\label{fig:bruteVal}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{BADBRUTEPROP-v4p3456n10.png}
+\caption{3 Properties and 5 Sets Found Varying Values Showing Inefficiency of Brute Force. When the value was raised to 7, it ran overnight and did not finish in over 8 hours of CPU time.}
+\label{fig:bruteProp}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=.75\linewidth]{BADBRUTESETS-v4p5n12345678910.png}
+\caption{3 Properties and 5 Sets Found Varying Values Showing Inefficiency of Brute Force. When the value was raised to 7, it ran overnight and did not finish in over 8 hours of CPU time.}
+\label{fig:bruteSet}
+\end{minipage}
+\end{figure}
+
+
+
+
+
+
+
+Changing Values:
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l   |l   |l |l | } \hline
+    \textbf{Value} & \textbf{SMT Time (sec)}  & \textbf{Dynamic Time (sec)} & \textbf{Brute Force Time (sec)} \\\hline
+    3          &   0.151558  &  0.0011556 & 0.0005788 \\ \hline 
+    4          &   0.3181856 &  0.0076392 &  0.0088644 \\ \hline 
+    5          &   0.5297282 &  0.0303382 &  0.4365208\\ \hline 
+    6        &   0.9475802 &  0.1281706  & 14.238836 \\ \hline 
+  \end{tabular}
+  \caption{3 Properties and 5 Sets Found Varying Values Showing Inefficiency of Brute Force}
+  \label{table:data}
+\end{table}
+
+
+
+
+
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l   |l   |l |l | } \hline
+    \textbf{Properties} & \textbf{SMT Time (sec)}  & \textbf{Dynamic Time (sec)} & \textbf{Brute Force Time (sec)} \\\hline
+    3          &   0.515003  &  0.0131808 & 0.0244682 \\ \hline 
+    4          &   1.0666256 &  0.0920564 &  0.4419958 \\ \hline 
+    5          &   2.699265 &  0.8713774 &  8.1313608\\ \hline 
+    6        &   7.3704448 &  6.2403746  & 65.0100778 \\ \hline 
+  \end{tabular}
+  \caption{4 Values 10 Sets Found Varying Properties Showing Inefficiency of Brute Force}
+  \label{table:data}
+\end{table}
+
+
+Changing Properties:
+
+
+Changing Number of Sets to Find:
+
+
+\begin{table}[hbt]
+  \centering
+  \begin{tabular}{|l   |l   |l |l | } \hline
+    \textbf{Sets Found} & \textbf{SMT Time (sec)}  & \textbf{Dynamic Time (sec)} & \textbf{Brute Force Time (sec)} \\\hline
+1 &	0.4885771 & 0.165111 & 0.192901 \\ \hline 
+2&	0.8434341 & 0.1644045 & 0.9045717\\ \hline 
+3&	1.3540622 & 0.2729211 & 1.4737172\\ \hline 
+4&	1.358116 & 0.3569608 & 1.8925655\\ \hline 
+5&	1.5512601 & 0.4747814 & 2.3848884\\ \hline 
+6&	1.5569981 & 0.6256077 & 2.0579355\\ \hline 
+7&	2.3483779 & 0.7106884 & 3.3225479\\ \hline 
+8&	2.3680173 & 0.6465143 & 4.0763619\\ \hline 
+9&	2.7270461 & 0.8219845 & 5.8325919\\ \hline 
+10&	3.0290509 & 0.7972899 & 5.6602476\\ \hline                       
+  \end{tabular}
+  \caption{4 Values 5 Properties Varying Number of Sets Found Showing Inefficiency of Brute Force}
+  \label{table:data}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+% choosing which SMT solver condesning condition to use
+
+all 3 of them!!! so slow no condensing
+
+Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.1315286 | No Condense time: 0.1119434 | Sorted SMT time: 0.1313658
+Value: 4 | Properties: 3 | Sets found: 5 | SMT time: 0.262593 | No Condense time: 0.2711514 | Sorted SMT time: 0.2629172
+Value: 5 | Properties: 3 | Sets found: 5 | SMT time: 0.4915598 | No Condense time: 0.893835 | Sorted SMT time: 0.5346276
+Value: 6 | Properties: 3 | Sets found: 5 | SMT time: 0.7359456 | No Condense time: 3.492051 | Sorted SMT time: 0.8089124
+Value: 7 | Properties: 3 | Sets found: 5 | SMT time: 1.1994746 | No Condense time: 27.6221938 | Sorted SMT time: 1.243199
+
+
+Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.1227916 | No Condense time: 0.11586 | Sorted SMT time: 0.114809
+Value: 3 | Properties: 4 | Sets found: 5 | SMT time: 0.1911524 | No Condense time: 0.1624124 | Sorted SMT time: 0.2034166
+Value: 3 | Properties: 5 | Sets found: 5 | SMT time: 0.3240426 | No Condense time: 0.3860674 | Sorted SMT time: 0.297322
+Value: 3 | Properties: 6 | Sets found: 5 | SMT time: 0.716594 | No Condense time: 0.5641488 | Sorted SMT time: 0.5785234
+Value: 3 | Properties: 7 | Sets found: 5 | SMT time: 1.0865544 | No Condense time: 1.4534238 | Sorted SMT time: 1.252956
+Value: 3 | Properties: 8 | Sets found: 5 | SMT time: 2.542946 | No Condense time: 4.0203912 | Sorted SMT time: 2.8551718
+Value: 3 | Properties: 9 | Sets found: 5 | SMT time: 6.8818012 | No Condense time: 13.0063166 | Sorted SMT time: 6.7265682
+Value: 3 | Properties: 10 | Sets found: 5 | SMT time: 17.436174 | No Condense time: 64.4995744 | Sorted SMT time: 24.2810026
+
+
+Value: 4 | Properties: 5 | Sets found: 1 | SMT time: 0.8400982 | No Condense time: 0.6961396 | Sorted SMT time: 0.2944522
+Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 1.0228374 | No Condense time: 2.1587538 | Sorted SMT time: 0.9887542
+Value: 4 | Properties: 5 | Sets found: 3 | SMT time: 1.1529082 | No Condense time: 2.0398788 | Sorted SMT time: 1.3236176
+Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.6135378 | No Condense time: 3.6882298 | Sorted SMT time: 1.6481674
+Value: 4 | Properties: 5 | Sets found: 5 | SMT time: 1.927098 | No Condense time: 2.8627508 | Sorted SMT time: 1.6150942
+Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 2.048918 | No Condense time: 5.402477 | Sorted SMT time: 2.131423
+Value: 4 | Properties: 5 | Sets found: 7 | SMT time: 1.7453106 | No Condense time: 5.5532816 | Sorted SMT time: 1.9461758
+Value: 4 | Properties: 5 | Sets found: 8 | SMT time: 1.928023 | No Condense time: 5.0165282 | Sorted SMT time: 2.4612764
+Value: 4 | Properties: 5 | Sets found: 9 | SMT time: 2.6054798 | No Condense time: 8.7542114 | Sorted SMT time: 2.5709226
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 2.3732238 | No Condense time: 6.7005978 | Sorted SMT time: 2.6775954
+
+% now between the two of the fastest
+
+Value: 3 | Properties: 4 | Sets found: 10 | SMT time: 0.3780628 | Sorted SMT time: 0.3163608
+Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 0.9876946 | Sorted SMT time: 0.9584652
+Value: 5 | Properties: 4 | Sets found: 10 | SMT time: 1.9884428 | Sorted SMT time: 2.2310528
+Value: 6 | Properties: 4 | Sets found: 10 | SMT time: 3.7249208 | Sorted SMT time: 4.3889242
+Value: 7 | Properties: 4 | Sets found: 10 | SMT time: 6.460034 | Sorted SMT time: 7.4369284
+Value: 8 | Properties: 4 | Sets found: 10 | SMT time: 8.4522018 | Sorted SMT time: 12.236469
+Value: 9 | Properties: 4 | Sets found: 10 | SMT time: 12.1094048 | Sorted SMT time: 20.610751
+Value: 10 | Properties: 4 | Sets found: 10 | SMT time: 17.0089256 | Sorted SMT time: 29.6069972
+
+Value: 4 | Properties: 3 | Sets found: 10 | SMT time: 0.4043404 | Sorted SMT time: 0.5289736
+Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 0.967702 | Sorted SMT time: 0.9353798
+Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 2.1844898 | Sorted SMT time: 2.548027
+Value: 4 | Properties: 6 | Sets found: 10 | SMT time: 7.0779262 | Sorted SMT time: 9.6672632
+Value: 4 | Properties: 7 | Sets found: 10 | SMT time: 25.211324 | Sorted SMT time: 48.43503
+
+
+
+
+The brute force algorithm ONLY works for small values of v,p, and n. As we increase either one of these, the order of growth is much higher. This makes sense as n choose 3 is much higher than n choose 2. Therefore, in further testing, we must delete the brute force solution for timing tests, as the order of growth is much too high and ruins the graphs. 
+
 \subsection{Varying the Number of Values}
 
 In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which the are larger than two for accurate results. 
@@ -462,81 +653,6 @@ Value: 5 | Properties: 6 | Sets found: 7 | SMT time: 25.4241238 | Dynamic time: 
 Value: 5 | Properties: 6 | Sets found: 8 | SMT time: 23.322687 | Dynamic time: 63.31625
 Value: 5 | Properties: 6 | Sets found: 9 | SMT time: 29.7868654 | Dynamic time: 56.9822622
 Value: 5 | Properties: 6 | Sets found: 10 | SMT time: 26.955211 | Dynamic time: 51.7786976
-
-
-
-
-
-Changing Values:
-
-\begin{table}[hbt]
-  \centering
-  \begin{tabular}{|l   |l   |l |l | } \hline
-    \textbf{Value} & \textbf{SMT Time}  & \textbf{Dynamic Time} & \textbf{Brute Force Time} \\\hline
-    3          &   0.151558  &  0.0011556 & 0.0005788 \\ \hline 
-    4          &   0.3181856 &  0.0076392 &  0.0088644 \\ \hline 
-    5          &   0.5297282 &  0.0303382 &  0.4365208\\ \hline 
-    6        &   0.9475802 &  0.1281706  & 14.238836 \\ \hline 
-  \end{tabular}
-  \caption{3 Properties and 5 Sets Found Varying Values}
-  \label{table:data}
-\end{table}
-
-
-\begin{figure}[htbb]
-\begin{minipage}[b]{0.5\linewidth}
-\centering
-\includegraphics[width=.75\linewidth]{BADBRUTEVAL-v3456p3n5.png}
-\caption{3 properties, 4 values, 10,000 trials Initial Board Distribution}
-\label{fig:bruteVal}
-\end{minipage}
-\end{figure}
-
-
-
-When the value was raised to 7, it ran overnight and did not finish in over 8 hours of CPU time. 
-
-THIS SHOWS WHY BRUTE FORCE IS BAD!!!
-Value: 3 | Properties: 3 | Sets found: 5 | SMT time: 0.151558 | Dynamic time: 0.0011556 | Brute Force time: 0.0005788
-Value: 4 | Properties: 3 | Sets found: 5 | SMT time: 0.3181856 | Dynamic time: 0.0076392 | Brute Force time: 0.0088644
-Value: 5 | Properties: 3 | Sets found: 5 | SMT time: 0.5297282 | Dynamic time: 0.0303382 | Brute Force time: 0.4365208
-Value: 6 | Properties: 3 | Sets found: 5 | SMT time: 0.9475802 | Dynamic time: 0.1281706 | Brute Force time: 14.238836
-
-
-
-Changing Properties:
-
-
-THIS SHOWS WHY BRUTE FORCE IS BAD!!!
-
-Value: 4 | Properties: 3 | Sets found: 10 | SMT time: 0.515003 | Dynamic time: 0.0131808 | Brute Force time: 0.0244682
-Value: 4 | Properties: 4 | Sets found: 10 | SMT time: 1.0666256 | Dynamic time: 0.0920564 | Brute Force time: 0.4419958
-Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 2.699265 | Dynamic time: 0.8713774 | Brute Force time: 8.1313608
-Value: 4 | Properties: 6 | Sets found: 10 | SMT time: 7.3704448 | Dynamic time: 6.2403746 | Brute Force time: 65.0100778
-
-
-
-Changing Number of Sets to Find:
-
-THIS SHOWS WHY BRUTE FORCE IS BAD!!!
-
-Value: 4 | Properties: 5 | Sets found: 1 | SMT time: 0.4885771 | Dynamic time: 0.165111 | Brute Force time: 0.192901
-Value: 4 | Properties: 5 | Sets found: 2 | SMT time: 0.8434341 | Dynamic time: 0.1644045 | Brute Force time: 0.9045717
-Value: 4 | Properties: 5 | Sets found: 3 | SMT time: 1.3540622 | Dynamic time: 0.2729211 | Brute Force time: 1.4737172
-Value: 4 | Properties: 5 | Sets found: 4 | SMT time: 1.358116 | Dynamic time: 0.3569608 | Brute Force time: 1.8925655
-Value: 4 | Properties: 5 | Sets found: 5 | SMT time: 1.5512601 | Dynamic time: 0.4747814 | Brute Force time: 2.3848884
-Value: 4 | Properties: 5 | Sets found: 6 | SMT time: 1.5569981 | Dynamic time: 0.6256077 | Brute Force time: 2.0579355
-Value: 4 | Properties: 5 | Sets found: 7 | SMT time: 2.3483779 | Dynamic time: 0.7106884 | Brute Force time: 3.3225479
-Value: 4 | Properties: 5 | Sets found: 8 | SMT time: 2.3680173 | Dynamic time: 0.6465143 | Brute Force time: 4.0763619
-Value: 4 | Properties: 5 | Sets found: 9 | SMT time: 2.7270461 | Dynamic time: 0.8219845 | Brute Force time: 5.8325919
-Value: 4 | Properties: 5 | Sets found: 10 | SMT time: 3.0290509 | Dynamic time: 0.7972899 | Brute Force time: 5.6602476
-
-
-
-
-
-
-The brute force algorithm ONLY works for small values of v,p, and n. As we increase either one of these, the order of growth is much higher. This makes sense as n choose 3 is much higher than n choose 2. Therefore, in further testing, we must delete the brute force solution for timing tests, as the order of growth is much too high and ruins the graphs. 
 
 \section{Conclusion}
 
