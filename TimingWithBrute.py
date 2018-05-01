@@ -102,6 +102,14 @@ def runBruteForce(randomizer, n):
 	# return total time it took to find the sets
 	return finish - start
 
+
+
+
+# reset the board so they run on the same instance
+def reset_board(rand, board):
+	rand.found_sets = []
+	rand.board = board
+
 # run all the trials
 def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	time_smt = []
@@ -124,14 +132,18 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 				# have to create new randomizer or else the next solver uses the same "used" board
 				for _ in range(num_trials):
-					SMT_rand = Randomizer(v,p) 
-					SMT_time.append(runSMTsolver(SMT_rand, n))
+					rand = Randomizer(v,p)
+					board = rand.board
 
-					Dynamic_rand = Randomizer(v,p) 
-					Dynamic_time.append(runDynamicsolver(Dynamic_rand, n))
+					SMT_time.append(runSMTsolver(rand, n))
 
-					Brute_rand = Randomizer(v,p) 
-					BruteForce_time.append(runBruteForce(Brute_rand, n))
+					reset_board(rand, board)
+
+					Dynamic_time.append(runDynamicsolver(rand, n))
+
+					reset_board(rand, board)
+
+					BruteForce_time.append(runBruteForce(rand, n))
 
 				avg_SMT = sum(SMT_time)/float(num_trials)
 				avg_Dynamic = sum(Dynamic_time)/float(num_trials)

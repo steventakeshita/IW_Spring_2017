@@ -11,6 +11,7 @@ from Randomizer import *
 import itertools
 
 class Dynamicsolver: 
+
     # Initialize the dynamic solver with the board
     def __init__(self, values, prop, randomizer):
         # number of values
@@ -34,6 +35,7 @@ class Dynamicsolver:
         # represent all the sets that we have found so far
         self.found_sets = []
 
+        self.num_found_sets = 1
 
         # cards searching for
         # mapped from card that you have to the set that it completes
@@ -50,7 +52,7 @@ class Dynamicsolver:
             # all sets are defined by two cards
             elif (self.v == 2):
                 for i in itertools.combinations(cards,2):
-                    self.found_sets.append(list(i))
+                    self.found_sets.append(self.sort_cards(list(i)))
                 # no more cards on the board since they are all sets
                 self.rand.board = []
 
@@ -58,10 +60,12 @@ class Dynamicsolver:
                 # assign them all as partial sets
                 all_combos = itertools.combinations(cards,2)
                 for i in all_combos:
-                    self.partial_sets.append(list(i))
+                    self.partial_sets.append(self.sort_cards(list(i)))
 
                 # find all the sets
                 self.find_all_sets()
+
+
 
         # partial sets mapped by the card that they are searching for? 
         # Upon initialization, create sets of two because we know that 
@@ -70,14 +74,27 @@ class Dynamicsolver:
 
         create_initial_combos(self.rand.board)
 
+        # compare two cards in a set
+    def compare(self, c1, c2):
+        for i in range(len(c1)):
+            if c1[i] < c2[i]: 
+                return -1
+            elif c1[i] > c2[i]:
+                return 1
+            # if its equal then keep going till you find the first different property
+
+    # sort them to check for duplicates
+    def sort_cards(self,cur_partial_set):
+        return sorted(cur_partial_set, cmp = self.compare)
+
+
         # keep the threshold of cards searching for... ie, it could be mapped by one or two cards?
         # but potentiaally makes sense to only map by one considering that the reason it grows exponentially
         # is because its v^p but if we know we are going to keep v < 10 then it would make sense to only map 
         # by a couple 
 
-
     # find all cards that complete stes from partial sets
-    def find_completing_cards_from_board_for_partial_set(self, ps, cur_partial_set, sets_to_delete, cards_cannot_use):
+    def find_completing_cards_from_board_for_partial_set(self, cur_partial_set, sets_to_delete, cards_cannot_use):
         # determine whether for each property are we searching for the same or different value
         
 
@@ -134,37 +151,69 @@ class Dynamicsolver:
                 # satisfies all characteristics add it to the set
                 if not failed:
                     # partial sets
-                    cur_partial_set.append(card)
+
+                    new_partial_set = cur_partial_set+[card]
+
+                    new_partial_set = self.sort_cards(new_partial_set)
+
+                    # added all the satisfying cards to the card
+                    # if the length of the possible set is v then it is a set!
+                    if len(new_partial_set) == self.v:
+
+                        self.found_sets.append(new_partial_set)
+
+                        # i think you have to delete the partial set... since you found the last card it should delete
+                        sets_to_delete.append(cur_partial_set)
+
+                        cards_cannot_use += new_partial_set
+                    else:
+                        # make sure you aren't adding duplicates!!! thereby breaking symmetry
+                        if self.partial_sets.count(new_partial_set) > 1:
+                            self.partial_sets.remove(new_partial_set)
+                        else:
+                            self.partial_sets.append(new_partial_set)
+
 
                     # combine to see what values we are missing
                     for add in range(self.p):
                         diff_value_needed[add]+= potential_add_diff_values[add]
 
-        # added all the satisfying cards to the card
-        # if the length of the possible set is v then it is a set!
-        if len(cur_partial_set) == self.v:
 
-            self.found_sets.append(cur_partial_set)
-            sets_to_delete.append(len(self.partial_sets)-ps-1)
+    # figure out the last card you're missing
+    def find_last_card(self, almost_finished):
+        is_same_for_prop = []
+        diff_value_needed = [[] for _ in range(self.p)]
 
-            cards_cannot_use += cur_partial_set
+        # can determine what the set is aiming for based on only two cards
+        for p in range(self.p):
+
+            # same value for this property
+            p_1 = almost_finished[1][p]
+            p_0 = almost_finished[0][p] 
+            if (p_0 == p_1):
+                is_same_for_prop.append(True)
+            # or different
+            else:
+                # go over all cards in the partial sets and see what value we need for each property
+                for i in almost_finished:
+                    diff_value_needed[p] += [int(i[p])]
+
+                is_same_for_prop.append(False)
 
 
-        # missing one card, queue this up to the next one! 
-        elif len(cur_partial_set) == self.v-1:
-            # determine WHAT the last card should be 
-            card_missing = ""
-            tot_val = sum(range(self.v))
-            for p in range(self.p):
-                if is_same_for_prop[p]:
-                    # match arbitrarily first cards pth property
-                    card_missing += cur_partial_set[0][p]
-                else:
-                    values_have = diff_value_needed[p]
-                    value_missing = tot_val - sum(values_have)
-                    card_missing += str(value_missing)
+        # determine WHAT the last card should be 
+        card_missing = ""
+        tot_val = sum(range(self.v))
+        for p in range(self.p):
+            if is_same_for_prop[p]:
+                # match arbitrarily first cards pth property
+                card_missing += almost_finished[0][p]
+            else:
+                values_have = diff_value_needed[p]
+                value_missing = tot_val - sum(values_have)
+                card_missing += str(value_missing)
 
-            self.cards_searching_for[card_missing] = cur_partial_set
+        self.cards_searching_for[card_missing] = almost_finished
 
 
     def find_all_sets(self):
@@ -172,16 +221,13 @@ class Dynamicsolver:
         sets_to_delete = []
         cards_cannot_use = []
 
-        # start from the back for easier deletion 
-        for ps in range(len(self.partial_sets)):
-
-            cur_partial_set = self.partial_sets[len(self.partial_sets)-ps-1]
+        for cur_partial_set in self.partial_sets:
 
             # be able to delete sets that we have removed the card from
             is_bad_set = False
             for i in cur_partial_set:
                 if i in cards_cannot_use:
-                    sets_to_delete+=[len(self.partial_sets)-ps-1]
+                    sets_to_delete.append(cur_partial_set)
                     is_bad_set = True
                     break
 
@@ -189,12 +235,22 @@ class Dynamicsolver:
             if is_bad_set:
                 continue 
 
-            self.find_completing_cards_from_board_for_partial_set(ps, cur_partial_set, sets_to_delete, cards_cannot_use)
+            self.find_completing_cards_from_board_for_partial_set(cur_partial_set, sets_to_delete, cards_cannot_use)
             
+        
+
+
+        for cur_partial_set in self.partial_sets:
+            # missing one card... find the last card and add it to the missing card data structure
+            if len(cur_partial_set) == self.v-1:
+                self.find_last_card(cur_partial_set)
+
+
         for i in sets_to_delete:
             # delete partial sets 
             # delete this possible set from possible sets... 
-            del self.partial_sets[i]
+            self.partial_sets.remove(i)
+
 
         
         self.delete_from_partial_sets(cards_cannot_use)
@@ -220,8 +276,6 @@ class Dynamicsolver:
 
 
 
-
-# COPY PASTED
         # potentially make it faster lol
         # delete the partial set mapping from searching for cards if one of the partial sets uses card we can't use
         for missing_card, partial in self.cards_searching_for.items():
@@ -231,50 +285,6 @@ class Dynamicsolver:
                     break
 
 
-        # for every partial set
-        for i in self.partial_sets:
-
-            to_delete_from_partial = []
-
-            for card in i:
-                if card in cards_cannot_use:
-                    to_delete_from_partial.append(card)
-
-            for j in to_delete_from_partial:
-                i.remove(j)
-
-            # # for every card in each partial set
-            # for j in range(len(i)):
-
-
-
-
-            #     # if this partial set used a card we are not supposed to use...
-            #     if i[len(i)-1-j] in cards_cannot_use:
-
-            #         # if the card was missing just one card remove it from the cards searching for 
-            #         # since it is now missing 2 cards
-
-
-
-            #         # if len(i) == self.v-1:
-            #         #     for missing_card, partial in self.cards_searching_for.items():
-            #         #         if partial == i:
-            #         #             del self.cards_searching_for[missing_card]
-            #         #             break
-
-            #         # delete the card from the partial set
-            #         del i[len(i)-1-j]
-
-            # add to queue of deleting sets
-            if len(i) == 1 or len(i) == 0:
-                sets_to_delete.append(i)
-
-        # delete the sets that are now just one card
-        for i in sets_to_delete:
-            self.partial_sets.remove(i)
-
-
 
 
         # # for every partial set
@@ -282,27 +292,39 @@ class Dynamicsolver:
 
         #     to_delete_from_partial = []
 
-        #     # for every card in each partial set
-        #     for j in i:
+        #     for card in i:
+        #         if card in cards_cannot_use:
+        #             to_delete_from_partial.append(card)
 
-        #         # if this partial set used a card we are not supposed to use...
-        #         if j in cards_cannot_use:
-
-        #             to_delete_from_partial.append(j)
-
-        #     # delete it from the set
-        #     for j in i:
+        #     for j in to_delete_from_partial:
         #         i.remove(j)
 
+        
         #     # add to queue of deleting sets
         #     if len(i) == 1 or len(i) == 0:
         #         sets_to_delete.append(i)
 
-        # # delete the sets that are now just one card
+        # # delete the sets
         # for i in sets_to_delete:
         #     self.partial_sets.remove(i)
 
 
+
+
+        # for every partial set
+        for i in self.partial_sets:
+            for card in i:
+                if card in cards_cannot_use:
+                    sets_to_delete.append(i)
+                    break
+
+
+
+                    
+
+        # delete the sets
+        for i in sets_to_delete:
+            self.partial_sets.remove(i)
     
 
     def find_set(self):
@@ -350,10 +372,10 @@ class Dynamicsolver:
                     continue            
 
                 new_set = original_set + [i]
-
                 
                 # add it to found sets
                 self.found_sets.append(new_set)
+
 
                 # delete it from partial sets
                 self.partial_sets.remove(original_set)
@@ -380,9 +402,24 @@ class Dynamicsolver:
         # assign them all as partial sets
         if len(new_cards) == 1:
             "print possibly might not work when new_cards 1 meaning all of them used to finish the sets"
-        all_combos = itertools.combinations(new_cards,2)
-        for i in all_combos:
-            self.partial_sets.append(list(i))
+        # all_combos = itertools.combinations(new_cards,2)
+
+
+        # # add all new combos...
+        # for i in all_combos:
+        #     self.partial_sets.append(self.sort_cards(list(i)))
+
+        # print new_cards
+        num_new = len(new_cards)
+        # also add combos with existing cards
+        on_board_cards = self.rand.board
+        # print on_board_cards
+        for c1 in new_cards:
+            for c2 in on_board_cards:
+                # quick fix but you should figure out the bug... :(
+                if c1 != c2:
+                    new_partial_set = [c1]+[c2]
+                    self.partial_sets.append(self.sort_cards(new_partial_set))
 
 
         # once added new combinations check if there exists any other complete sets
@@ -393,6 +430,8 @@ class Dynamicsolver:
     def find_n_sets(self, n):
         # find n sets
         sets = []
+
+        self.num_found_sets = n
 
         for _ in range(n):
             sets.append(self.find_set())
@@ -437,8 +476,13 @@ def extract_cards(val, prop, model, should_print):
     return
 
 
+import time
+
+
 # run tests
 def run_test():
+
+    start = time.clock()
 
 
 # Checking basic find_set function
@@ -469,7 +513,7 @@ def run_test():
     test = Dynamicsolver(basic3.v, basic3.p, basic3)
     original_board = test.all_cards_on_board
     model = test.find_set()
-    extract_cards(basic3.v, basic3.p, model, False)
+    extract_cards(basic3.v, basic3.p, model, True)
     check_if_real_set(original_board, model, basic3.p, basic3.v)
 
 
@@ -547,7 +591,7 @@ def run_test():
     test = Dynamicsolver(remove2.v, remove2.p, remove2)
     model = test.find_n_sets(1)
     for i in model:
-      extract_cards(remove2.v, remove2.p, i, True)
+      extract_cards(remove2.v, remove2.p, i, False)
 
     original_board = test.all_cards_on_board
     # need to check whether it has been part of ANY board since we mightve had to add cards
@@ -558,4 +602,6 @@ def run_test():
     for i in model:
       check_if_removed(remove2.board, i)
 
-# run_test()
+    print time.clock() - start
+
+run_test()

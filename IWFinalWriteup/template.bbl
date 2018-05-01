@@ -24,6 +24,13 @@
 \bibitem{chaudhuri}
 K.~Chaudhuri \emph{et~al.}, ``On the complexity of the game of set,'' 2003.
 
+\bibitem{SMTbackground}
+\BIBentryALTinterwordspacing
+L.~De~Moura and N.~Bj{\o}rner, ``Satisfiability modulo theories: Introduction
+  and applications,'' \emph{Commun. ACM}, vol.~54, no.~9, pp. 69--77, Sep.
+  2011. Available: \url{http://doi.acm.org/10.1145/1995376.1995394}
+\BIBentrySTDinterwordspacing
+
 \bibitem{fisher}
 R.~A. Fisher and F.~Yates, \emph{{Statistical tables for biological,
   agricultural and medical research}}, 6th~ed.\hskip 1em plus 0.5em minus
@@ -35,6 +42,9 @@ F.~S.~M. Jorquera and A.~Legge, ``Set® card game solver using image processing
 
 \bibitem{nolte}
 S.~Nolte, ``Javascript set game solver.''
+
+\bibitem{norvig}
+P.~Norvig, ``The odds of finding a set in the card game set®,'' 2017.
 
 \bibitem{search_from_AI}
 S.~Russel and P.~Norvig, \emph{Artificial Intelligence: A Modern Approach},

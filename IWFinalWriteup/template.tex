@@ -26,11 +26,28 @@ This paper examines three implementations of a solver for the generalized versio
 
 \section{Introduction}
 
+\subsection{Motivation and Goal}
+
+The Game of Set was created in 1974 and published in 1991. The game consists of $3^4 = 81$ unique cards. Each card has 4 properties and one of three values. A valid set of three cards is one in which for each property, they all either have the same or different value. See Figure~\ref{fig:SetOverview} for an overview of the game and to see how the properties and values are visually represented for all of the cards of the game. At the beginning of the game, $12$ cards are shown, and players must locate valid sets. Once a set is found or no set exists, three new cards are added. The most number of sets collected at the ends win. 
+
+\begin{figure}[htbb]
+\centering
+\begin{minipage}[b]{.75\linewidth}
+\includegraphics[width=\linewidth]{SetOverview.png}
+\caption{Brief Overview of the Game of Set with $v=3$ and $p=4$}
+\label{fig:SetOverview}
+\end{minipage}
+\end{figure}
+
+When I used to play this game with my family, I had difficulty finding sets and always lost to my much faster sister. A natural extension of this game is to determine how fast can a computer find sets, and what are the different ways that we can achieve this. The more interesting part to this is increasing the number of values and properties as the base values are quite small and the computer can easily verify sets in negligible time. Therefore, the goal of my project is to create a solver that locates a set efficiently in practice for a game with $p$ properties and $v$ values. The Game of Set is an interesting problem for dynamic algorithms in that when three new cards are added, the algorithm should be able to build off of previous knowledge. A way to utilize this past information could be helpful in applying similar principles to other problems that could lend itself to dynamic programming for a speed up on top of the brute force solution. 
 
 
-\section{Motivation and Goal}
+\subsection{Problem Definition}
 
-The Game of Set was created in 1974 and published in 1991. The game consists of $3^4 = 81$ unique cards. Each card has 4 properties and one of three values. A valid set of three cards is one in which for each property, they all either have the same or different value. At the beginning of the game, 12 cards are shown, and players must locate valid sets. Once a set is found or no set exists, three new cards are added. The most number of sets collected at the ends win. Therefore, a natural extension of this problem is to determine how fast can we find sets. The goal of my project is to create a solver that locates a set efficiently in practice for a game with $p$ properties and $v$ values. The Game of Set is an interesting problem for dynamic algorithms in that when three new cards are added, the algorithm should be able to build off of previous knowledge. A way to utilize this past information could be helpful in applying similar principles to other problems that could lend itself to dynamic programming. 
+A deck will contain $v^p$ possible cards where the cards have $p$ properties and $v$ values. Initially, $v*p$ cards will be outputted as the starting layout. Identify an arbitrary set of $v$ cards, in which for all properties the values are either the same or all different. Remove this set of size $v$ and count it as another set found, or if no set exists, add $v$ more cards from the remaining $v^p - v$ cards. Find a total of $n$ sets, where $n \leq v^{p-1}$ and each time a set is found $v$ more cards will be immediately added. Therefore, there are 2 update functions that the algorithms must handle. One to add $v$ new cards to the board and the other to remove $v$ cards that formed a set. 
+
+By removing the first set of cards seen, this will simulate real gameplay, in which the goal is to find sets as fast as possible. By finding a generalized $n$ number of sets, as cards are added and removed, the dynamic algorithm will hopefully see some speed up. This further simulates gameplay in which the goal is to find a collection of sets and it is likely that there might not exists sets or sets will be found causing new cards to be added. 
+
 
 
 \section{Problem Background and Related Work}
@@ -53,20 +70,20 @@ This paper proves computational complexity bounds, but does not solve the proble
 Some solvers even employ image processing to identify sets ~\cite{jorquera}. These more advanced programs are able to parse the cards from an image using computer vision and determine sets without a user inputting the cards manually. Again, this solver only supports use for one iteration of the game and will need to be updated manually to load in the new cards when the sets have been removed. However, the solvers are constrained to have four properties and three values as they only apply to the original Game of Set and cannot be used for a generalized version. Moreover, all the solvers found restrict their solving mechanism to the brute force solution. They iteratively check all possible combinations of cards and to determine satisfying Sets. Therefore, the solvers I will build will be able to solve the generic case of Set in which it has $p$ properties, $v$ values, and we are searching for $n$ sets. 
 
 
-\subsection{Problem Definition}
-
-A deck will contain $v^p$ possible cards where the cards have $p$ properties and $v$ values. Initially, $v*p$ cards will be outputted as the starting layout. Identify an arbitrary set of $v$ cards, in which for all properties the values are either the same or all different. Remove this set of size $v$ and count it as another set found, or if no set exists, add $v$ more cards from the remaining $v^p - v$ cards. Find a total of $n$ sets, where $n \leq v^{p-1}$ and each time a set is found $v$ more cards will be immediately added. Therefore, there are 2 update functions that the algorithms must handle. One to add $v$ new cards to the board and the other to remove $v$ cards that formed a set. 
-
-By removing the first set of cards seen, this will simulate real gameplay, in which the goal is to find sets as fast as possible. By finding a generalized $n$ number of sets, as cards are added and removed, the dynamic algorithm will hopefully see some speed up. This further simulates gameplay in which the goal is to find a collection of sets and it is likely that there might not exists sets or sets will be found causing new cards to be added. 
-
 \section{Approach}
 
-Generalizing the Game of Set has been done academically, but no practical solution to locate sets exists. A reduction to SMT creates a solver to theoretically always verify whether a set exists, but this does not verify a set within reasonable time if we consider the the poly-time transformation and the fact that it needs to recalculate a set every time new cards are added, not using information from previous rounds to verify it faster. Therefore, my approach will use previous knowledge of the absence of sets to quickly discover sets in a new showing of cards. Set's changing probabilities of discovering a Set also lends itself to the dynamic algorithm approach. Norvig (2017) showed that on a fresh layout of the game with 12 cards, the ratio of games in which there exists a Set to those that do not contain a set, is 29:1. But as the game plays on, the ratio drops to 15:1, a 50\% less chance of finding a set. For 15 cards, the ratio drops to 4\% of its original ratio ~\cite{norvig}. Therefore, as the game is iteratively played in which Sets are taken out, the game becomes immensely harder. With a dynamic algorithm approach, the solver I build should be able to beat the SMT solver especially with this added difficulty as Sets are removed from the board. 
+\subsection{SMT Solver}
+Satisfiability modulo theories (SMT) are efficient solvers for constraint satisfaction problems (CSP). CSP problems arise in all sorts of applications from software verification to graph problems, and need an efficient solver to determine whether the variables and constraints are satisfiable. The most basic CSP problem is propositional satisfiability (SAT), which takes in a logical formula of boolean variables and decides whether it is possible to satisfy the formula assigning the variables to either be true or false. Though this formulation can be efficiently solved, SMT solvers provide a more natural and richer language for which to encode the formula into. For example, it is possible to use variables that are integers or real numbers and can the constraints can be arithmetic constraints rather than a pure logical formula. The SMT solver will output whether the set of constraints can be satisfied with some assignment of the variables and can output these variables if satisfied. The basis for these SMT solvers  is the use of an approach called systematic search. The search space is represented as a tree with each branch representing an assignment of a variable. The DPLL/Davis-Putnam-Logemann-Loveland algorithm is used to efficiently search this space, and speedups can be gained by restricting this search tree as much as possible to reduce the number of branches that the algorithm must traverse ~\cite{SMTbackground}.
 
 
-\section{Reduction to SMT}
+Generalizing the Game of Set has been done academically, but no practical solution to locate sets exists. My first implementation to solve this problem is through a reduction to SMT. SMT solvers are theoretically an efficient solver for an NP-Complete problem and can find sets due to the optimizations that the creators have implemented to create the fastest speedup possible. However, in this generalized game for some values of $p$ and $v$, it might not locate a set within reasonable time in practice if we consider the the poly-time transformation and the fact that it needs to recalculate a set every time new cards are added, not using information from previous rounds to verify it faster. 
 
-\subsection{Set Up}
+Below is my reduction to SMT from the Game of Set to verify and find whether a set exists in a given board with $v$ values and $p$ properties.
+
+
+\subsection{Reduction to SMT}
+
+\subsubsection{Set Up}
 
 There exists $v*p$ cards forming a starting board $B$, but in general there will be $n$ cards on a board at any moment. These cards can be represented as vectors where all entries $b_{i,j} \in \{0,1, ... , v-1\}$:
 
@@ -114,7 +131,7 @@ The SMT Solver will then attempt to find a set of $v$ cards. The satisfying set 
          \end{bmatrix}
   \end{align}
 
-\subsection{All Different or All Same Constraint}
+\subsubsection{All Different or All Same Constraint}
 To correctly identify satisfying, distinct sets that exist from the given cards, we need to create three sets of constraints. The first set of constraints will only be satisfied when the cards found $K$ represent a set, where for all properties, they have either the same or all different value. This constraint can be written as two cases for each property of the cards:
 
 \textbf{The values are all the same for a given property i:} 
@@ -144,7 +161,7 @@ Therefore, we can write more concisely that for all properties of the cards, the
 \end{align}
 
 
-\subsection{The Cards Must Be From The Board}
+\subsubsection{The Cards Must Be From The Board}
 
 The second set of constraints is that the cards selected in the set $K$ must all be from the board $B$, which is of size $n$. This constraint can be encoded into the SMT solver as:
 
@@ -160,7 +177,7 @@ Therefore, all cards $i \in K$ must be from the board $B$:
 	\bigwedge \limits_{i=1}^{v}  \left( \bigvee \limits_{j = 1}^{n}  \left( \bigwedge \limits_{m=1}^{p}  k_{i,m} = b_{j,m}\right) \right)
 \end{align}
 
-\subsection{All Distinct Cards}
+\subsubsection{All Distinct Cards}
 
 We constrain the possible cards in the set to be from $B$, but this includes duplicates. A possible set could be three of the exact same cards and would satisfy the above constraints but does not represent a real set in the game. Therefore, the last constraint is that the cards selected to be in $K$, must all be distinct cards. The cards of a set are considered all distinct if for any two cards, they have at least one property that has a differing value. The constraint can be written as:
 
@@ -194,7 +211,7 @@ Written more succinctly:
 	\bigwedge \limits_{i=1}^{v-1}   \left( \bigwedge \limits_{j=i+1}^{v}   \left( \bigvee \limits_{m = 1}^{p} k_{i,m} \neq k_{j,m} \right)  \right)
 \end{align}
 
-\subsection {Condensing Search Tree}
+\subsubsection {Symmetry Breaking}
 
 % initial way to do it by sorted!
 To ensure that the cards are constrained as much as possible for the domain of the SMT solver, we can say that for every possible set, the cards need to be in sorted order by their first property, and if the values are all the same, then by the sorted by the second property, and so forth if the cards in the set have equivalent value for a given property. This can be encoded as follows: 
@@ -232,7 +249,7 @@ Written more compactly:
 
 By building these four constraints (7, 9, 11, 12) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
 
-\subsection{Update Functions} 
+\subsubsection{Update Functions} 
 The solver to find sets must also support two update functions. The first update function of removing cards can be easily encoded into the SMT constraints. Let set $V$ be an arbitrary set that was located by the SMT solver. To remove the set from the board, we can add new constraints such that the new set to be found cannot be equal to any of the cards found in $V$, where $V$ contains $v$ cards. Again, to be a distinct card, at least one property must be differing. This can be written as:
 
 \begin{align}
@@ -257,6 +274,10 @@ All cards $i \in K$ must not be equivalent to a card in $V$:
 
 For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11) from above. Therefore, this is represents a full reduction to SMT from the Game of Set. 
 
+
+\subsection{Dynamic Algorithm}
+
+I will also implement a dynamic algorithm approach that will use previous knowledge of the absence of sets to quickly discover sets. This approach will be useful because of the nature of the games changing probabilities as it is played. Norvig (2017) showed that on a fresh layout of the game with 12 cards, the ratio of games in which there exists a Set to those that do not contain a set, is 29:1. But as the game plays on, the ratio drops to 15:1, a 50\% less chance of finding a set. For 15 cards, the ratio drops to 4\% of its original ratio ~\cite{norvig}. Therefore, as the game is iteratively played in which Sets are taken out, the game becomes immensely harder. Finding a high number of sets $n$ becomes much harder as we must draw more and more cards. Therefore, remembering partial sets, or almost completed sets such that we can use this information to finish sets in the future can greatly speed up the algorithm. I will also employ similar speedups from the SMT solver into the dynamic algorithm to create a faster algorithm. The dynamic algorithm solver I build should be able to beat the SMT solver for some cases of $v,p,$ and $n$ considering the added difficulty of the game as Sets are removed from the board. 
 
 \section{Implementation}
 
@@ -332,34 +353,38 @@ The SMT solver iteratively searches for a solution through a search tree, attemp
 
 \subsection{Dynamic Algorithm Implementation}
 
-The Dynamic Algorithm approach hinges on the tradeoff between memory and speed. The Brute Force solution does not need to keep track of partial sets and can spend time iterating over all combos as fast possible. The SMT solver computes a set even faster by pruning the search as it continues through the algorithm to create marginal speed up while recording down possible search paths and deleting branches that have no chance of yielding a correct solution. And in the extreme case, the Dynamic Algorithm will utilize more space, recording down possible sets that can be quickly completed when new card are drawn. Therefore, the Dynamic Algorithm can complete sets in almost instantaneous time when large numbers of sets are to be found and when there is a low chance of there being a set in the board at a given time. 
+The Dynamic Algorithm approach hinges on the tradeoff between memory and speed. The Brute Force solution does not need to keep track of partial sets and can spend time iterating over all combos as fast possible. The SMT solver computes a set even faster by pruning the search as it continues through the algorithm to create marginal speed up while recording down possible search paths and deleting branches that have no chance of yielding a correct solution. And in the extreme case, the Dynamic Algorithm will utilize more space, recording down possible sets that can be quickly completed when new card are drawn. 
+%Therefore, the Dynamic Algorithm can complete sets in almost instantaneous time when large numbers of sets are to be found and when there is a low chance of there being a set in the board at a given time. 
 
-The Dynamic Algorithm's main speedup is in the way that it creates a list of partial sets and a dictionary mapping the missing card to an almost complete partial set so it can quickly finish these sets when new cards are drawn. 
+The Dynamic Algorithm's main speedup is in the way that it creates a list of partial sets and a dictionary mapping the missing card to an almost complete partial set so it can quickly finish these sets when new cards are drawn. Outlined below is the general algorithm. 
 
 \subsubsection{Set Up}
 
-To create all partial sets, the Dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${v*p}\choose{2}$ using Python's built in itertools library since a possible set can be wholly determined by two cards(ie. if the first two cards have the same value for a given property, the satisfying cards must have the same value for that property). These two card partial sets will be the basis for creating larger partial sets and will ensure that all combinations of cards are checked for completing a set. 
+To create all partial sets, the Dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${v*p}\choose{2}$ using Python's built in itertools library since a possible set can be  determined by two cards(ie. if the first two cards have the same value for a given property, the satisfying cards must have the same value for that property or if different than all the properties need to be different). These two card partial sets will be the basis for creating larger partial sets and will ensure that all combinations of cards are checked for completing a set. I also include a symmetry breaking constraint in this search space, similar to the SMT solver, as adding in cards to a partial set will create many duplicate partial sets. For example, starting with partial sets [0,1] and [1,2], when I add 2 to the first set and 0 to the second, they will both yield set [0,1,2]. However, these are identical partial sets and would cause the search space to expand exponentially.  Therefore, I keep the partial sets sorted at all times (by saying that the first property for which they differ, they must be in sorted order), and when I add a new partial set (add a new card) to the partial set list I check whether it already exists thereby not creating duplicates in this list of partial sets.
 
 \subsubsection{Partial Set List and Quick Complete Dictionary Creation}
 
-Next, for each partial set, the algorithm will determine which cards to add to the partial set from the board that satisfy the constraints that for each property, the values are either the same or all different and must not be in the set of cards that we flag as unusable cards as they have been used to complete a set in a previous iteration. At the end of iterating over all cards on the board, there are two important cases that a partial set could be in:
+Next, for each partial set, the algorithm determines which cards can be added to the partial set from the board that satisfy the constraints that for each property, the values are either the same or all different and must not be in the set of cards that we flag as unusable cards as they have been used to complete a set in a previous iteration. 
+
+I copy the given partial set and add the new card to it (if I added card 2 to a set [0, 1], I append [0,1,2] to the partial set list and keep [0,1] just in case a card I draw later will determine a whole new set), creating a whole new partial set that is again sorted and verified that it is not in the partial set list already then I append it at the end of the partial set list. This practice also ensures that the new partial set I append will not interfere with any previous sets that were added before (ie. I can add [0,1,3] while not interfering with [0,1,2] if 3 and 2 conflict with each other). I must keep the original set because depending on how new cards are drawn, this stub set can be satisfied differently. By adding the cards incrementally, one card at a time to each partial set, if it does so happen that both cards satisfy the set, (ie. [0,1,2,3] is a set), then when I add the last card to the set it will see that it already exists in the partial set list and then delete it as I keep them sorted.
 
 \textbf{Case 1: Size $v$:} If the partial set is completely full and at size $v$, then the partial set is a complete satisfying set and can therefore be queued as a found set. These cards will also be queued up as cards that will need to be deleted from the partial sets and board and cannot be used to complete other partial sets.
 
-\textbf{Case 2: Size $v-1$:} This partial set is missing one card that can be determined by the rest of the cards in the partial set as the value will be the same if the set has the same value for a given property and if they are all different then it will be the last missing value. Therefore, to create the quick complete data structure, I add to the dictionary the missing card mapped to the partial set. 
+\textbf{Case 2: Otherwise:} This partial set is missing more than one card. Therefore, we must append this new set to the end of the partial sets as this is a partial set that can be satisfied by adding new cards from the board. Python for loop construction is also very powerful and supports iterating over an expanding list. Therefore, it will reach all partial sets, even if added after the initialization of the for loop. 
 
-Otherwise, the partial set is not complete enough to create a data structure for and therefore will be left. This process will continue for all partial sets. 
+At the end of iterating through all partial sets, I will have had added all possible cards to all possible sets. Therefore, no cards could be added to any partial set without violating the satisfying constraint. We will have found all sets that could have been finished in the given board. Now, I iterate over all partial sets to see which sets are almost completed (of size $v-1$). If there missing one card, I create the quick complete data structure. The last card can be wholly determined the by the cards currently in the set as the value will be the same if the set has the same value for a given property and if they are all different then it will be the last missing value. Therefore, to create the quick complete data structure, I add to the dictionary the missing card mapped to the partial set. 
 
 
 \subsubsection{Quick Complete Upon Drawing Cards}
 
+
 When more sets are needed to be found than exist on the board, new cards must be drawn to create opportunity for more sets. When these $v$ new cards are drawn, the dynamic algorithm will use its quick complete dictionary to quickly search to see if any of the $v$ cards drawn satisfy and of the partial sets that are missing one card. If they complete a partial set, the dictionary will delete the card from the dictionary, append it to the partial set it completes, and add it to the queue of found cards. As we iterate through, it is possible that the cards used in one of these quick completed sets could be used for another completed set and therefore we need to iterate through the cards in a possibly quick completed set to make sure that it was not used to complete a previous set. 
 
-After we have completed all of the partial sets we could have with the new drawn cards, we must create new basis partial sets from these new cards that remain not completing any partial set. Therefore, I again use the itertools library and use combinations to append all combinations of two cards from the unused new cards drawn, and append these to the list of partial sets. With these new partial sets appended, the program then reruns the algorithm described above (5.4.2) to append new cards from the board onto the partial sets, potentially complete sets using a combination of the cards drawn, and add new entries to the quick complete dictionary if necessary. 
+After we have completed all of the partial sets we could have with the new drawn cards, we must create new basis partial sets from these new cards. I create combinations over all these cards and all the cards currently on the board (ie. if there are $v?$ new cards and $n?$ cards on the board, I create $v?*n?$ new stub partial sets to be added to the partial sets list). With these new partial sets appended, the program then reruns the algorithm described above in Partial Set List and Quick Complete Dictionary Creation to append new cards from the board onto the partial sets, potentially completing sets using a combination of the cards drawn, and add new entries to the quick complete dictionary if necessary. 
 
 \subsubsection{Deletion Bookkeeping}
 
-After both of the above steps, we need to ensure that any set found is appropriately removed from the partial sets. Therefore, I iterate over all partial sets and see if any of them contain a card that was used to complete a set. If it does, I delete the card from the partial set. After we iterate through all of the partial sets, any partial set that is now of length one or zero is no longer a partial set as either it no longer contains any cards or it non longer has specific cards it is searching for since a set needs two cards to determine what cards it is searching for.
+After both of the above steps, we need to ensure that any set found is appropriately removed from the partial sets. Therefore, I iterate over all partial sets and see if any of them contain a card that was used to complete a set. If it does, I delete the entire partial set. This ensures that we will not be harboring any duplicate partial sets as we retain all partial sets as well. For example, if the card 3 needed to be deleted, we would delete it from a partial set [0,1,2,3]. However, we can delete the entire set as we retain the partial set [0,1,2] by the above step of the algorithm. Therefore, we can remove all the partial sets that contain cards that were used to create a completed set.
 
 I also iterate over the quick complete dictionary and see whether any of the almost completed, partial sets contain the cards we are removing. If they do, we must delete it from the dictionary as it is now missing more than one card which was the criteria to be included in the quick complete dictionary. Once we have deleted the cards from the appropriate data structures, we can iteratively continue these steps until $n$ sets have been found. 
 
@@ -391,12 +416,9 @@ To test the relative effectiveness of the three implementations, I divided the t
 
 To accurately test the timing of each solver, I utilized Python's time library to accurately test CPU time used for each of the processes. Therefore, if other processes are running in the background and take some real time, this will not factor into the timing tests of these solvers. Also, only the process of creating the solver data structure and finding $n$ sets is accounted as CPU time, as creating the randomizer and verification of correct sets following finding the sets is irrelevant to the speed of the solver itself. 
 
-To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate picture of an accurate test case. Also, before each one of these ten trials, a new board is created by instantiating a new randomizer such that the solver will not be redoing the same computation it had just finished. 
+To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate picture of an accurate test case. Also, for each of the ten trials, I test each solver with the same beginning board such that we can see how they match up directly against each other on the same board and had not been given a much easier board in randomization. 
 
 I again used a Python package called matplotlib to graph all of the curves formed from the timing tests. These graphs are composed of connected dotted lines that are color coded by solver, red to Brute Force, blue to SMT, and green to Dynamic solver, and give an easy to read visualization of order of growth as a variable is changed. 
-
-
-
 
 
 \subsection{Brute Force Inefficiency}
@@ -654,153 +676,24 @@ Value: 5 | Properties: 6 | Sets found: 8 | SMT time: 23.322687 | Dynamic time: 6
 Value: 5 | Properties: 6 | Sets found: 9 | SMT time: 29.7868654 | Dynamic time: 56.9822622
 Value: 5 | Properties: 6 | Sets found: 10 | SMT time: 26.955211 | Dynamic time: 51.7786976
 
-\section{Conclusion}
+\section{Conclusion and Future Work}
 
 
+This paper outlines the creation of three different solvers: brute force, dynamic algorithm, and SMT based, to solve the generalized Game of Set. Through timing tests, I found that as expected, the brute force implementation blows up exponentially as any of the parameters are increased. Though the brute force solver should be used for the original game which has very few possibilities and can be easily calculated, it does not lend itself to be an efficient solver for the more general case. The dynamic algorithm and SMT based solver both perform much better than the brute force and are superior in their own ways. The dynamic algorithm is superior on smaller cases than the SMT solver, but as the parameters increase, the memory usage of the dynamic algorithm become too unwieldy and causes it be much slower, almost exponentially increasing. On the other hand, the SMT solver, though slower on smaller cases, follows a roughly linear growth and is an efficient solver as the parameters increase to larger values. 
 
 
+For future research into this problem, it would be interesting and potentially much faster if there is a way to combine the SMT solver and dynamic algorithm. This way, we could benefit from the dynamic algorithm's speed on smaller cases but also the SMT's efficiency for larger cases. One easy way to do this would be to run both algorithms in parallel and whichever one returns first will be a set. The only issue would be the bookkeeping would be much harder as we would constantly need to change the constraints for the SMT or the partial sets in the dynamic algorithm. If a solution combining the two can be found and implemented, this line of thinking could be very useful in creating efficient solutions for other problems that grow exponentially and need an efficient solver for a wide range of parameters. 
 
+\section{Acknowledgments}
 
+Thank you to Professor Kincaid for guidance and support through this project. 
 
+\section{Acknowledgments}
 
+I pledge my honor that this project represents my own work in accordance with University regulations.
 
+Steven Takeshita
 
-\subsection{Paper Formatting}
-\label{section:formatting}
-
-There are no minimum or maximum length limits on IW reports.  
-We are including this template because we think it will be helpful
-for citing things properly and for including figures into formatted
-text.  If you are using \LaTeX~\cite{lamport94} 
-to typeset your paper, then we strongly suggest
-that you start from the template available at
-http://iw.cs.princeton.edu -- this
-document was prepared with that template.  
-If you are using a different software package to typeset your paper, 
-then you can still use this document as a reasonable sample of 
-how your report might look.  Table~\ref{table:formatting} is a suggestion
-of some formatting guidelines, as well as being an example of how to
-include a table in a Latex document.
-
-\begin{table}[hbt]
-  \centering
-  \begin{tabular}{|l|l|}
-    \hline
-    \textbf{Field} & \textbf{Value}\\
-    \hline
-    \hline
-    Paper size & US Letter 8.5in $\times$ 11in\\
-    \hline
-    Top margin & 1in\\
-    \hline
-    Bottom margin & 1in\\
-    \hline
-    Left margin & 1in\\
-    \hline
-    Right margin & 1in\\
-    \hline
-    Body font & 12pt\\
-    \hline
-    Abstract font & 12pt, italicized\\
-    \hline
-    Section heading font & 14pt, bold\\
-    \hline
-    Subsection heading font & 12pt, bold\\
-    \hline
-  \end{tabular}
-  \caption{Formatting guidelines. }
-  \label{table:formatting}
-\end{table}
-
-\textbf{Please ensure that you include page numbers with your
-submission}. This makes it easier for readers to refer to
-different parts of your paper when they provide comments.
-
-We highly recommend you use bibtex for managing your references and citations.  You can add bib entries to a references.bib file throughout the semester (e.g., as you read papers) and then they will be ready for you to cite when you start writing the report.  If you use bibtex, please note that the references.bib file provided in the template example includes some format-specific incantations at the top of the file.  If you substitute your own bib file, you will probably want to include these 
-incantations at the top of it.
-
-\subsection{Citations and Footnotes}
-
-There are various reasons to cite prior work and include it as references in your bibliography.  For example, If you are improving upon 
-prior work, you should include
-a full citation for the work in the bibliography \cite{nicepaper,nicepaper2}. 
-You can also cite information that is used as background or
-explanation\cite{Salzberg:2005}.  In addition to citing scholarly papers or books, you can
-also create bibtex entries for webpages or other sources.  Many online
-databases allow you to download a premade bibtex entry for each paper
-you access.  You can simply copy-paste these into your references.bib
-file.
-
-Sometimes you want to footnote something, such as a web
-site.\footnote{http://www.cs.princeton.edu}  Note that the footnote
-number comes after the punctuation.
-
-\subsection{Figures and Tables.}
-
-Figure \ref{fig:gray} shows an example of how to include a figure in
-your report.  
-Ensure that the figures and
-tables are legible.  Please also ensure that you refer to your
-figures in the main text. Make sure that your figures will be legible
-in the expected forms that the report will be read.  If you expect someone
-to print it out in gray-scale, then make sure the figures are legible 
-when printed that way.  
-
-\begin{figure}[hbt]
-\centering
-\includegraphics[width=0.75\linewidth]{gray.jpg}
-\caption{This is a gray image.}
-\label{fig:gray}
-\end{figure}
-
-In Section~\ref{section:formatting}, an example of a table was given.
-(Note that the ``S'' in Section is capitalized.  Here's one more
-example - see Table~\ref{table:data}.
-
-\begin{table}[hbt]
-  \centering
-  \begin{tabular}{|l|l|} \hline
-    \textbf{Some field} & \textbf{Another field}\\\hline
-    200          &  10000 \\ \hline 
-    400          &  20000 \\ \hline 
-    800          &  40000 \\ \hline 
-    1600        &  80000 \\ \hline 
-    3200        &  160000 \\ \hline 
-    6400        &  320000 \\ \hline 
-  \end{tabular}
-  \caption{Some data in a table. }
-  \label{table:data}
-\end{table}
-
-
-Here's an example that shows how you can have side-by-side figures -
-see Figure~\ref{fig:side-a} and Figure~\ref{fig:side-b}.  (Note that
-the the ``F'' in Figure is capitalized. 
-
-\begin{figure}[htbb]
-\begin{minipage}[b]{0.5\linewidth}
-\centering
-\includegraphics[width=.75\linewidth]{checkerboard-squares-black-white.jpg}
-\caption{Plain checkerboard.}
-\label{fig:side-a}
-\end{minipage}
-\hspace{0.5cm}
-\begin{minipage}[b]{0.5\linewidth}
-\centering
-\includegraphics[width=.75\linewidth]{swirl-squares-black-white.jpg}
-\caption{Cool checkerboard.}
-\label{fig:side-b}
-\end{minipage}
-\end{figure}
-
-\subsection{Double Quotes.}
-
-Latex double quotes are not the same as the double quote key on your
-keyboard. The standard way of writing quotes and double quotes in
-LaTeX is with `` and '' not with " and ".   
-
-Now that may be confusing, so you may want to use the \textbackslash\{quotes\} command.  For
-example \quotes{The quick brown fox.}
 
 
 
