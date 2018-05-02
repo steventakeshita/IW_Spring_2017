@@ -133,7 +133,7 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 				# have to create new randomizer or else the next solver uses the same "used" board
 				for _ in range(num_trials):
 					rand = Randomizer(v,p)
-					board = rand.board
+					
 
 					SMT_time.append(runSMTsolver(rand, n))
 
@@ -290,7 +290,7 @@ def run_all():
 		print "END CHANGING N"
 
 
-	# change_val()
+	change_val()
 
 	change_prop()
 

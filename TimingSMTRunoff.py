@@ -262,9 +262,9 @@ def run_all():
 
 	# change_val()
 
-	# change_prop()
+	change_prop()
 
-	change_n()
+	# change_n()
 
 
 

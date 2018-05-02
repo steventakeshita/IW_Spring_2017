@@ -162,6 +162,11 @@ class Dynamicsolver:
 
                         self.found_sets.append(new_partial_set)
 
+
+                        # n sets!
+                        if self.num_found_sets == 0:
+                            return
+
                         # i think you have to delete the partial set... since you found the last card it should delete
                         sets_to_delete.append(cur_partial_set)
 
@@ -320,7 +325,7 @@ class Dynamicsolver:
 
 
 
-                    
+
 
         # delete the sets
         for i in sets_to_delete:
@@ -375,6 +380,10 @@ class Dynamicsolver:
                 
                 # add it to found sets
                 self.found_sets.append(new_set)
+
+                # n sets!
+                if self.num_found_sets == 0:
+                    return
 
 
                 # delete it from partial sets
@@ -513,7 +522,7 @@ def run_test():
     test = Dynamicsolver(basic3.v, basic3.p, basic3)
     original_board = test.all_cards_on_board
     model = test.find_set()
-    extract_cards(basic3.v, basic3.p, model, True)
+    extract_cards(basic3.v, basic3.p, model, False)
     check_if_real_set(original_board, model, basic3.p, basic3.v)
 
 
@@ -574,7 +583,7 @@ def run_test():
     test = Dynamicsolver(remove2.v, remove2.p, remove2)
     model = test.find_n_sets(10)
     for i in model:
-      extract_cards(remove2.v, remove2.p, i, False)
+      extract_cards(remove2.v, remove2.p, i, True)
 
     original_board = test.all_cards_on_board
     # need to check whether it has been part of ANY board since we mightve had to add cards
@@ -604,4 +613,4 @@ def run_test():
 
     print time.clock() - start
 
-run_test()
+# run_test()

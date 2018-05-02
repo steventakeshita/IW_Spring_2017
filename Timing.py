@@ -206,49 +206,49 @@ def run_all():
 	def change_val():
 		print "BEGIN CHANGING VALUE"
 		sets_to_find = [5]
-		values = [3,4,5,6,7,8,9,10]
+		values = [3,4,5,6,7]
 		properties = [3]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 
-		sets_to_find = [10]
-		values = [3,4,5,6,7,8,9,10]
-		properties = [4]
-		num_trials = 5
+		# sets_to_find = [10]
+		# values = [3,4,5,6,7,8,9,10]
+		# properties = [4]
+		# num_trials = 5
 
-		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 
-		sets_to_find = [15]
-		values = [3,4,5,6,7,8,9,10]
-		properties = [5]
-		num_trials = 5
+		# sets_to_find = [15]
+		# values = [3,4,5,6,7,8,9,10]
+		# properties = [5]
+		# num_trials = 5
 
-		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 1)
 		print "END CHANGING VALUE"
 
 	def change_prop():
 		print "BEGIN CHANGING PROP"
-		sets_to_find = [5]
-		values = [3]
-		properties = [3,4,5,6,7,8,9,10]
-		num_trials = 5
+		# sets_to_find = [5]
+		# values = [3]
+		# properties = [3,4,5,6,7]
+		# num_trials = 5
 
-		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 2)
 
 		sets_to_find = [10]
 		values = [4]
-		properties = [3,4,5,6,7]
-		num_trials = 5
-
-		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
-
-		sets_to_find = [15]
-		values = [5]
 		properties = [3,4,5,6]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
+
+		# sets_to_find = [15]
+		# values = [5]
+		# properties = [3,4,5,6]
+		# num_trials = 5
+
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 2)
 		print "END CHANGING PROP"
 
 	def change_n():
@@ -260,25 +260,25 @@ def run_all():
 
 		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
 
-		# sets_to_find = [2,4,6,8,10,12,14,16,18,20]
-		# values = [4]
-		# properties = [5]
-		# num_trials = 5
-
-		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
-
-		sets_to_find = [1,2,3,4,5,6,7,8,9,10]
-		values = [5]
-		properties = [6]
-		num_trials = 10
+		sets_to_find = [2,4,6,8,10,12,14,16,18,20]
+		values = [4]
+		properties = [5]
+		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 3)
+
+		# sets_to_find = [1,2,3,4,5,6,7,8,9,10]
+		# values = [5]
+		# properties = [6]
+		# num_trials = 10
+
+		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
 		print "END CHANGING N"
 
 
 	# change_val()
 
-	# change_prop()
+	change_prop()
 
 	change_n()
 

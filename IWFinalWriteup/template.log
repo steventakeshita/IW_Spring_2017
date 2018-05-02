@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  1 MAY 2018 11:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  1 MAY 2018 22:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -909,14 +909,7 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
 LaTeX Info: Redefining \[ on input line 2739.
 LaTeX Info: Redefining \] on input line 2740.
 )
-(./template.aux
-
-LaTeX Warning: Label `table:data' multiply defined.
-
-
-LaTeX Warning: Label `table:data' multiply defined.
-
-)
+(./template.aux)
 \openout1 = `template.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
@@ -1105,7 +1098,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
 
-<SetOverview.png, id=193, 982.67125pt x 401.5pt>
+<SetOverview.png, id=189, 982.67125pt x 401.5pt>
 File: SetOverview.png Graphic file (type png)
  <use SetOverview.png>
 Package pdftex.def Info: SetOverview.png used on input line 36.
@@ -1128,13 +1121,28 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
  [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./S
-etOverview.png>] <nolte.png, id=216, 896.34875pt x 527.9725pt>
+etOverview.png>]
+
+LaTeX Warning: Citation `chaudhuri' on page 3 undefined on input line 55.
+
+
+LaTeX Warning: Citation `nolte' on page 3 undefined on input line 55.
+
+<nolte.png, id=210, 896.34875pt x 527.9725pt>
 File: nolte.png Graphic file (type png)
  <use nolte.png>
-Package pdftex.def Info: nolte.png used on input line 63.
+Package pdftex.def Info: nolte.png used on input line 60.
 (pdftex.def)             Requested size: 352.31625pt x 207.51968pt.
- [3 <./nolte.png>] [4] [5] [6] [7]
-Overfull \hbox (4.11305pt too wide) detected at line 223
+
+
+LaTeX Warning: Citation `jorquera' on page 3 undefined on input line 67.
+
+[3 <./nolte.png>]
+
+LaTeX Warning: Citation `SMTbackground' on page 4 undefined on input line 73.
+
+[4] [5] [6] [7]
+Overfull \hbox (4.11305pt too wide) detected at line 219
  []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
 m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 k[] 
 \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m
@@ -1148,7 +1156,7 @@ ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[
  []
 
 
-Overfull \hbox (22.25363pt too wide) detected at line 242
+Overfull \hbox (22.25363pt too wide) detected at line 236
  []$[]  \OT1/ztmcm/m/n/12 (\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztm
 cm/m/it/12 ; k[] \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/
 m/n/12 = \OML/ztmcm/m/it/12 v \OMS/ztmcm/m/n/12 ^^@ \OT1/ztmcm/m/n/12 1) \OMS/z
@@ -1162,7 +1170,7 @@ tmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$
  []
 
 
-Overfull \hbox (52.73636pt too wide) detected at line 242
+Overfull \hbox (52.73636pt too wide) detected at line 236
  []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
 m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztmcm/m/it/12 ; k[]
  \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/m/n/12 = \OML/zt
@@ -1175,114 +1183,172 @@ OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n
 /12 = \OML/ztmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$ []  
  []
 
-[8] [9] [10] [11] <3p4v10000Init.png, id=288, 578.16pt x 433.62pt>
+[8] [9]
+
+LaTeX Warning: Citation `norvig' on page 10 undefined on input line 277.
+
+[10]
+
+LaTeX Warning: Citation `fisher' on page 11 undefined on input line 286.
+
+[11] <3p4v10000Init.png, id=272, 578.16pt x 433.62pt>
 File: 3p4v10000Init.png Graphic file (type png)
-
-<use 3p4v10000Init.png>
-Package pdftex.def Info: 3p4v10000Init.png used on input line 296.
+ <use 3p4v10000Init.png>
+Package pdftex.def Info: 3p4v10000Init.png used on input line 293.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
- <4p5v10000Init.png, id=289, 578.16pt x 433.62pt>
+
+<4p5v10000Init.png, id=273, 578.16pt x 433.62pt>
 File: 4p5v10000Init.png Graphic file (type png)
-
-<use 4p5v10000Init.png>
-Package pdftex.def Info: 4p5v10000Init.png used on input line 303.
+ <use 4p5v10000Init.png>
+Package pdftex.def Info: 4p5v10000Init.png used on input line 300.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 294--307
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 291--304
 [][]   [] 
  []
 
-<3p4v10000Draw.png, id=292, 578.16pt x 433.62pt>
+<3p4v10000Draw.png, id=276, 578.16pt x 433.62pt>
 File: 3p4v10000Draw.png Graphic file (type png)
  <use 3p4v10000Draw.png>
-Package pdftex.def Info: 3p4v10000Draw.png used on input line 315.
+Package pdftex.def Info: 3p4v10000Draw.png used on input line 312.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<4p5v10000Draw.png, id=293, 578.16pt x 433.62pt>
+<4p5v10000Draw.png, id=277, 578.16pt x 433.62pt>
 File: 4p5v10000Draw.png Graphic file (type png)
  <use 4p5v10000Draw.png>
-Package pdftex.def Info: 4p5v10000Draw.png used on input line 322.
+Package pdftex.def Info: 4p5v10000Draw.png used on input line 319.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 313--326
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 310--323
 [][]   [] 
  []
 
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 334.
+(amsmath)                 on input line 328.
 
-[12 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5v10
-000Draw.png>] [13] [14] [15] [16] [17] [18] [19]
-<BADBRUTEVAL-v3456p3n5.png, id=338, 578.16pt x 433.62pt>
+[12 <./3p4v10000Init.png> <./4p5v10000Init.png>]
+
+LaTeX Warning: Citation `search_from_AI' on page 13 undefined on input line 343
+.
+
+[13 <./3p4v10000Draw.png> <./4p5v10000Draw.png>] [14] [15] [16] [17] [18]
+[19] <BADBRUTEVAL-v3456p3n5.png, id=321, 578.16pt x 433.62pt>
 File: BADBRUTEVAL-v3456p3n5.png Graphic file (type png)
 
 <use BADBRUTEVAL-v3456p3n5.png>
-Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 432.
+Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 422.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<BADBRUTEPROP-v4p3456n10.png, id=339, 578.16pt x 433.62pt>
+<BADBRUTEPROP-v4p3456n10.png, id=322, 578.16pt x 433.62pt>
 File: BADBRUTEPROP-v4p3456n10.png Graphic file (type png)
 
 <use BADBRUTEPROP-v4p3456n10.png>
-Package pdftex.def Info: BADBRUTEPROP-v4p3456n10.png used on input line 439.
+Package pdftex.def Info: BADBRUTEPROP-v4p3456n10.png used on input line 429.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<BADBRUTESETS-v4p5n12345678910.png, id=340, 578.16pt x 433.62pt>
-File: BADBRUTESETS-v4p5n12345678910.png Graphic file (type png)
-
-<use BADBRUTESETS-v4p5n12345678910.png>
-Package pdftex.def Info: BADBRUTESETS-v4p5n12345678910.png used on input line 4
-46.
-(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
-
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 430--450
-[][]   []
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 420--433
+[][]   [] 
  []
 
-[20] [21 <./BADBRUTEVAL-v3456p3n5.png> <./BADBRUTEPROP-v4p3456n10.png> <./BADBR
-UTESETS-v4p5n12345678910.png>] [22] [23] [24] [25] [26] [27]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 713.
+<VersusSMTVAL-v34567p3n5.png, id=325, 578.16pt x 433.62pt>
+File: VersusSMTVAL-v34567p3n5.png Graphic file (type png)
+
+<use VersusSMTVAL-v34567p3n5.png>
+Package pdftex.def Info: VersusSMTVAL-v34567p3n5.png used on input line 446.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
+
+<VersusSMTPROP-v3p345678910n5.png, id=326, 578.16pt x 433.62pt>
+File: VersusSMTPROP-v3p345678910n5.png Graphic file (type png)
+
+<use VersusSMTPROP-v3p345678910n5.png>
+Package pdftex.def Info: VersusSMTPROP-v3p345678910n5.png used on input line 45
+3.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
+
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 444--457
+[][]   [] 
+ []
+
+[20 <./BADBRUTEVAL-v3456p3n5.png> <./BADBRUTEPROP-v4p3456n10.png>]
+<RunoffSMTVAL-v345678910p4n10.png, id=337, 578.16pt x 433.62pt>
+File: RunoffSMTVAL-v345678910p4n10.png Graphic file (type png)
+
+<use RunoffSMTVAL-v345678910p4n10.png>
+Package pdftex.def Info: RunoffSMTVAL-v345678910p4n10.png used on input line 47
+2.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
+
+<RunoffSMTPROP-v4p34567n10.png, id=338, 578.16pt x 433.62pt>
+File: RunoffSMTPROP-v4p34567n10.png Graphic file (type png)
+
+<use RunoffSMTPROP-v4p34567n10.png>
+Package pdftex.def Info: RunoffSMTPROP-v4p34567n10.png used on input line 479.
+(pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
+
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 470--483
+[][]   [] 
+ []
+
+[21 <./VersusSMTVAL-v34567p3n5.png> <./VersusSMTPROP-v3p345678910n5.png> <./Run
+offSMTVAL-v345678910p4n10.png> <./RunoffSMTPROP-v4p34567n10.png>]
+<DvSVAL-v34567p3n5.png, id=349, 578.16pt x 433.62pt>
+File: DvSVAL-v34567p3n5.png Graphic file (type png)
+
+<use DvSVAL-v34567p3n5.png>
+Package pdftex.def Info: DvSVAL-v34567p3n5.png used on input line 497.
+(pdftex.def)             Requested size: 234.8775pt x 176.15768pt.
+
+<DvSPROP-v4p3456n10.png, id=351, 578.16pt x 433.62pt>
+File: DvSPROP-v4p3456n10.png Graphic file (type png)
+
+<use DvSPROP-v4p3456n10.png>
+Package pdftex.def Info: DvSPROP-v4p3456n10.png used on input line 511.
+(pdftex.def)             Requested size: 234.8775pt x 176.15768pt.
+ [22 <./DvSVAL-v34567p3n5.png>]
+<DvSSETS-v4p5n2468101214161820.png, id=360, 578.16pt x 433.62pt>
+File: DvSSETS-v4p5n2468101214161820.png Graphic file (type png)
+
+<use DvSSETS-v4p5n2468101214161820.png>
+Package pdftex.def Info: DvSSETS-v4p5n2468101214161820.png used on input line 5
+26.
+(pdftex.def)             Requested size: 234.8775pt x 176.15768pt.
+ [23 <./DvSPROP-v4p3456n10.png> <./DvSSETS-v4p5n2468101214161820.png>] [24]
+Overfull \hbox (0.86472pt too wide) in paragraph at lines 589--597
+ [][] 
+ []
 
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 713.
- [28]
-(./template.bbl
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 40.
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 774.
- [29]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 774.
+Overfull \hbox (25.06834pt too wide) in paragraph at lines 604--615
+ [][] 
+ []
+
+[25]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 710.
+ [26] [27]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 710.
  (./template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 774.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 774.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 710.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 710.
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 36531DFE908080E780DB168C541A148C;7602.
+(rerunfilecheck)             Checksum: 2BC512E31AE4233A4438E6765CC24E64;8329.
 
 
-LaTeX Warning: There were multiply-defined labels.
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 15697 strings out of 493014
- 227785 string characters out of 6133351
- 355043 words of memory out of 5000000
- 18674 multiletter control sequences out of 15000+600000
- 78567 words of font info for 244 fonts, out of 8000000 for 9000
+ 15612 strings out of 493014
+ 227051 string characters out of 6133351
+ 356660 words of memory out of 5000000
+ 18627 multiletter control sequences out of 15000+600000
+ 59807 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 48i,16n,40p,1835b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,16n,40p,1770b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -1292,10 +1358,10 @@ e/2016/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/
 texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on template.pdf (29 pages, 978952 bytes).
+Output written on template.pdf (27 pages, 1148910 bytes).
 PDF statistics:
- 445 PDF objects out of 1000 (max. 8388607)
- 384 compressed objects within 4 object streams
- 110 named destinations out of 1000 (max. 500000)
- 45990 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 449 PDF objects out of 1000 (max. 8388607)
+ 378 compressed objects within 4 object streams
+ 111 named destinations out of 1000 (max. 500000)
+ 31164 words of extra memory for PDF output out of 35830 (max. 10000000)
 
