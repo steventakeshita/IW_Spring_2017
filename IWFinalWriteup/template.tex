@@ -401,9 +401,11 @@ To accurately test the timing of each solver, I utilized Python's time library t
 To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate time for a test case. Also, for each of the ten trials, I test each solver with the same beginning board such that we can see how they match up directly against each other on the same board.
 
 I again used matplotlib to graph the time trials. These graphs are composed of connected dotted lines that are color coded by solver. 
+
+
 \subsection{Brute Force Inefficiency}
 
-The brute force implementation is the solution that many solvers online employ. The brute force solution is efficient enough and fast in the case of the actual Game of Set in which there are only $3$ values and $4$ properties, even being able to beat the SMT solver and dynamic algorithm in some cases. However, as $v$, $p$, and $n$ are increased to add complexity to the problem, the brute force solution begins to take exponential time. Therefore, the brute force solution must be deleted in real timing tests between the SMT solver and dynamic algorithm to provide fair competition and not ruin the scale of the graphs. To see the inefficiency of the brute force implementation, see Figure~\ref{fig:bruteVal} as we vary the value and~\ref{fig:bruteProp} as we change the number of properties where red is the brute force solution, blue is the SMT solver, and green is the dynamic algorithm.
+The brute force implementation is the solution that many solvers online employ. The brute force solution is efficient enough and fast in the case of the actual Game of Set in which there are only $3$ values and $4$ properties, even being able to beat the SMT solver and dynamic algorithm in some cases. However, as $v$, $p$, and $n$ are increased to add complexity to the problem, the brute force solution begins to take exponential time. Therefore, the brute force solution must be deleted in real timing tests between the SMT solver and dynamic algorithm to provide fair competition and not ruin the scale of the graphs. To see the inefficiency of the brute force implementation, see Figure~\ref{fig:bruteVal} as we vary the value and~\ref{fig:bruteProp} as we change the number of properties.
 
 
 \begin{figure}[htbb]
@@ -417,7 +419,7 @@ The brute force implementation is the solution that many solvers online employ. 
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{BADBRUTEPROP-v4p3456n10.png}
-\caption{4 Properties and 10 Sets Found Varying the Number of Properties}
+\caption{4 Values and 10 Sets Found Varying the Number of Properties}
 \label{fig:bruteProp}
 \end{minipage}
 \end{figure}
@@ -428,7 +430,7 @@ The brute force implementation is the solution that many solvers online employ. 
 
 The first symmetry breaking constraint I used dictated that for the first property in which they differed, they needed to be sorted by that property. However, this was a relative constraint and did not condense the search tree as much as possible, labelled as constraint 13 above. Therefore, I also created an alternate constraint that is more specific and rigidly dictates that for the first property in which the differ the first card's value has to be 0 and so forth, labelled as constraint 15 above. 
 
-We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and ~\ref{fig:VersusSMTProp}, in which I graph the speed of the three variations of the SMT solver (no condensing of the search tree is green, the relative sort is red, and the rigid sort is blue) against each other. As the number of values of the game is increased, the no condensing SMT solver's run time blows up exponentially. We can see that the symmetry breaking constraints do provide considerable speed up for all different values. 
+We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and ~\ref{fig:VersusSMTProp}, in which I graph the speed of the three variations of the SMT solver against each other. As the number of values of the game is increased, the no condensing SMT solver's run time blows up exponentially. We can see that the symmetry breaking constraints do provide considerable speed up for all different values. 
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -452,7 +454,7 @@ We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and
 % now between the two of the fastest
 
 
-Now, to determine which symmetry breaking constraint yields the greatest speedup, I run the two implementations against each other. As the rigidly sorted constraint condenses the search space more than the relative sorted, the speed up of adding this constraint can be seen in Figure~\ref{fig:RunoffVAL} and~\ref{fig:RunoffPROP} where the relative sort is in red and the rigid sort is in blue. In all cases, the rigid sort is marginally faster and this difference increases as the parameter increases. Therefore, for the final implementation of the SMT solver, I settled on using the rigidly sorted constraint. This is the fastest version of the SMT solver and would provide the best competitor against the dynamic algorithm.
+Now, to determine which symmetry breaking constraint yields the greatest speedup, I run the two implementations against each other. As the rigidly sorted constraint condenses the search space more than the relative sorted, the speed up of adding this constraint can be seen in Figure~\ref{fig:RunoffVAL} and~\ref{fig:RunoffPROP}. In all cases, the rigid sort is marginally faster and this difference increases as the parameter increases. Therefore, for the final implementation of the SMT solver, I settled on using the rigidly sorted constraint. This is the fastest version of the SMT solver and would provide the best competitor against the dynamic algorithm.
 
 
 
@@ -474,13 +476,11 @@ Now, to determine which symmetry breaking constraint yields the greatest speedup
 
 \subsection{Comparing the Final Implementations of the Dynamic Algorithm and SMT Solver}
 
-To test the dynamic algorithm and SMT solver solutions against each other, I used a variety of different parameters to see how they perform against each other. 
-
 \subsection{Varying the Number of Values}
 
-In the case of changing the value of the deck to be used, the value has to be restricted to be greater than two. If the number of values was either one or two, then a set could be immediately found as any card and any two cards are a valid set, in each case respectively. Therefore, I only test values in which they are larger than two for accurate results. There exists a threshold for which the SMT solver performs better than the dynamic algorithm. See Figure~\ref{fig:DvSVAL} (dynamic algorithm is in green and the SMT solver is in blue). Up until there are 5 values, the dynamic algorithm is able to beat the SMT solver, but once the number of values increases past 5, the time grows exponentially while the SMT solver is relatively linear. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
+There exists a threshold for which the dynamic algorithm performs better than the SMT solver. See Figure~\ref{fig:DvSVAL}. Up until there are 5 values, the dynamic algorithm is marginally faster than the SMT solver, but once the number of values increases past 5, the time grows exponentially while the SMT solver is relatively linear. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
 
-The SMT is able to handle much larger values than the dynamic algorithm without growing till a later degree. Graphing without the dynamic algorithm, the SMT solver is able to handle values as large as 10, while still retaining its linear growth. This is even with 4 properties instead of 3 properties as in Figure~\ref{fig:DvSVAL}, which adds even more complexity to finding set, but is still able to retain linear growth. See Figure~\ref{fig:SMTVal} for the growth of the SMT solver for higher values.
+The SMT solver is able to handle values as large as 10, even with 4 properties instead of 3 properties from the previous figure, while still retaining its linear growth. See Figure~\ref{fig:SMTVal}. The dynamic algorithm performs much worse because of how many more partial sets it has to store. As we increase the number of values, the dynamic algorithm will store larger partial sets because satisfying sets will be larger (of size $v$ where $v$ is the number of values). Memory usage will be higher and iterating over these sets will take more time. This explains why the dynamic algorithm grows exponentially while the SMT solver is relatively linear with respect to the number of values. 
 
 
 \begin{figure}[htbb]
@@ -494,24 +494,19 @@ The SMT is able to handle much larger values than the dynamic algorithm without 
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{SMTOnlyVAL-v345678910p4n5.png}
-\caption{4 Properties and 5 Sets Found Varying the Number of Values Only the SMT Solver}
+\caption{4 Properties and 5 Sets Found Varying the Number of Values}
 \label{fig:SMTVal}
 \end{minipage}
 \end{figure}
 
 
 
-
-
-
-
-
 \subsection{Varying the Number of Properties}
 
-Again, the SMT solver is able to finish larger instances of the problem faster than the dynamic algorithm past a certain threshold. See Figure~\ref{fig:DvSPROP} (dynamic algorithm is in green and the SMT solver is in blue). Only once the number of properties increases past 5 is the SMT solver significantly faster than the dynamic algorithm. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
+Again, the SMT solver is able to finish larger instances of the problem faster than the dynamic algorithm past a certain threshold. See Figure~\ref{fig:DvSPROP}. Only once the number of properties increases past 5 is the SMT solver significantly faster than the dynamic algorithm. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
 
 
-The SMT is able to handle much larger number of properties than the dynamic algorithm without growing exponentially till a later degree. Graphing without the dynamic algorithm, the SMT solver is able to handle as many as 7 properties a until it also takes on an exponential growth and becomes infeasible to run. See Figure~\ref{fig:SMTProp} to see the exponential growth of the SMT Solver as we vary the number of properties. 
+The SMT solver is able to handle much larger number of properties than the dynamic algorithm without growing exponentially till a later degree. Once the number of properties is increased to 7, the SMT solver also begins to grow exponentially. See Figure~\ref{fig:SMTProp}.
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -524,7 +519,7 @@ The SMT is able to handle much larger number of properties than the dynamic algo
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{SMTOnlyPROP-v4p345678n10.png}
-\caption{4 Values and 10 Sets Found Varying the Number of Properties Only the SMT Solver}
+\caption{4 Values and 10 Sets Found Varying the Number of Properties}
 \label{fig:SMTProp}
 \end{minipage}
 \end{figure}
@@ -535,9 +530,9 @@ The SMT is able to handle much larger number of properties than the dynamic algo
 
 \subsection{Varying the Number of Sets to be Found}
 
-Though I had assumed that the dynamic algorithm would expect the highest speed up when the number of sets to be found increases, as you can see from Figure~\ref{fig:DvSSETS} (dynamic algorithm is in green and the SMT solver is in blue), once the number of values and properties increases high enough, the dynamic algorithm cannot compete with the SMT solver and is much slower as the number of sets to be found is increased. Even though the dynamic algorithm creates a speed up by retaining all partial sets especially for multiple draws, the speed up does not always outweigh the cost of storing so many partial sets.
+As the number of sets to be found increases, if the number of values and properties is high enough, the dynamic algorithm is much slower than  the SMT solver. See Figure~\ref{fig:DvSSETS}. Even though the dynamic algorithm creates a speed up by retaining all partial sets especially for multiple draws, the speed up does not always outweigh the cost of storing so many partial sets.
 
-As the number of sets increases, the growth of both the SMT solver and dynamic algorithm are roughly identical. However, the SMT solver is marginally faster. As we graph its runtime to find more sets with the same constant parameters as above, we can see that the runtime does begin to take on an exponential growth. See Figure~\ref{fig:SMTSet} as we increase the number of sets to find.
+As the number of sets increases, the growth of both the SMT solver and dynamic algorithm are roughly identical. However, the SMT solver is marginally faster. The runtime continues to grow linearly in Figure~\ref{fig:SMTSet} as it finds more sets than in the previous figure with the same constant parameters.
 
 
 \begin{figure}[htbb]
@@ -551,24 +546,15 @@ As the number of sets increases, the growth of both the SMT solver and dynamic a
 \begin{minipage}[b]{0.5\linewidth}
 \centering
 \includegraphics[width=.75\linewidth]{SMTOnlySETS-v4p5n5101520253035404550.png}
-\caption{4 Values and 5 Properties Varying the Number of Sets to Find Only the SMT Solver}
+\caption{4 Values and 5 Properties Varying the Number of Sets to Find}
 \label{fig:SMTSet}
 \end{minipage}
 \end{figure}
 
-
-
-
-%GROWTH OF SMT FOR LARGER VALUES
-
-
-
-
 \section{Conclusion and Future Work}
 
 
-This paper outlines the creation of three different solvers: brute force, dynamic algorithm, and SMT based, to solve the generalized Game of Set. Through timing tests, I found that as expected, the brute force implementation blows up exponentially as any of the parameters are increased. It does not lend itself to be an efficient solver for the more general case. The dynamic algorithm and SMT based solver both perform much better than the brute force and are superior in their own ways. The dynamic algorithm is faster on smaller cases than the SMT solver, but as the parameters increase, the memory usage of the dynamic algorithm become too unwieldy and causes it be much slower, exponentially increasing. On the other hand, the SMT solver, though slower on smaller cases, follows a roughly linear order of growth and is an efficient solver as the parameters increase to larger values. 
-
+This paper outlines the creation of three different solvers: brute force, dynamic algorithm, and SMT based, to solve the generalized Game of Set. Through timing tests, I found that as expected, the brute force implementation blows up exponentially as any of the parameters are increased. It does not lend itself to be an efficient solver for the more general case. The dynamic algorithm and SMT based solver both perform much better than the brute force and are superior in their own ways. The dynamic algorithm is faster on smaller cases than the SMT solver, but as the parameters increase, the memory usage of the dynamic algorithm become too unwieldy and causes it be much slower, exponentially increasing. Interestingly, only when the SMT solver is used on higher number of properties does its growth take on exponential growth. Otherwise, in the case of the values and sets to find, the SMT solver can continue its linear growth till much higher values. 
 
 For future research into this problem, it would be interesting and potentially much faster if there is a way to combine the SMT solver and dynamic algorithm. This way, we could benefit from the dynamic algorithm's speed on smaller cases but also the SMT solver's efficiency for larger cases. If a solution combining the two can be found and implemented, this line of thinking could be very useful in creating efficient solutions for other problems that grow exponentially and need an efficient solver for a wide range of parameters. 
 
