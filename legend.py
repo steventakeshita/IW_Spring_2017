@@ -39,3 +39,10 @@ pylab.plot(x, y2, 'g-o', label='Dynamic Algorithm')
 pylab.legend(loc='upper left')
 pylab.ylim(-1.5, 2.0)
 pylab.show()
+
+
+
+pylab.plot(x, y2, 'b-o', label='SMT Solver')
+pylab.legend(loc='upper left')
+pylab.ylim(-1.5, 2.0)
+pylab.show()

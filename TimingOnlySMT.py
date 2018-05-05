@@ -133,18 +133,12 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 
 					SMT_time.append(runSMTsolver(rand, n))
 
-					reset_board(rand,board)
-
-					Dynamic_time.append(runDynamicsolver(rand, n))
-
 				avg_SMT = sum(SMT_time)/float(num_trials)
-				avg_Dynamic = sum(Dynamic_time)/float(num_trials)
 
 
 				time_smt.append(avg_SMT)
-				time_dyn.append(avg_Dynamic)
 
-				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT) + " | Dynamic time: " + str(avg_Dynamic)
+				print "Value: " + str(v) + " | Properties: " + str(p) + " | Sets found: " + str(n) + " | SMT time: " + str(avg_SMT)
 
 	
 	print "NEXT TRIAL"	
@@ -156,7 +150,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	if setting == 1:
 
 		plt.plot(values, time_smt, 'b-o')
-		plt.plot(values, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Values')
 
@@ -171,7 +164,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	# changing property
 	elif setting == 2:
 		plt.plot(properties, time_smt, 'b-o')
-		plt.plot(properties, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Properties')
 
@@ -186,7 +178,6 @@ def run_trials_plot(values, properties, sets_to_find, num_trials, setting):
 	# changing number of sets to find
 	else:
 		plt.plot(sets_to_find, time_smt, 'b-o')
-		plt.plot(sets_to_find, time_dyn, 'g-o')
 		plt.ylabel('Time (Seconds)')
 		plt.xlabel('Number of Sets to Find')
 
@@ -206,8 +197,8 @@ def run_all():
 	def change_val():
 		print "BEGIN CHANGING VALUE"
 		sets_to_find = [5]
-		values = [3,4,5,6,7]
-		properties = [3]
+		values = [3,4,5,6,7,8,9,10]
+		properties = [4]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 1)
@@ -238,7 +229,7 @@ def run_all():
 
 		sets_to_find = [10]
 		values = [4]
-		properties = [3,4,5,6]
+		properties = [3,4,5,6,7,8]
 		num_trials = 5
 
 		run_trials_plot(values, properties, sets_to_find, num_trials, 2)
@@ -260,7 +251,7 @@ def run_all():
 
 		# run_trials_plot(values, properties, sets_to_find, num_trials, 3)
 
-		sets_to_find = [2,4,6,8,10,12,14,16,18,20]
+		sets_to_find = [5,10,15,20,25,30,35,40,45,50]
 		values = [4]
 		properties = [5]
 		num_trials = 5
@@ -276,7 +267,7 @@ def run_all():
 		print "END CHANGING N"
 
 
-	# change_val()
+	change_val()
 
 	change_prop()
 
