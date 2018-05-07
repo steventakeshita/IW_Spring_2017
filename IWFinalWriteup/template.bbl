@@ -50,4 +50,10 @@ P.~Norvig, ``The odds of finding a set in the card game set®,'' 2017.
 S.~Russel and P.~Norvig, \emph{Artificial Intelligence: A Modern Approach},
   2nd~ed.\hskip 1em plus 0.5em minus 0.4em\relax Prentice Hall, 2002.
 
+\bibitem{setOverview}
+\BIBentryALTinterwordspacing
+Samantha, ``Game, set, match,'' 2016. Available:
+  \url{https://socialmathematics.net/2016/06/01/game-set-match/}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

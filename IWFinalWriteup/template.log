@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  5 MAY 2018 13:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  7 MAY 2018 11:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1121,13 +1121,13 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
  [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./S
-etOverview.png>] <nolte.png, id=195, 896.34875pt x 527.9725pt>
+etOverview.png>] <nolte.png, id=200, 896.34875pt x 527.9725pt>
 File: nolte.png Graphic file (type png)
  <use nolte.png>
-Package pdftex.def Info: nolte.png used on input line 60.
+Package pdftex.def Info: nolte.png used on input line 57.
 (pdftex.def)             Requested size: 352.31625pt x 207.51968pt.
  [3 <./nolte.png>] [4] [5] [6]
-Overfull \hbox (4.11305pt too wide) detected at line 216
+Overfull \hbox (4.11305pt too wide) detected at line 213
  []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
 m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 k[] 
 \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^^T \OML/ztmcm/m
@@ -1141,7 +1141,7 @@ ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 k[
  []
 
 [7]
-Overfull \hbox (4.92038pt too wide) detected at line 233
+Overfull \hbox (4.92038pt too wide) detected at line 230
  []$[]  \OT1/ztmcm/m/n/12 (\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztm
 cm/m/it/12 ; k[] \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/
 m/n/12 = \OML/ztmcm/m/it/12 v \OMS/ztmcm/m/n/12 ^^@ \OT1/ztmcm/m/n/12 1) \OMS/z
@@ -1154,7 +1154,7 @@ cm/m/n/12 = \OML/ztmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$
  []
 
 
-Overfull \hbox (52.73636pt too wide) detected at line 233
+Overfull \hbox (52.73636pt too wide) detected at line 230
  []$[] \OMS/ztmcm/m/n/12 ^ \OML/ztmcm/m/it/12 ::: \OMS/ztmcm/m/n/12 ^ \OT1/ztmc
 m/m/n/12 ((\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0\OML/ztmcm/m/it/12 ; k[]
  \OT1/ztmcm/m/n/12 = 1\OML/ztmcm/m/it/12 ; :::; k[] \OT1/ztmcm/m/n/12 = \OML/zt
@@ -1167,72 +1167,71 @@ OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = \OML/ztmcm/m/it/12 ::: \OT1/ztmcm/m/n
 /12 = \OML/ztmcm/m/it/12 k[]\OT1/ztmcm/m/n/12 ))$ []  
  []
 
-[8] [9] [10] <3p4v10000Init.png, id=262, 578.16pt x 433.62pt>
+[8] [9] [10] <3p4v10000Init.png, id=270, 578.16pt x 433.62pt>
 File: 3p4v10000Init.png Graphic file (type png)
 
 <use 3p4v10000Init.png>
-Package pdftex.def Info: 3p4v10000Init.png used on input line 286.
+Package pdftex.def Info: 3p4v10000Init.png used on input line 285.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
- <4p5v10000Init.png, id=263, 578.16pt x 433.62pt>
+ <4p5v10000Init.png, id=271, 578.16pt x 433.62pt>
 File: 4p5v10000Init.png Graphic file (type png)
 
 <use 4p5v10000Init.png>
-Package pdftex.def Info: 4p5v10000Init.png used on input line 293.
+Package pdftex.def Info: 4p5v10000Init.png used on input line 292.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
- <3p4v10000Draw.png, id=264, 578.16pt x 433.62pt>
+ <3p4v10000Draw.png, id=272, 578.16pt x 433.62pt>
 File: 3p4v10000Draw.png Graphic file (type png)
 
 <use 3p4v10000Draw.png>
-Package pdftex.def Info: 3p4v10000Draw.png used on input line 299.
+Package pdftex.def Info: 3p4v10000Draw.png used on input line 298.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
- <4p5v10000Draw.png, id=265, 578.16pt x 433.62pt>
+ <4p5v10000Draw.png, id=273, 578.16pt x 433.62pt>
 File: 4p5v10000Draw.png Graphic file (type png)
 
 <use 4p5v10000Draw.png>
-Package pdftex.def Info: 4p5v10000Draw.png used on input line 306.
+Package pdftex.def Info: 4p5v10000Draw.png used on input line 305.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 284--310
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 283--309
 [][]   []
  []
 
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 284--310
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 283--309
 []   [] 
  []
 
-[11]
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 318.
+(amsmath)                 on input line 316.
 
-[12 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5v10
-000Draw.png>] [13] [14] [15] [16] [17] [18]
-<BADBRUTEVAL-v3456p3n5.png, id=312, 578.16pt x 433.62pt>
+[11 <./3p4v10000Init.png> <./4p5v10000Init.png> <./3p4v10000Draw.png> <./4p5v10
+000Draw.png>] [12] [13] [14] [15] [16] [17]
+<BADBRUTEVAL-v3456p3n5.png, id=313, 578.16pt x 433.62pt>
 File: BADBRUTEVAL-v3456p3n5.png Graphic file (type png)
 
 <use BADBRUTEVAL-v3456p3n5.png>
-Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 414.
+Package pdftex.def Info: BADBRUTEVAL-v3456p3n5.png used on input line 412.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<BADBRUTEPROP-v4p3456n10.png, id=313, 578.16pt x 433.62pt>
+<BADBRUTEPROP-v4p3456n10.png, id=314, 578.16pt x 433.62pt>
 File: BADBRUTEPROP-v4p3456n10.png Graphic file (type png)
 
 <use BADBRUTEPROP-v4p3456n10.png>
-Package pdftex.def Info: BADBRUTEPROP-v4p3456n10.png used on input line 421.
+Package pdftex.def Info: BADBRUTEPROP-v4p3456n10.png used on input line 419.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 412--425
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 410--423
 [][]   [] 
  []
 
-[19 <./BADBRUTEVAL-v3456p3n5.png> <./BADBRUTEPROP-v4p3456n10.png>]
+[18 <./BADBRUTEVAL-v3456p3n5.png> <./BADBRUTEPROP-v4p3456n10.png>]
 <VersusSMTVAL-v34567p3n5.png, id=324, 578.16pt x 433.62pt>
 File: VersusSMTVAL-v34567p3n5.png Graphic file (type png)
 
 <use VersusSMTVAL-v34567p3n5.png>
-Package pdftex.def Info: VersusSMTVAL-v34567p3n5.png used on input line 438.
+Package pdftex.def Info: VersusSMTVAL-v34567p3n5.png used on input line 436.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
 <VersusSMTPROP-v3p345678910n5.png, id=325, 578.16pt x 433.62pt>
@@ -1240,10 +1239,10 @@ File: VersusSMTPROP-v3p345678910n5.png Graphic file (type png)
 
 <use VersusSMTPROP-v3p345678910n5.png>
 Package pdftex.def Info: VersusSMTPROP-v3p345678910n5.png used on input line 44
-5.
+3.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 436--449
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 434--447
 [][]   [] 
  []
 
@@ -1252,61 +1251,60 @@ File: RunoffSMTVAL-v345678910p4n10.png Graphic file (type png)
 
 <use RunoffSMTVAL-v345678910p4n10.png>
 Package pdftex.def Info: RunoffSMTVAL-v345678910p4n10.png used on input line 46
-4.
+0.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
 <RunoffSMTPROP-v4p34567n10.png, id=329, 578.16pt x 433.62pt>
 File: RunoffSMTPROP-v4p34567n10.png Graphic file (type png)
 
 <use RunoffSMTPROP-v4p34567n10.png>
-Package pdftex.def Info: RunoffSMTPROP-v4p34567n10.png used on input line 471.
+Package pdftex.def Info: RunoffSMTPROP-v4p34567n10.png used on input line 467.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 462--475
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 458--471
 [][]   [] 
  []
 
-[20 <./VersusSMTVAL-v34567p3n5.png> <./VersusSMTPROP-v3p345678910n5.png>]
-<DvSVAL-v34567p3n5.png, id=340, 578.16pt x 433.62pt>
+[19 <./VersusSMTVAL-v34567p3n5.png> <./VersusSMTPROP-v3p345678910n5.png> <./Run
+offSMTVAL-v345678910p4n10.png> <./RunoffSMTPROP-v4p34567n10.png>]
+<DvSVAL-v34567p3n5.png, id=343, 578.16pt x 433.62pt>
 File: DvSVAL-v34567p3n5.png Graphic file (type png)
 
 <use DvSVAL-v34567p3n5.png>
-Package pdftex.def Info: DvSVAL-v34567p3n5.png used on input line 489.
+Package pdftex.def Info: DvSVAL-v34567p3n5.png used on input line 490.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<SMTOnlyVAL-v345678910p4n5.png, id=341, 578.16pt x 433.62pt>
+<SMTOnlyVAL-v345678910p4n5.png, id=344, 578.16pt x 433.62pt>
 File: SMTOnlyVAL-v345678910p4n5.png Graphic file (type png)
 
 <use SMTOnlyVAL-v345678910p4n5.png>
-Package pdftex.def Info: SMTOnlyVAL-v345678910p4n5.png used on input line 496.
+Package pdftex.def Info: SMTOnlyVAL-v345678910p4n5.png used on input line 497.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 487--500
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 488--501
 [][]   [] 
  []
 
-[21 <./RunoffSMTVAL-v345678910p4n10.png> <./RunoffSMTPROP-v4p34567n10.png>]
-<DvSPROP-v4p3456n10.png, id=352, 578.16pt x 433.62pt>
+<DvSPROP-v4p3456n10.png, id=346, 578.16pt x 433.62pt>
 File: DvSPROP-v4p3456n10.png Graphic file (type png)
 
 <use DvSPROP-v4p3456n10.png>
-Package pdftex.def Info: DvSPROP-v4p3456n10.png used on input line 514.
+Package pdftex.def Info: DvSPROP-v4p3456n10.png used on input line 513.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<SMTOnlyPROP-v4p345678n10.png, id=353, 578.16pt x 433.62pt>
+<SMTOnlyPROP-v4p345678n10.png, id=347, 578.16pt x 433.62pt>
 File: SMTOnlyPROP-v4p345678n10.png Graphic file (type png)
 
 <use SMTOnlyPROP-v4p345678n10.png>
-Package pdftex.def Info: SMTOnlyPROP-v4p345678n10.png used on input line 521.
+Package pdftex.def Info: SMTOnlyPROP-v4p345678n10.png used on input line 520.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-Overfull \hbox (18.7864pt too wide) in paragraph at lines 512--525
+Overfull \hbox (18.7864pt too wide) in paragraph at lines 511--524
 [][]   [] 
  []
 
-[22 <./DvSVAL-v34567p3n5.png> <./SMTOnlyVAL-v345678910p4n5.png> <./DvSPROP-v4p3
-456n10.png> <./SMTOnlyPROP-v4p345678n10.png>]
-<DvSSETS-v4p5n2468101214161820.png, id=365, 578.16pt x 433.62pt>
+[20 <./DvSVAL-v34567p3n5.png> <./SMTOnlyVAL-v345678910p4n5.png>]
+<DvSSETS-v4p5n2468101214161820.png, id=358, 578.16pt x 433.62pt>
 File: DvSSETS-v4p5n2468101214161820.png Graphic file (type png)
 
 <use DvSSETS-v4p5n2468101214161820.png>
@@ -1314,7 +1312,7 @@ Package pdftex.def Info: DvSSETS-v4p5n2468101214161820.png used on input line 5
 41.
 (pdftex.def)             Requested size: 176.15813pt x 132.11827pt.
 
-<SMTOnlySETS-v4p5n5101520253035404550.png, id=366, 578.16pt x 433.62pt>
+<SMTOnlySETS-v4p5n5101520253035404550.png, id=359, 578.16pt x 433.62pt>
 File: SMTOnlySETS-v4p5n5101520253035404550.png Graphic file (type png)
 
 <use SMTOnlySETS-v4p5n5101520253035404550.png>
@@ -1326,8 +1324,9 @@ Overfull \hbox (18.7864pt too wide) in paragraph at lines 539--552
 [][]   [] 
  []
 
-[23 <./DvSSETS-v4p5n2468101214161820.png> <./SMTOnlySETS-v4p5n51015202530354045
-50.png>] (./template.bbl
+[21 <./DvSPROP-v4p3456n10.png> <./SMTOnlyPROP-v4p345678n10.png> <./DvSSETS-v4p5
+n2468101214161820.png> <./SMTOnlySETS-v4p5n5101520253035404550.png>] [22]
+(./template.bbl
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
@@ -1335,43 +1334,45 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 40.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 40.
 )
-LaTeX Font Info:    Try loading font information for T1+pcrs on input line 581.
+LaTeX Font Info:    Try loading font information for T1+pcrs on input line 585.
 
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/courier-scaled/t1pcrs.fd
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/courier-scaled/t1pcrs.fd
 File: t1pcrs.fd 2004/07/09 scalable font definitions for T1/pcrs.
 )
 LaTeX Font Info:    Font shape `T1/pcrs/m/n' will be
-(Font)              scaled to size 10.5pt on input line 581.
+(Font)              scaled to size 10.5pt on input line 585.
 Package microtype Info: Loading generic settings for font family
 (microtype)             `pcrs' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 583.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 587.
 
-[24]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 583.
+[23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 587.
  (./template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 583.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 583.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 587.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 587.
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: CEF4EDA5681B512EBBDBB64E8F558829;7435.
+(rerunfilecheck)             Checksum: F71638C0809BD319FA1F815C04D8CA58;7402.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 15747 strings out of 493014
- 229541 string characters out of 6133351
- 352356 words of memory out of 5000000
- 18724 multiletter control sequences out of 15000+600000
- 78833 words of font info for 242 fonts, out of 8000000 for 9000
+ 15751 strings out of 493014
+ 229590 string characters out of 6133351
+ 350414 words of memory out of 5000000
+ 18725 multiletter control sequences out of 15000+600000
+ 78963 words of font info for 244 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 48i,16n,40p,1686b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,16n,45p,1585b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -1382,10 +1383,10 @@ exmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on template.pdf (24 pages, 1219071 bytes).
+Output written on template.pdf (23 pages, 1217242 bytes).
 PDF statistics:
- 435 PDF objects out of 1000 (max. 8388607)
- 360 compressed objects within 4 object streams
+ 437 PDF objects out of 1000 (max. 8388607)
+ 361 compressed objects within 4 object streams
  100 named destinations out of 1000 (max. 500000)
  46507 words of extra memory for PDF output out of 51595 (max. 10000000)
 

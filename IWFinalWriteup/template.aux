@@ -16,89 +16,94 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{setOverview}
+\citation{setOverview}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation and Goal}{1}{subsection.1.1}}
 \citation{chaudhuri}
 \citation{nolte}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Brief Overview of the Game of Set with $v=3$ and $p=4$\relax }}{2}{figure.caption.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Brief Overview of the Game of Set with $v=3$ and $p=4$ \nobreakspace  {}\cite  {setOverview}\relax }}{2}{figure.caption.1}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:SetOverview}{{1}{2}{Brief Overview of the Game of Set with $v=3$ and $p=4$\relax }{figure.caption.1}{}}
+\newlabel{fig:SetOverview}{{1}{2}{Brief Overview of the Game of Set with $v=3$ and $p=4$ ~\cite {setOverview}\relax }{figure.caption.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Problem Definition}{2}{subsection.1.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Problem Background and Related Work}{2}{section.2}}
+\citation{nolte}
+\citation{nolte}
 \citation{jorquera}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Problem Background and Related Work}{3}{section.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Javascript SET Game Solver by Steve Nolte\relax }}{3}{figure.caption.2}}
-\newlabel{fig:nolteUI}{{2}{3}{Javascript SET Game Solver by Steve Nolte\relax }{figure.caption.2}{}}
 \citation{SMTbackground}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Approach}{4}{section.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}SMT Solver}{4}{subsection.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Reduction to SMT}{5}{subsection.3.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Set Up}{5}{subsubsection.3.2.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Javascript SET Game Solver by Steve Nolte \cite  {nolte}\relax }}{3}{figure.caption.2}}
+\newlabel{fig:nolteUI}{{2}{3}{Javascript SET Game Solver by Steve Nolte \cite {nolte}\relax }{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Approach}{3}{section.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}SMT Solver}{3}{subsection.3.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Reduction to SMT}{4}{subsection.3.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Set Up}{4}{subsubsection.3.2.1}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}All Different or All Same Constraint}{5}{subsubsection.3.2.2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}The Cards Must Be From The Board}{6}{subsubsection.3.2.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.4}All Distinct Cards}{7}{subsubsection.3.2.4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.4}All Distinct Cards}{6}{subsubsection.3.2.4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.5}Symmetry Breaking}{7}{subsubsection.3.2.5}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.6}Update Functions}{9}{subsubsection.3.2.6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.6}Update Functions}{8}{subsubsection.3.2.6}}
 \citation{norvig}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Dynamic Algorithm}{9}{subsection.3.3}}
 \citation{fisher}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Dynamic Algorithm}{10}{subsection.3.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Implementation}{10}{section.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Randomizer}{11}{subsection.4.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 3 properties, 4 values, 10,000 trials Initial Board Distribution\relax }}{12}{figure.caption.3}}
-\newlabel{fig:init1}{{3}{12}{3 properties, 4 values, 10,000 trials Initial Board Distribution\relax }{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 4 properties, 5 values, 10,000 trials Initial Board Distribution\relax }}{12}{figure.caption.3}}
-\newlabel{fig:init2}{{4}{12}{4 properties, 5 values, 10,000 trials Initial Board Distribution\relax }{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 3 properties, 4 values, 10,000 trials Distribution of $4$ New Cards Drawn\relax }}{12}{figure.caption.3}}
-\newlabel{fig:draw1}{{5}{12}{3 properties, 4 values, 10,000 trials Distribution of $4$ New Cards Drawn\relax }{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 4 properties, 5 values, 10,000 trials Distribution of $5$ New Cards Drawn\relax }}{12}{figure.caption.3}}
-\newlabel{fig:draw2}{{6}{12}{4 properties, 5 values, 10,000 trials Distribution of $5$ New Cards Drawn\relax }{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Brute Force Implementation}{12}{subsection.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Randomizer}{10}{subsection.4.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 3 properties, 4 values, 10,000 trials Initial Board Distribution\relax }}{11}{figure.caption.3}}
+\newlabel{fig:init1}{{3}{11}{3 properties, 4 values, 10,000 trials Initial Board Distribution\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 4 properties, 5 values, 10,000 trials Initial Board Distribution\relax }}{11}{figure.caption.3}}
+\newlabel{fig:init2}{{4}{11}{4 properties, 5 values, 10,000 trials Initial Board Distribution\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 3 properties, 4 values, 10,000 trials Distribution of $4$ New Cards Drawn\relax }}{11}{figure.caption.3}}
+\newlabel{fig:draw1}{{5}{11}{3 properties, 4 values, 10,000 trials Distribution of $4$ New Cards Drawn\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 4 properties, 5 values, 10,000 trials Distribution of $5$ New Cards Drawn\relax }}{11}{figure.caption.3}}
+\newlabel{fig:draw2}{{6}{11}{4 properties, 5 values, 10,000 trials Distribution of $5$ New Cards Drawn\relax }{figure.caption.3}{}}
 \citation{search_from_AI}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}SMT Solver Implementation}{13}{subsection.4.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Z3}{13}{subsubsection.4.3.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Delayed Deletion Optimization}{13}{subsubsection.4.3.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Constraining the Domain Optimization}{13}{subsubsection.4.3.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Dynamic Algorithm Implementation}{14}{subsection.4.4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Set Up}{14}{subsubsection.4.4.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Partial Set List and Quick Complete Dictionary Creation}{15}{subsubsection.4.4.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Quick Complete Upon Drawing Cards}{16}{subsubsection.4.4.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Deletion Bookkeeping}{16}{subsubsection.4.4.4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.5}Finding a Set}{17}{subsubsection.4.4.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Testing}{17}{subsection.4.5}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Testing Satisfying Set}{17}{subsubsection.4.5.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Testing Correct Deletion}{18}{subsubsection.4.5.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Results and Evaluation}{18}{section.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Timing Tests}{18}{subsection.5.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Brute Force Inefficiency}{19}{subsection.5.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{19}{figure.caption.4}}
-\newlabel{fig:bruteVal}{{7}{19}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{19}{figure.caption.4}}
-\newlabel{fig:bruteProp}{{8}{19}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Comparing Symmetry Breaking Constraints}{20}{subsection.5.3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{20}{figure.caption.5}}
-\newlabel{fig:VersusSMTVal}{{9}{20}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 3 Values and 10 Sets Found Varying the Number of Properties\relax }}{20}{figure.caption.5}}
-\newlabel{fig:VersusSMTProp}{{10}{20}{3 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 4 Properties and 10 Sets Found Varying the Number of Values\relax }}{21}{figure.caption.6}}
-\newlabel{fig:RunoffVAL}{{11}{21}{4 Properties and 10 Sets Found Varying the Number of Values\relax }{figure.caption.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{21}{figure.caption.6}}
-\newlabel{fig:RunoffPROP}{{12}{21}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Comparing the Final Implementations of the Dynamic Algorithm and SMT Solver}{21}{subsection.5.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Varying the Number of Values}{21}{subsection.5.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Varying the Number of Properties}{21}{subsection.5.6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{22}{figure.caption.7}}
-\newlabel{fig:DvSVAL}{{13}{22}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces 4 Properties and 5 Sets Found Varying the Number of Values\relax }}{22}{figure.caption.7}}
-\newlabel{fig:SMTVal}{{14}{22}{4 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{22}{figure.caption.8}}
-\newlabel{fig:DvSPROP}{{15}{22}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{22}{figure.caption.8}}
-\newlabel{fig:SMTProp}{{16}{22}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Varying the Number of Sets to be Found}{22}{subsection.5.7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces 4 Values and 5 Properties Varying the Number of Sets to Find\relax }}{23}{figure.caption.9}}
-\newlabel{fig:DvSSETS}{{17}{23}{4 Values and 5 Properties Varying the Number of Sets to Find\relax }{figure.caption.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces 4 Values and 5 Properties Varying the Number of Sets to Find\relax }}{23}{figure.caption.9}}
-\newlabel{fig:SMTSet}{{18}{23}{4 Values and 5 Properties Varying the Number of Sets to Find\relax }{figure.caption.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Future Work}{23}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Brute Force Implementation}{12}{subsection.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}SMT Solver Implementation}{12}{subsection.4.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Z3}{12}{subsubsection.4.3.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Delayed Deletion Optimization}{12}{subsubsection.4.3.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Symmetry Breaking Optimization}{12}{subsubsection.4.3.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Dynamic Algorithm Implementation}{13}{subsection.4.4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Set Up}{13}{subsubsection.4.4.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Partial Set List and Quick Complete Dictionary Creation}{14}{subsubsection.4.4.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Quick Complete Upon Drawing Cards}{15}{subsubsection.4.4.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Deletion Bookkeeping}{15}{subsubsection.4.4.4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.5}Finding a Set}{16}{subsubsection.4.4.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Testing}{16}{subsection.4.5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Testing Satisfying Set}{16}{subsubsection.4.5.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Testing Correct Deletion}{17}{subsubsection.4.5.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results and Evaluation}{17}{section.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Timing Tests}{17}{subsection.5.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Brute Force Inefficiency}{18}{subsection.5.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{18}{figure.caption.4}}
+\newlabel{fig:bruteVal}{{7}{18}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{18}{figure.caption.4}}
+\newlabel{fig:bruteProp}{{8}{18}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Comparing Symmetry Breaking Constraints}{18}{subsection.5.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{19}{figure.caption.5}}
+\newlabel{fig:VersusSMTVal}{{9}{19}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 3 Values and 10 Sets Found Varying the Number of Properties\relax }}{19}{figure.caption.5}}
+\newlabel{fig:VersusSMTProp}{{10}{19}{3 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 4 Properties and 10 Sets Found Varying the Number of Values\relax }}{19}{figure.caption.6}}
+\newlabel{fig:RunoffVAL}{{11}{19}{4 Properties and 10 Sets Found Varying the Number of Values\relax }{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{19}{figure.caption.6}}
+\newlabel{fig:RunoffPROP}{{12}{19}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Comparing the Final Implementations of the Dynamic Algorithm and SMT Solver}{20}{subsection.5.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Varying the Number of Values}{20}{subsection.5.5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces 3 Properties and 5 Sets Found Varying the Number of Values\relax }}{20}{figure.caption.7}}
+\newlabel{fig:DvSVAL}{{13}{20}{3 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces 4 Properties and 5 Sets Found Varying the Number of Values\relax }}{20}{figure.caption.7}}
+\newlabel{fig:SMTVal}{{14}{20}{4 Properties and 5 Sets Found Varying the Number of Values\relax }{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Varying the Number of Properties}{20}{subsection.5.6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{21}{figure.caption.8}}
+\newlabel{fig:DvSPROP}{{15}{21}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces 4 Values and 10 Sets Found Varying the Number of Properties\relax }}{21}{figure.caption.8}}
+\newlabel{fig:SMTProp}{{16}{21}{4 Values and 10 Sets Found Varying the Number of Properties\relax }{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Varying the Number of Sets to be Found}{21}{subsection.5.7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces 4 Values and 5 Properties Varying the Number of Sets to Find\relax }}{21}{figure.caption.9}}
+\newlabel{fig:DvSSETS}{{17}{21}{4 Values and 5 Properties Varying the Number of Sets to Find\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces 4 Values and 5 Properties Varying the Number of Sets to Find\relax }}{21}{figure.caption.9}}
+\newlabel{fig:SMTSet}{{18}{21}{4 Values and 5 Properties Varying the Number of Sets to Find\relax }{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Future Work}{22}{section.6}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgments}{22}{section.7}}
 \citation{bstctl:etal}
 \citation{bstctl:nodash}
 \citation{bstctl:simpurl}
@@ -111,6 +116,6 @@
 \bibcite{nolte}{5}
 \bibcite{norvig}{6}
 \bibcite{search_from_AI}{7}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgments}{24}{section.7}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Ethics}{24}{section.8}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Appendix}{24}{section.9}}
+\bibcite{setOverview}{8}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Ethics}{23}{section.8}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Appendix}{23}{section.9}}

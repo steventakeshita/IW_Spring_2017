@@ -28,43 +28,40 @@ This paper examines three implementations of a solver to efficiently find sets i
 
 \subsection{Motivation and Goal}
 
-The Game of Set was created in 1974 and published in 1991. The game consists of $3^4 = 81$ unique cards. Each card has four properties and one of three values. A valid set of three cards is one in which for each property, they all either have the same or different values. See Figure~\ref{fig:SetOverview} for an overview of the game and to see how the properties and values are visually represented for all cards. At the beginning of the game, $12$ cards are shown, and players must locate valid sets. Once a set is found or no set exists, three new cards are added. The person who collected the most sets wins. 
+The Game of Set was created in 1974 and published in 1991. The game consists of $3^4 = 81$ unique cards. Each card has four properties and one of three values. A valid set of three cards is one in which for each property, they all either have the same or different values. See Figure~\ref{fig:SetOverview} for an overview of the game and to see how the properties and values are visually represented for all cards. At the beginning of the game, $12$ cards are shown, and players must locate valid sets. Once a set is found or no set exists, three new cards are added. The person who collects the most sets wins. 
 
 \begin{figure}[htbb]
 \centering
 \begin{minipage}[b]{.75\linewidth}
 \includegraphics[width=\linewidth]{SetOverview.png}
-\caption{Brief Overview of the Game of Set with $v=3$ and $p=4$}
+\caption{Brief Overview of the Game of Set with $v=3$ and $p=4$ ~\cite{setOverview}}
 \label{fig:SetOverview}
 \end{minipage}
 \end{figure}
 
-When I used to play this game with my family, I had difficulty finding sets and always lost to my much faster sister. A natural extension of this game is to determine how fast can a computer find sets, and what are the different ways that we can minimize the time taken. The game itself is relatively limited with only three values and four properties, and therefore generalizing the number of values and properties will make the game much more difficult for a computer to solve. The Game of Set is an interesting problem for dynamic algorithms in that when three new cards are added, the algorithm should be able to build off of previous knowledge. A way to utilize this past information could be helpful in applying similar principles to other problems that could lend itself to dynamic programming. The goal of my project is to create a solver that locates $n$ sets efficiently in practice for a Game of Set with $p$ properties and $v$ values. 
+When I used to play this game with my family, I had difficulty finding sets and always lost to my much faster sister. A natural extension of this game is to determine how a computer can find sets. The game itself is relatively limited with only three values and four properties, and therefore generalizing the number of values and properties will make the game much more difficult for a computer to solve. The Game of Set is an interesting problem for dynamic algorithms in that when three new cards are added, the algorithm should be able to build off of previous knowledge. A way to utilize this past information could be helpful in applying similar principles to other problems that could lend itself to dynamic programming. The goal of my project is to create a solver that locates $n$ sets efficiently in practice for a Game of Set with $p$ properties and $v$ values. 
 
 
 \subsection{Problem Definition}
 
-A deck will contain $v^p$ possible cards where the cards have $p$ properties and $v$ values. Initially, $v*p$ cards will be outputted as the starting layout. Identify an arbitrary set of $v$ cards, in which for all properties the values are either the same or all different. Remove this set of size $v$ and count it as another set found, or if no set exists, add $v$ more cards from the remaining $v^p - v$ cards. Find a total of $n$ sets, where $n \leq v^{p-1}$ and each time a set is found, $v$ cards will be immediately added. Therefore, there are 2 update functions that the algorithms must handle. One to add $v$ new cards to the board and the other to remove $v$ cards that formed a set. 
-
-Removing the first set of cards found will simulate real gameplay in which the goal is to find sets as fast as possible. As cards are added and removed, the dynamic algorithm will hopefully see some speed up as it will remember past partial sets. This further simulates gameplay in which the goal is to find a collection of sets within a limited period of time.
-
+A deck will contain $v^p$ possible cards where the cards have $p$ properties and $v$ values. Initially, $v*p$ cards will be outputted as the starting layout. Identify an arbitrary set of $v$ cards, in which for all properties the values are either the same or all different. Remove this set of size $v$ and count it as another set found, or if no set exists, add $v$ more cards from the remaining $v^p - v$ cards. Find a total of $n$ sets, where $n \leq v^{p-1}$ and each time a set is found, $v$ cards will be immediately added. Therefore, there are 2 update functions that the algorithms must handle: add $v$ cards to the board and remove $v$ cards that formed a set. 
 
 \section{Problem Background and Related Work}
 
 
-The Game of Set has been researched thoroughly for education, but little research exists in regards to solving the generalized version. The generalized version of Set is in fact NP-Complete through a reduction from perfect-Dimensional Matching, a known NP-Hard problem ~\cite{chaudhuri}. However, this paper does not solve the problem in practice and only notes about the computational complexity bounds. On the Internet, solvers do exist and can be readily found. For example, this online JavaScript solver takes in the exact cards that appear on the board and outputs the total number of sets that exist on the board ~\cite{nolte}. The solver has a great UI as seen in Figure~\ref{fig:nolteUI}. However, this solver can only find a set within the given board and outputs overlapping sets which are not valid sets as can be seen below (sets 3-8-11 and 6-9-11 both contain card 11). 
+The Game of Set has been researched thoroughly for education, but little research exists in regards to solving the generalized version. The generalized version of Set is in fact NP-Complete through a reduction from perfect-Dimensional Matching, a known NP-Hard problem ~\cite{chaudhuri}. However, this paper does not solve the problem in practice. On the Internet, solvers do exist and can be readily found. For example, this online JavaScript solver takes as input the cards that appear on the board and outputs the total number of sets that exist on the board ~\cite{nolte}. The solver has a great UI as seen in Figure~\ref{fig:nolteUI}. However, this solver can only find a set within the given board and outputs overlapping sets which are not valid sets, as can be seen below (sets 3-8-11 and 6-9-11 both contain card 11). 
 
 \begin{figure}[htbb]
 \centering
 \begin{minipage}[b]{.75\linewidth}
 \includegraphics[width=\linewidth]{nolte.png}
-\caption{Javascript SET Game Solver by Steve Nolte}
+\caption{Javascript SET Game Solver by Steve Nolte \cite{nolte}}
 \label{fig:nolteUI}
 \end{minipage}
 \end{figure}
 
 
-Some solvers even employ image processing to identify sets ~\cite{jorquera}. These more advanced programs are able to parse the cards from an image using computer vision and determine sets without a user inputting the cards manually. Again, this solver only supports use for one iteration of the game and will need to be updated manually to load in the new cards when the sets have been removed. All these solvers are constrained to have four properties and three values as they only apply to the original Game of Set and cannot be used for a generalized version. Moreover, all these solvers restrict their mechanism to the brute force solution. They iteratively check all possible combinations of cards to determine satisfying sets.
+Some solvers even employ image processing to identify sets ~\cite{jorquera}. These more advanced programs parse the cards from an image using computer vision to determine sets. Again, this solver only supports use for one iteration of the game and will need to be updated manually to load in new cards. These solvers are constrained to have four properties and three values as they only apply to the original Game of Set. Moreover, all these solvers restrict their mechanism to the brute force solution. They iteratively check all possible combinations of cards to determine satisfying sets.
 
 
 \section{Approach}
@@ -238,7 +235,7 @@ Written more compactly:
 	\bigwedge \limits_{i=1}^{p}   \left(  (k_{1,i} = 0, k_{2,i} =1,  ... , k_{v,i} = v-1) \bigvee \limits_{j=1}^{i-1}  \left( \neg (k_{1,j} = k_{2,j} = ... = k_{v,j})  \right)   \right)
 \end{align}
 
-These two strategies are different and I will explore the relative effectiveness of both in the implementation section.
+I will explore the relative effectiveness of both strategies in the implementation section.
 
 By building these four constraints (7, 9, 11, and 13 or 15) from a given board, we can reduce finding an arbitrary set to SMT and use a solver to locate a set efficiently. 
 
@@ -263,22 +260,24 @@ All cards $i \in K$ must not be equivalent to a card in $V$:
 
 For the second update function in which new cards may be added to the deck, we will need to create a new set of constraints (7, 9, 11, and 13 or 15) from above to locate a complete set. Therefore, this is represents a full reduction to SMT from the Game of Set. 
 
-However, in this generalized game for some values of $p$ and $v$, it might not locate a set within reasonable time in practice if we consider the the poly-time transformation and the fact that it needs to recalculate a set every time new cards are added, not using information from previous rounds.
+The SMT solver might not locate a set within reasonable time in practice if we consider the the poly-time transformation and the fact that it needs to recalculate a set every time new cards are added. Therefore, I also explore the use of a dynamic algorithm to find sets.
 
 \subsection{Dynamic Algorithm}
 
-The dynamic algorithm approach uses previous knowledge of the board between draws to quickly discover sets. This approach will be useful because of the nature of the game's changing probabilities as it is played. It has been shown that on an initial layout of the game with 12 cards, the ratio of games in which there exists a Set to those that do not contain a set, is 29:1. But as the game plays on, the ratio drops to 15:1, a 50\% less chance of finding a set. For 15 cards, the ratio drops to 4\% of its original ratio as the game is played ~\cite{norvig}. Therefore, as the game is iteratively played in which sets are taken out, the game becomes immensely harder. Finding a high number of sets $n$ will be hard if many cards must be drawn. Remembering partial sets across draws can greatly speed up the algorithm if we know that it will take many draws to find complete sets. I will also employ a similar symmetry breaking constraint from the SMT solver for the dynamic algorithm to create a faster algorithm, as instead of storing all possible permutations of a partial set, I will only store the one set that a permutation will condense to by keeping each partial set sorted. The dynamic algorithm solver I build should be able to beat the SMT solver for some cases of $v,p,$ and $n$ considering the added difficulty of the game as we add new cards.
+The dynamic algorithm approach uses previous knowledge of the board between draws to quickly discover sets. This approach will be useful because of the nature of the game's changing probabilities as it is played. It has been shown that on an initial layout of the game with 12 cards, the ratio of games in which there exists a set to those that do not contain a set, is 29:1. But as the game plays on, the ratio drops to 15:1, a 50\% less chance of finding a set. For 15 cards, the ratio drops to 4\% of its original ratio as the game is played ~\cite{norvig}. Therefore, as the game is iteratively played in which sets are taken out, the game becomes immensely harder. Finding a high number of sets $n$ will be hard if many cards must be drawn. Remembering partial sets across draws can greatly speed up the algorithm if we know that it will take many draws to find complete sets. A similar symmetry breaking constraint from the SMT solver will be used to store only one set that all permutations of a given partial set will condense to. The dynamic algorithm solver I build should be able to beat the SMT solver for some cases of $v,p,$ and $n$ considering the added difficulty of the game as we add new cards.
 
 \section{Implementation}
 
-The randomizer to create cards and solvers were all written in Python. Considering Python's lightweight feel and ease of iterating over all variables in a list, it is the natural choice to represent a deck and board of cards, where we must iterate over them regularly. Therefore, I selected to use Python as the coding language for the entirety of the project. 
+The randomizer to create cards and solvers were all written in Python. Considering Python's lightweight feel and ease of iterating over all variables in a list, it is the natural choice to represent a deck and board of cards, where we must iterate over them regularly.
 
 
 \subsection{Randomizer}
 
-The randomization algorithm for creating a randomized deck is very important in terms of creating real gameplay. The algorithm must uniformly distribute all of the cards ($v^p$) initially so that no solver can have an unfair advantage knowing what cards are more likely to appear. I used the Random library in Python to generate cards. To ensure the cards drawn were unbiased, I employed the use of a modified version of Fisher Yates Shuffle. Fisher Yates Shuffle works by iteratively picking random indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert the algorithm for use on a deck, I used rejection sampling to determine new cards to add to the board. I created a card by randomly generating a string of length $p$ and, for each property, randomly generating a value from $0$ to $v-1$. If the card was not in the board already and not in the removed cards set (ie. part of a set that was already found), I added it. If it was a duplicate of a card I had already seen, I generated another card until I have created $v*p$ cards that are all distinct. Since the algorithm uses a randomized strategy but will always produce a board whose cards are all distinct and from the deck with equal probabilities, it is an example of a Las Vegas algorithm. To support the update function of removing cards, I appended those cards to a set of removed cards that cannot be used for new cards. Therefore, when $v$ new cards are to be added, I generated $v$ new random cards through the above algorithm to be added to the board. This yields a randomized $v*p$ starting boards and unbiased drawing of $v$ cards from the deck.
+The randomization algorithm for creating a randomized deck is very important in terms of creating real gameplay. The algorithm must uniformly distribute all of the cards so that no solver can have an unfair advantage knowing what cards are more likely to appear. I used the Random library in Python to generate cards. To ensure the cards drawn were unbiased, I employed the use of a modified version of Fisher Yates Shuffle. Fisher Yates Shuffle works by iteratively picking random indices from a finite sequence and produces an unbiased permutation \cite{fisher}. To convert the algorithm for use on a deck, I used rejection sampling to determine new cards to add to the board. I created a card by randomly generating a string of length $p$ and, for each property, randomly generating a value from $0$ to $v-1$. If the card was not in the board already and not in the removed cards set (ie. part of a set that was already found), I added it. If it was a duplicate of a previous card, I generated another card until I created $v*p$, for the initial board, or $v$, for a draw, cards that are all distinct. Since the algorithm uses a randomized strategy but will always produce a board whose cards are all distinct and from the deck with equal probabilities, it is an example of a Las Vegas algorithm. To support the update function of removing cards, I appended those cards to a set of removed cards that cannot be used for new cards. This strategy yields a randomized $v*p$ cards for the starting board and unbiased drawing of $v$ cards from the deck.
 
 To confirm that this in fact created random initial boards and $v$ new cards, I graphed the distribution of the beginning board for $1000$ trials with two different cases, $v=4$ and $p=3$ and $v=5$ and $p=4$. I then used numpy and matplotlib to count all the occurrences of each card and graph them as a histogram. In Figures~\ref{fig:init1}  and~\ref{fig:init2}, we can see that in both cases (3 properties, 4 values and 4 properties, 5 values), the distribution of cards that were initially selected to be on the board form a uniform distribution over 10,000 trials.
+
+The distribution of cards drawn (excluding the starting board and only counting the $v$ new cards drawn) also forms a uniform distribution as can be seen in Figures~\ref{fig:draw1}  and~\ref{fig:draw2}, when the boards have 3 properties, 4 values and 4 properties, 5 values over 10,000 trials. Therefore, this confirms that the implementation of the Fisher Yates shuffle in creating a perfectly random board and draws was successful. 
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -310,7 +309,6 @@ To confirm that this in fact created random initial boards and $v$ new cards, I 
 \end{figure}
 
 
-The distribution of cards drawn (excluding the starting board and only counting the $v$ new cards drawn) also forms a uniform distribution as can be seen in Figures~\ref{fig:draw1}  and~\ref{fig:draw2}, when the boards have 3 properties, 4 values and 4 properties, 5 values over 10,000 trials. Therefore, this confirms that the implementation of the Fisher Yates shuffle in creating a perfectly random board and draws was successful. 
 
 
 \subsection{Brute Force Implementation}
@@ -321,32 +319,32 @@ As a naive implementation, I created a brute force solution that tests all possi
 
 
 \subsubsection{Z3}
-I used Z3, a high performance theorem prover created by Microsoft Research. The software allows me to easily create variables and constraints in Python. Each card that needs to be found represents $p$ variables, or $v*p$ total variables for all cards. I coded the above constraints in Z3 and if the SMT solver outputs "sat," then we know there exists a satisfying set of assignments for the variables with these constraints. Therefore, this satisfying assignments represents the $v$ cards that compose a set. If the SMT solver is "unsat," then there exists no satisfying assignment and more cards must be drawn to find a set. 
+I used Z3, a high performance theorem prover created by Microsoft Research. The software allows me to easily create variables and constraints in Python. Each card that needs to be found represents $p$ variables, or $v*p$ total variables for all cards. I coded the above constraints in Z3 and if the SMT solver outputs "sat," then we know there exists $v$ cards that compose a set. If the SMT solver is "unsat," then there exists no sets and more cards must be drawn.
 
 \subsubsection{Delayed Deletion Optimization}
 
-To optimize the SMT Solver implementation, I queue up the set to be removed and add constraint 17 (a satisfying set cannot include any card that was found to be part of a set) to run through the SMT Solver again to find another set to be removed in case there exists many sets already on the starting board. Once the SMT Solver no longer says a set exists, I then add $v$ new cards to hopefully create a new set. I will only do this once no set exists on the board after removing many cards to provide marginal speedup to the program as the solver will not have to rebuild many constraints every time a set is found. Once no sets exist on the board and I draw the corresponding number of cards, I rebuild the constraints and run the SMT solver to hopefully find another set of cards. 
+To optimize the SMT Solver implementation, I queue up the set to be removed and add constraint 17 (a satisfying set cannot include any card that was found to be part of a set) to the SMT Solver. If there exists many sets already on the board, this strategy will iteratively find them quickly. Once the SMT Solver no longer says a set exists, I then add $v$ new cards to hopefully create a new set. I will only do this once no set exists on the board after removing many cards to provide marginal speedup to the program as the solver will not have to rebuild many constraints every time a set is found.
 
 
-\subsubsection{Constraining the Domain Optimization}
+\subsubsection{Symmetry Breaking Optimization}
 
-The SMT solver iteratively searches for a solution through a search tree, attempting to constrain the domain for each variable until a satisfying assignment has been discovered, a process called forward checking, or all the possible assignments have been exhausted and the constraints cannot be satisfied \cite{search_from_AI}. In this game, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards to satisfy the constraints. To break this symmetry for multiple sets, constraint 13 and 15 enforce that the cards in a set are in sorted order (ie. by the first property or if all equal then by the second property and so forth for all properties) and constrains the domain of each variable. This will break the symmetry in the encoding and speed up the process of the SMT solver, as the SMT solver will not need to search branches of its search tree that are duplicates of another branch. 
+The SMT solver iteratively searches for a solution in a search tree, through a process called forward checking, attempting to constrain the domain for each variable until a satisfying assignment has been discovered \cite{search_from_AI}. If all possible assignments have been exhausted, then the constraints cannot be satisfied. In this game, the SMT solver will be forced to check every permutation of cards for a set, when in reality, all permutations of a given set are equivalent because order does not matter in a set of cards to satisfy the constraints. To break this symmetry for multiple sets, constraint 13 and 15 enforce that the cards in a set are in sorted order (ie. by the first property or if all equal then by the second property and so forth for all properties). Since the SMT solver will no longer search duplicate branches of its search tree, the SMT solver will find sets faster.
 
 \subsection{Dynamic Algorithm Implementation}
 
-The dynamic algorithm approach hinges on the tradeoff between memory and speed. The brute force solution does not need to keep track of partial sets and spends time iterating over all combos as fast possible. The dynamic algorithm is on the other side of the spectrum and utilizes much more space, recording all possible sets that can be quickly completed, but does so in hopes for a benefit in overall speed. 
+The dynamic algorithm approach hinges on the tradeoff between memory and speed. The brute force solution retains no information and iterates over all combos as fast possible. The dynamic algorithm is on the other side of the spectrum and utilizes much more space, recording all possible sets that can be quickly completed, but does so in hopes for a benefit in overall speed. 
 
 The dynamic algorithm's main speedup is in the way that it creates a list of partial sets and a dictionary mapping the missing card to an almost complete partial set, in the hopes that it can quickly finish these sets when new cards are drawn. Outlined below is the general algorithm. 
 
 \subsubsection{Set Up}
 
-To create all partial sets, the dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${v*p}\choose{2}$ combinations of two cards using Python's built in itertools library since a possible set can be determined by any two cards (ie. if the first two cards have the same value for a given property, the satisfying cards must have the same value for that property or if different than all the values need to be different). These two card partial sets will be the basis for creating larger partial sets and will ensure that all combinations of cards are checked to complete a set. I also include a symmetry breaking constraint, identical to the optimal SMT solver of retaining only sorted sets, as adding in cards to a partial set will create many duplicate partial sets. As an example of how this condenses the space of partial lists consider this example: Starting with partial sets [0,1] and [1,2], when I add 2 to the first set and 0 to the second, they will both yield set [0,1,2]. However, these are identical partial sets and would cause the search space to expand unnecessarily.  Therefore, I keep the partial sets sorted at all times (by saying that the first property for which they differ, they must be in sorted order), and when I add a new partial set to the partial set list I check whether it already exists, thereby not creating duplicates in this partial set list.
+To create all partial sets, the dynamic approach begins similarly to the brute force solution. When the board is created, the solver will initially create partial sets for all ${v*p}\choose{2}$ combinations of two cards using Python's built in itertools library since a possible set can be determined by any two cards (ie. if the first two cards have the same value for a given property, the satisfying cards must have the same value for that property or if different than all the values need to be different). These two card partial sets will be the basis for creating larger partial sets and will ensure that all combinations of cards are checked to complete a set. I also include a symmetry breaking constraint, identical to the optimal SMT solver of retaining only sorted sets, as adding cards to a partial set can create many duplicate partial sets. Consider this example of its effect: Starting with partial sets [0,1] and [1,2], when I add 2 to the first set and 0 to the second, they will both yield set [0,1,2]. However, these are identical partial sets and would cause the search space to expand unnecessarily.  I keep the partial sets sorted at all times. When I add a new partial set, I check whether it already exists to not create duplicates in the partial set list.
 
 \subsubsection{Partial Set List and Quick Complete Dictionary Creation}
 
 For each partial set, the algorithm determines which cards can be added to the partial set from the board that satisfy the constraints that for each property, the values are either the same or all different and must not be in the set of cards that we flag as unusable cards as they have been used to complete a set in a previous iteration. 
 
-If a card can be added, I copy the given partial set and add the new card to it (if I added card 2 to a set [0, 1], I append [0,1,2] to the partial set list and keep [0,1] just in case a card I draw later will determine a whole new set), creating a  new partial set that is again sorted and verified that it is not in the partial set list already. Then, I append it at the end of the partial set list. This practice also ensures that new partial sets I append will not interfere with any previous sets. I must keep the original set because depending on how new cards are drawn, this stub set can be satisfied differently (ie. I can add [0,1,3] while not interfering with [0,1,2] if 3 and 2 conflict with each other as [0,1] is left after matching to 2 so it can be matched with 3). By adding the cards incrementally, if it does happen that both cards satisfy the set, (ie. [0,1,2,3] is a set), then when I add the last card to the set it will see that it already exists in the partial set list by the symmetry breaking constraint and will delete one of the partial sets.
+If a card can be added, I copy the given partial set and add the new card to it (if I added card 2 to a set [0, 1], I append [0,1,2] to the partial set list and keep [0,1]), creating a  new partial set that is again sorted and verified that it is not in the partial set list already. Then, I append it at the end of the partial set list. This practice also ensures that new partial sets I append will not interfere with any previous sets. I must keep the original set because depending on how new cards are drawn, the original partial set can be satisfied differently (ie. I can add [0,1,3] while not interfering with [0,1,2] if 3 and 2 conflict with each other as [0,1] is left after matching to 2 so it can be matched with 3). By adding the cards incrementally, if it does happen that both cards satisfy the set, (ie. [0,1,2,3] is a set), then when I add the last card to the set it will see that it already exists in the partial set list by the symmetry breaking constraint and will delete one of the partial sets.
 
 When I add cards to a partial set, its size can be in one of two cases:
 
@@ -358,13 +356,13 @@ At the end of iterating through all partial sets, I will have had attempted to a
 
 \subsubsection{Quick Complete Upon Drawing Cards}
 
-When more sets are needed to be found than exist on the board, new cards must be drawn to create an opportunity for more sets. When these $v$ new cards are drawn, the dynamic algorithm will use its quick complete dictionary to quickly search to see if any of the $v$ cards drawn satisfy any of the partial sets that are missing one card. If they complete a partial set, the dictionary will delete the card from its table, append it to the partial set it completes, and add it to the queue of found cards. As we iterate through, it is possible that the cards used in one of these quick completed sets could be used for another completed set and therefore we need to ensure that any card was not used to complete a previous set. 
+When more sets are needed to be found than exist on the board, new cards must be drawn to create an opportunity for more sets. When these $v$ new cards are drawn, the dynamic algorithm will use its quick complete dictionary to quickly search to see if any of the $v$ cards drawn satisfy any of the partial sets that are missing one card. If they complete a partial set, the dictionary will delete the card from its table, append it to the partial set it completes, and add it to the queue of found cards. It is possible that cards used in a quick completed set could be used for another set. Before a set is completed, we need to ensure that any card was not used to complete a previous set. 
 
-After we have completed all of the partial sets we could have with the new drawn cards, we must create new stub partial sets from these new cards. I create combinations over all new cards and all cards currently on the board (ie. if there are $v'$ new cards left after quick completing and $n'$ cards on the board, I create $v'*(n'+v'-1)$ new stub partial sets to be added to the partial sets list). With these new partial sets appended, the program then reruns the algorithm described above in Partial Set List and Quick Complete Dictionary Creation to find new sets and create the appropriate data structures for future iterations. 
+After we have completed all of the partial sets we could have with the new drawn cards, we must create new partial sets of size 2 from these new cards. I create combinations over the new cards and all cards currently on the board (ie. if there are $v'$ new cards left after quick completing and $n'$ cards on the board, I create $v'*(n'+v'-1)$ new partial sets to be added to the partial sets list). With these new partial sets appended, the program then reruns the algorithm described above in Partial Set List and Quick Complete Dictionary Creation to find new sets and create the appropriate data structures for future iterations. 
 
 \subsubsection{Deletion Bookkeeping}
 
-After both of the above steps, we need to ensure that any found set's cards are appropriately removed from the partial sets. Therefore, I iterate over all partial sets and see if any of them contain a card that was used to complete a set. If it does, I delete the entire partial set. This ensures that we will not be harboring any duplicate partial sets as we retain all partial sets as well. For example, if the card 3 needed to be deleted, we would delete the entire partial set [0,1,2,3]. We can delete the entire set as we retain the partial set [0,1,2] by the above step of the algorithm. Therefore, we can remove all partial sets that contain cards that were used to create a completed set.
+After both of the above steps, we need to ensure that any found set's cards are appropriately removed from the partial sets. Therefore, I iterate over all partial sets and see if any of them contain a card that was used to complete a set. If it does, I delete the entire partial set. This ensures that we will not be harboring any duplicate partial sets as we retain all partial sets as well. For example, if the card 3 needed to be deleted, we would delete the entire partial set [0,1,2,3]. We can delete the entire set as we retain the partial set [0,1,2] by the above step of the algorithm. 
 
 I also iterate over the quick complete dictionary and if any of the almost completed partial sets contain a card we are removing, I delete that appropriate entry from the dictionary as it is now missing more than one card which was the criteria to be included in the quick complete dictionary. Once we have deleted the cards from the appropriate data structures, we can iteratively continue these steps until $n$ sets have been found. 
 
@@ -374,11 +372,11 @@ When the dynamic algorithm does find a set, either through quick complete or whi
 
 \subsection{Testing}
 
-For both of these implementation, I created testing infrastructure to ensure that the sets found by the solvers are indeed sets, and that the algorithm correctly removed the sets from the board. 
+For both of these implementations, I created testing infrastructure to ensure that the sets found by the solvers are indeed sets, and that the algorithm correctly removed the sets from the board. 
 
 \subsubsection{Testing Satisfying Set}
 
-To confirm that for all properties the cards from the set have either the same value or all different value, I iterated over all properties and check whether when I put the values from each property into a set data structure that the length of the set was either 1, meaning that all the values were the same, or of length $v$, meaning all values were distinct elements. 
+To confirm that for all properties the cards from the set have either the same value or all different value, I iterated over all properties and checked whether when I put the values from each property into a set data structure that the length of the set was either 1, meaning that all the values were the same, or of length $v$, meaning all values were distinct elements. 
 
 To check that all the cards must be from the board, I had to store all iterations of the board, as new cards could be added and sets would be removed. Therefore, I used a set data structure to store all the cards, and updated this set as new cards were added to the board. Finally, I iterated over each set found and checked that it was included in the board at some point and therefore meant it was taken from the board. 
 
@@ -388,24 +386,24 @@ Finally, the solver has to handle finding many sets, and to ensure that the solv
 
 \subsubsection{Testing Correct Deletion}
 
-The constraints created for the SMT solver also relies on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board, I iterated over all cards and asserted that all the cards found as part of sets were no longer part of the board at termination of the program. This is a good double check to ensure that SMT solver is functioning properly, because the SMT hinges on the fact that cards that can no longer be used are deleted from the board before rebuilding the constraints. This is also important for the dynamic algorithm and brute force implementation because they must output the correct board as well after finding $n$ sets. At termination, we iterate over all cards found as being part of sets and assert that they are no longer part of the board.
+The constraints created for the SMT solver also rely on the fact that the cards from a satisfying set must be deleted from the board at some point. Therefore, as a check to ensure that the corresponding cards were deleted from the board, I iterated over all cards and asserted that all the cards found as part of sets were no longer part of the board at termination of the program. This is a good double check to ensure that the SMT solver is functioning properly, because the SMT hinges on the fact that cards that can no longer be used are deleted from the board before rebuilding the constraints. This is also important for the dynamic algorithm and brute force implementation because they must output the correct board as well after finding $n$ sets.
 
 \section{Results and Evaluation}
 
 \subsection{Timing Tests}
 
-To test the relative effectiveness of the three implementations, I divided the testing into three cases to see how the implementations functioned on a variety of test cases. Since there are three variables to change, number of values, properties, and sets to find, I vary one of them and keep the other two constant. This creates a total of three overarching categories that can be broken down further as the two constant variables can take on different values. 
+To test the relative effectiveness of the three implementations, I divided the testing into three cases to see how the implementations functioned on a variety of test cases. Since there are three variables to change: number of values, properties, and sets to find, I vary one of them and keep the other two constant. This creates a total of three overarching categories that can be broken down further as the two constant variables can take on different values. 
 
 To accurately test the timing of each solver, I utilized Python's time library to accurately test CPU time used for each of the processes. Therefore, if other processes are running in the background, they will not factor into the timing tests of these solvers. Also, only the process of creating the solver data structure and finding $n$ sets is accounted in CPU time, as creating the randomizer and verification of correct sets following finding the sets is irrelevant to the speed of the solver itself. 
 
-To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. Therefore, this would account for instances in which a set can be found instantly or if all combinations need to be examined to find a set, and would give a more accurate time for a test case. Also, for each of the ten trials, I test each solver with the same beginning board such that we can see how they match up directly against each other on the same board.
+To give more accurate results, the times for a given set of values, properties, and sets to find are averaged over ten trials to give one data point. For each of the ten trials, I test each solver with the same beginning board so that we can see how they match up directly against each other on the same board.
 
 I again used matplotlib to graph the time trials. These graphs are composed of connected dotted lines that are color coded by solver. 
 
 
 \subsection{Brute Force Inefficiency}
 
-The brute force implementation is the solution that many solvers online employ. The brute force solution is efficient enough and fast in the case of the actual Game of Set in which there are only $3$ values and $4$ properties, even being able to beat the SMT solver and dynamic algorithm in some cases. However, as $v$, $p$, and $n$ are increased to add complexity to the problem, the brute force solution begins to take exponential time. Therefore, the brute force solution must be deleted in real timing tests between the SMT solver and dynamic algorithm to provide fair competition and not ruin the scale of the graphs. To see the inefficiency of the brute force implementation, see Figure~\ref{fig:bruteVal} as we vary the value and~\ref{fig:bruteProp} as we change the number of properties.
+The brute force implementation is the solution that many solvers online employ. The brute force solution is fast in the actual Game of Set in which there are only $3$ values and $4$ properties, even being able to beat the SMT solver and dynamic algorithm. However, as $v$, $p$, and $n$ are increased to add complexity to the problem, the brute force solution begins to take exponential time. Therefore, the brute force solution must be deleted in real timing tests between the SMT solver and dynamic algorithm to provide fair competition and not ruin the scale of the graphs. To see the inefficiency of the brute force implementation, see Figure~\ref{fig:bruteVal} as we vary the value and~\ref{fig:bruteProp} as we change the number of properties.
 
 
 \begin{figure}[htbb]
@@ -428,9 +426,9 @@ The brute force implementation is the solution that many solvers online employ. 
 
 \subsection{Comparing Symmetry Breaking Constraints}
 
-The first symmetry breaking constraint I used dictated that for the first property in which they differed, they needed to be sorted by that property. However, this was a relative constraint and did not condense the search tree as much as possible, labelled as constraint 13 above. Therefore, I also created an alternate constraint that is more specific and rigidly dictates that for the first property in which the differ the first card's value has to be 0 and so forth, labelled as constraint 15 above. 
+The first symmetry breaking constraint used dictated that for the first property in which they differed, they needed to be sorted by that property. However, this was a relative constraint and did not condense the search tree as much as possible, labelled as constraint 13 above. Therefore, I also created an alternate constraint that is more specific and rigidly dictates that for the first property in which the differ the first card's value has to be 0 and so forth, labelled as constraint 15 above. 
 
-We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and ~\ref{fig:VersusSMTProp}, in which I graph the speed of the three variations of the SMT solver against each other. As the number of values of the game is increased, the no condensing SMT solver's run time blows up exponentially. We can see that the symmetry breaking constraints do provide considerable speed up for all different values. 
+We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and ~\ref{fig:VersusSMTProp}, in which I graph the speed of the three variations of the SMT solver against each other. As the number of values and properties of the game is increased, the no symmetry breaking SMT solver's run time blows up exponentially.
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -454,9 +452,7 @@ We can see the effect of symmetry breaking in Figure ~\ref{fig:VersusSMTVal} and
 % now between the two of the fastest
 
 
-Now, to determine which symmetry breaking constraint yields the greatest speedup, I run the two implementations against each other. As the rigidly sorted constraint condenses the search space more than the relative sorted, the speed up of adding this constraint can be seen in Figure~\ref{fig:RunoffVAL} and~\ref{fig:RunoffPROP}. In all cases, the rigid sort is marginally faster and this difference increases as the parameter increases. Therefore, for the final implementation of the SMT solver, I settled on using the rigidly sorted constraint. This is the fastest version of the SMT solver and would provide the best competitor against the dynamic algorithm.
-
-
+To determine which symmetry breaking constraint yields the greatest speedup, I run the two implementations against each other. The rigidly sorted constraint condenses the search space more than the relative sorted constraint causing it to be faster as can be seen in Figure~\ref{fig:RunoffVAL} and~\ref{fig:RunoffPROP}.  
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -474,13 +470,18 @@ Now, to determine which symmetry breaking constraint yields the greatest speedup
 \end{minipage}
 \end{figure}
 
+In all cases, the rigid sort is marginally faster and this difference increases as the parameter increases. For the final implementation of the SMT solver, I settled on using the rigidly sorted constraint. This is the fastest version of the SMT solver and would provide the best competitor against the dynamic algorithm.
+
+
+
+
 \subsection{Comparing the Final Implementations of the Dynamic Algorithm and SMT Solver}
 
 \subsection{Varying the Number of Values}
 
-There exists a threshold for which the dynamic algorithm performs better than the SMT solver. See Figure~\ref{fig:DvSVAL}. Up until there are 5 values, the dynamic algorithm is marginally faster than the SMT solver, but once the number of values increases past 5, the time grows exponentially while the SMT solver is relatively linear. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
+There exists a threshold for which the dynamic algorithm performs better than the SMT solver. (See Figure~\ref{fig:DvSVAL}). Up until there are 5 values, the dynamic algorithm is marginally faster than the SMT solver, but once the number of values increases past 5, the time grows exponentially while the SMT solver is relatively linear. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
 
-The SMT solver is able to handle values as large as 10, even with 4 properties instead of 3 properties from the previous figure, while still retaining its linear growth. See Figure~\ref{fig:SMTVal}. The dynamic algorithm performs much worse because of how many more partial sets it has to store. As we increase the number of values, the dynamic algorithm will store larger partial sets because satisfying sets will be larger (of size $v$ where $v$ is the number of values). Memory usage will be higher and iterating over these sets will take more time. This explains why the dynamic algorithm grows exponentially while the SMT solver is relatively linear with respect to the number of values. 
+The SMT solver is able to handle values as large as 10, even with 4 properties instead of 3 properties from the previous figure, while still retaining its linear growth. (See Figure~\ref{fig:SMTVal}). The dynamic algorithm performs much worse because of how many more partial sets it has to store. As we increase the number of values, the dynamic algorithm will store larger partial sets because satisfying sets will be larger (of size $v$ where $v$ is the number of values). Memory usage will be higher and iterating over these sets will take more time. This explains why the dynamic algorithm grows exponentially while the SMT solver is relatively linear with respect to the number of values. 
 
 
 \begin{figure}[htbb]
@@ -503,10 +504,8 @@ The SMT solver is able to handle values as large as 10, even with 4 properties i
 
 \subsection{Varying the Number of Properties}
 
-Again, the SMT solver is able to finish larger instances of the problem faster than the dynamic algorithm past a certain threshold. See Figure~\ref{fig:DvSPROP}. Only once the number of properties increases past 5 is the SMT solver significantly faster than the dynamic algorithm. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
+The SMT solver is able to finish larger instances of the problem faster than the dynamic algorithm past a certain threshold. (See Figure~\ref{fig:DvSPROP}). Once the number of properties increases past 5, the SMT solver is significantly faster than the dynamic algorithm. At this threshold, the dynamic algorithm takes much too long and it becomes only feasible to run the SMT solver by itself. 
 
-
-The SMT solver is able to handle much larger number of properties than the dynamic algorithm without growing exponentially till a later degree. Once the number of properties is increased to 7, the SMT solver also begins to grow exponentially. See Figure~\ref{fig:SMTProp}.
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -524,16 +523,17 @@ The SMT solver is able to handle much larger number of properties than the dynam
 \end{minipage}
 \end{figure}
 
+The SMT solver is able to handle much larger number of properties than the dynamic algorithm without growing exponentially till a later degree. Once the number of properties is increased to 7, the SMT solver also begins to grow exponentially. (See Figure~\ref{fig:SMTProp}).
+
+
+
 
 
 
 
 \subsection{Varying the Number of Sets to be Found}
 
-As the number of sets to be found increases, if the number of values and properties is high enough, the dynamic algorithm is much slower than  the SMT solver. See Figure~\ref{fig:DvSSETS}. Even though the dynamic algorithm creates a speed up by retaining all partial sets especially for multiple draws, the speed up does not always outweigh the cost of storing so many partial sets.
-
-As the number of sets increases, the growth of both the SMT solver and dynamic algorithm are roughly identical. However, the SMT solver is marginally faster. The runtime continues to grow linearly in Figure~\ref{fig:SMTSet} as it finds more sets than in the previous figure with the same constant parameters.
-
+As the number of sets to be found increases, if the number of values and properties is high enough, the dynamic algorithm is much slower than  the SMT solver. (See Figure~\ref{fig:DvSSETS}.) Even though the dynamic algorithm creates a speed up by retaining all partial sets especially for multiple draws, the speed up does not always outweigh the cost of storing so many partial sets.
 
 \begin{figure}[htbb]
 \begin{minipage}[b]{0.5\linewidth}
@@ -551,10 +551,14 @@ As the number of sets increases, the growth of both the SMT solver and dynamic a
 \end{minipage}
 \end{figure}
 
+As the number of sets increases, the growth of both the SMT solver and dynamic algorithm are roughly identical. However, the SMT solver is marginally faster. The runtime continues to grow linearly in Figure~\ref{fig:SMTSet} as it finds more sets than in the previous figure with the same constant parameters.
+
+
+
 \section{Conclusion and Future Work}
 
 
-This paper outlines the creation of three different solvers: brute force, dynamic algorithm, and SMT based, to solve the generalized Game of Set. Through timing tests, I found that as expected, the brute force implementation blows up exponentially as any of the parameters are increased. It does not lend itself to be an efficient solver for the more general case. The dynamic algorithm and SMT based solver both perform much better than the brute force and are superior in their own ways. The dynamic algorithm is faster on smaller cases than the SMT solver, but as the parameters increase, the memory usage of the dynamic algorithm become too unwieldy and causes it be much slower, exponentially increasing. Interestingly, only when the SMT solver is used on higher number of properties does its growth take on exponential growth. Otherwise, in the case of the values and sets to find, the SMT solver can continue its linear growth till much higher values. 
+This paper outlines the creation of three different solvers: brute force, dynamic algorithm, and SMT based, to solve the generalized Game of Set. Through timing tests, I found that as expected, the brute force implementation blows up exponentially as any of the parameters are increased. It does not lend itself to be an efficient solver for the more general case. The dynamic algorithm and SMT based solver both perform much better than the brute force and are superior in their own ways. The dynamic algorithm is faster on smaller cases than the SMT solver, but as the parameters increase, the memory usage of the dynamic algorithm become too unwieldy and causes exponential growth in its runtime. Interestingly, only when the SMT solver is used on higher number of properties does its growth become exponential. Otherwise, in the case of higher number of values and sets to find, the SMT solver can continue its linear growth.
 
 For future research into this problem, it would be interesting and potentially much faster if there is a way to combine the SMT solver and dynamic algorithm. This way, we could benefit from the dynamic algorithm's speed on smaller cases but also the SMT solver's efficiency for larger cases. If a solution combining the two can be found and implemented, this line of thinking could be very useful in creating efficient solutions for other problems that grow exponentially and need an efficient solver for a wide range of parameters. 
 
